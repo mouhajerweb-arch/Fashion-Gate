@@ -709,7 +709,7 @@ export default function RestaurantDetailClient({ restaurantId, lang, initialSani
               }}
             >
               <MenuIcon sx={{ fontSize: 20 }} />
-              <Typography sx={{ fontFamily: "var(--heading-font)", fontWeight: 700, fontSize: { md: "0.95rem", lg: "1.1rem" }, letterSpacing: "0.1em" }}>
+              <Typography sx={{ fontFamily: "var(--heading-font)", fontWeight: 700, fontSize: { md: "0.95rem", lg: "1.1rem" }, letterSpacing: lang === "ar" ? 0 : "0.1em" }}>
                 {t.menuText}
               </Typography>
             </Box>
@@ -2366,7 +2366,7 @@ export default function RestaurantDetailClient({ restaurantId, lang, initialSani
             }}
           >
             <MenuIcon sx={{ fontSize: 20 }} />
-            <Typography sx={{ fontFamily: "Cairo, sans-serif", fontWeight: 700, fontSize: { md: "0.95rem", lg: "1.1rem" }, letterSpacing: "0.1em" }}>
+            <Typography sx={{ fontFamily: "Cairo, sans-serif", fontWeight: 700, fontSize: { md: "0.95rem", lg: "1.1rem" }, letterSpacing: lang === "ar" ? 0 : "0.1em" }}>
               {t.menuText}
             </Typography>
           </Box>

@@ -215,7 +215,7 @@ export default function SiteFooter() {
                 <Typography sx={{ fontFamily: "var(--heading-font)", fontSize: 20, fontWeight: 600, color: "#111111", lineHeight:lang === "ar" ?  1.3 : 1 }}>
                   {stretchArabicText(lang === "ar" ? "فاشن غيت" : "Fashion Gate", 2)}
                 </Typography>
-                <Typography sx={{ color: "primary.main", fontSize: 9, fontWeight: 800, letterSpacing: lang === "ar" ? "0.05em" : "0.2em", textTransform: "uppercase" }}>
+                 <Typography sx={{ color: "primary.main", fontSize: 9, fontWeight: 800, letterSpacing: lang === "ar" ? 0 : "0.2em", textTransform: "uppercase" }}>
                   {lang === "ar" ? "بوليفارد دمشق" : "Boulevard Damascus"}
                 </Typography>
               </Stack>
@@ -228,7 +228,7 @@ export default function SiteFooter() {
 
           {/* Quick Links Column */}
           <Stack spacing={2.5} sx={{ textAlign: lang === "ar" ? "right" : "left" }}>
-            <Typography sx={{ color: "#111111", fontSize: 12, fontWeight: 800, letterSpacing: "0.15em", textTransform: "uppercase", fontFamily: '"Cairo", sans-serif' }}>
+            <Typography sx={{ color: "#111111", fontSize: 12, fontWeight: 800, letterSpacing: lang === "ar" ? 0 : "0.15em", textTransform: "uppercase", fontFamily: '"Cairo", sans-serif' }}>
               {exploreTitle}
             </Typography>
             <Box
@@ -265,7 +265,7 @@ export default function SiteFooter() {
 
           {/* Newsletter Column */}
           <Stack spacing={2.5} sx={{ textAlign: lang === "ar" ? "right" : "left" }}>
-            <Typography sx={{ color: "#111111", fontSize: 12, fontWeight: 800, letterSpacing: "0.15em", textTransform: "uppercase", fontFamily: '"Cairo", sans-serif' }}>
+            <Typography sx={{ color: "#111111", fontSize: 12, fontWeight: 800, letterSpacing: lang === "ar" ? 0 : "0.15em", textTransform: "uppercase", fontFamily: '"Cairo", sans-serif' }}>
               {updatesTitle}
             </Typography>
             <Typography sx={{ color: "rgba(0,0,0,0.6)", fontSize: 14, lineHeight: 1.6, fontFamily: '"Cairo", sans-serif' }}>

@@ -61,7 +61,7 @@ export default function AuthClient({ initialLang, sanityData }: AuthClientProps)
     },
     typography: {
       fontFamily: `"Cairo", sans-serif`,
-      button: { fontWeight: 700, letterSpacing: "0.15em" }
+      button: { fontWeight: 700, letterSpacing: lang === "ar" ? 0 : "0.15em" }
     },
     shape: { borderRadius: 0 }
   }), []);
@@ -175,7 +175,7 @@ export default function AuthClient({ initialLang, sanityData }: AuthClientProps)
             }}
           >
             <Stack spacing={1.5} sx={{ mb: 4, textAlign: "center" }}>
-              <Typography sx={{ fontFamily: "var(--heading-font)", fontSize: { xs: 26, md: 32 }, fontWeight: 500, letterSpacing: "0.05em" }}>
+              <Typography sx={{ fontFamily: "var(--heading-font)", fontSize: { xs: 26, md: 32 }, fontWeight: 500, letterSpacing: lang === "ar" ? 0 : "0.05em" }}>
                 {mode === "login" ? t.loginTitle : t.signupTitle}
               </Typography>
               <Typography sx={{ color: "rgba(255,255,255,0.48)", fontSize: 13, fontFamily: '"Cairo", sans-serif' }}>
@@ -315,7 +315,7 @@ export default function AuthClient({ initialLang, sanityData }: AuthClientProps)
                 sx={{
                   color: "rgba(255,255,255,0.4)",
                   fontSize: 11,
-                  letterSpacing: "0.1em",
+                  letterSpacing: lang === "ar" ? 0 : "0.1em",
                   textTransform: "uppercase",
                   "&:hover": { color: "#CB6116", bgcolor: "transparent" }
                 }}
