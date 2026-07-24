@@ -576,7 +576,7 @@ function SearchOption({
             {!searchQuery.trim() ? (
               <Box sx={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 2 }}>
                 <Box>
-                  <Typography sx={{ fontSize: 10, fontWeight: 800, color: "#CB6116", textTransform: "uppercase", letterSpacing: "0.15em", mb: 1.5, fontFamily: '"Cairo", sans-serif' }}>
+                  <Typography sx={{ fontSize: 10, fontWeight: 800, color: "#CB6116", textTransform: "uppercase", letterSpacing: lang === "ar" ? 0 : "0.15em", mb: 1.5, fontFamily: '"Cairo", sans-serif' }}>
                     {resolvedDepsHeading}
                   </Typography>
                   <Stack spacing={1} alignItems="flex-start">
@@ -594,7 +594,7 @@ function SearchOption({
                   </Stack>
                 </Box>
                 <Box>
-                  <Typography sx={{ fontSize: 10, fontWeight: 800, color: "#CB6116", textTransform: "uppercase", letterSpacing: "0.15em", mb: 1.5, fontFamily: '"Cairo", sans-serif' }}>
+                  <Typography sx={{ fontSize: 10, fontWeight: 800, color: "#CB6116", textTransform: "uppercase", letterSpacing: lang === "ar" ? 0 : "0.15em", mb: 1.5, fontFamily: '"Cairo", sans-serif' }}>
                     {resolvedSuggestedHeading}
                   </Typography>
                   <Stack spacing={1} alignItems="flex-start">
@@ -614,7 +614,7 @@ function SearchOption({
               </Box>
             ) : (
               <Box>
-                <Typography sx={{ fontSize: 10, fontWeight: 800, color: "#CB6116", textTransform: "uppercase", letterSpacing: "0.15em", mb: 1.5, fontFamily: '"Cairo", sans-serif' }}>
+                <Typography sx={{ fontSize: 10, fontWeight: 800, color: "#CB6116", textTransform: "uppercase", letterSpacing: lang === "ar" ? 0 : "0.15em", mb: 1.5, fontFamily: '"Cairo", sans-serif' }}>
                   {resolvedMatchingHeading}
                 </Typography>
                 {matchingProducts.length === 0 ? (
@@ -660,7 +660,7 @@ function SearchOption({
                               <Typography sx={{ fontSize: 12, fontWeight: 700, color: "#111111", lineHeight: 1.2 }}>
                                 {title}
                               </Typography>
-                              <Typography sx={{ fontSize: 9, color: "#CB6116", textTransform: "uppercase", fontWeight: 700, letterSpacing: "0.1em", mt: 0.3 }}>
+                              <Typography sx={{ fontSize: 9, color: "#CB6116", textTransform: "uppercase", fontWeight: 700, letterSpacing: lang === "ar" ? 0 : "0.1em", mt: 0.3 }}>
                                 {brandName} — {cat}
                               </Typography>
                             </Box>
@@ -870,7 +870,7 @@ export default function SiteHeader({ settings, onLangToggleStart }: SiteHeaderPr
         const catTitle = lang === "ar" ? cat.title.ar : cat.title.en;
         activeBlocks.push(
           <Box key={catTitle}>
-            <Typography sx={{ fontSize: 10, fontWeight: 800, color: "#CB6116", textTransform: "uppercase", letterSpacing: "0.15em", mb: 2, fontFamily: '"Cairo", sans-serif' }}>
+            <Typography sx={{ fontSize: 10, fontWeight: 800, color: "#CB6116", textTransform: "uppercase", letterSpacing: lang === "ar" ? 0 : "0.15em", mb: 2, fontFamily: '"Cairo", sans-serif' }}>
               {catTitle}
             </Typography>
             <Stack spacing={1.2} alignItems="flex-start">
@@ -1204,7 +1204,7 @@ export default function SiteHeader({ settings, onLangToggleStart }: SiteHeaderPr
                       textTransform: "uppercase",
                       fontSize: 11,
                       fontWeight: 600,
-                      letterSpacing: "0.18em",
+                      letterSpacing: lang === "ar" ? 0 : "0.18em",
                       fontFamily: '"Cairo", sans-serif'
                     }}
                   >
@@ -1335,7 +1335,7 @@ export default function SiteHeader({ settings, onLangToggleStart }: SiteHeaderPr
                                         fontWeight: 600,
                                         fontSize: 12.5,
                                         textTransform: "uppercase",
-                                        letterSpacing: "0.05em",
+                                        letterSpacing: lang === "ar" ? 0 : "0.05em",
                                         fontFamily: '"Cairo", sans-serif',
                                         "&:hover": {
                                           color: "#CB6116",
@@ -1365,7 +1365,7 @@ export default function SiteHeader({ settings, onLangToggleStart }: SiteHeaderPr
                                         fontWeight: 600,
                                         fontSize: 12.5,
                                         textTransform: "uppercase",
-                                        letterSpacing: "0.05em",
+                                        letterSpacing: lang === "ar" ? 0 : "0.05em",
                                         fontFamily: '"Cairo", sans-serif',
                                         "&:hover": {
                                           color: "#CB6116",
@@ -1565,7 +1565,7 @@ export default function SiteHeader({ settings, onLangToggleStart }: SiteHeaderPr
           <Stack direction="row" justifyContent="space-between" alignItems="center">
             <Stack direction="row" gap={1.2} alignItems="center">
               <Box component="img" src={logoImageUrl || "/brand/logo.png"} alt="Fashion Gate" sx={{ height: 26, width: "auto" }} />
-              <Typography sx={{ fontFamily: "var(--heading-font)", fontSize: 16, color: "#fff", fontWeight: 700, letterSpacing: "0.05em" }}>
+              <Typography sx={{ fontFamily: "var(--heading-font)", fontSize: 16, color: "#fff", fontWeight: 700, letterSpacing: lang === "ar" ? 0 : "0.05em" }}>
                 {stretchArabicText(lang === "ar" ? logoTitle?.ar || "بوابة الأزياء" : logoTitle?.en || "FASHION GATE", 2)}
               </Typography>
             </Stack>
@@ -1708,7 +1708,7 @@ export default function SiteHeader({ settings, onLangToggleStart }: SiteHeaderPr
                         fontSize: 15,
                         fontWeight: 600,
                         textTransform: "uppercase",
-                        letterSpacing: "0.15em",
+                        letterSpacing: lang === "ar" ? 0 : "0.15em",
                         textDecoration: "none",
                         fontFamily: '"Cairo", sans-serif',
                         transition: "all 0.25s ease",
@@ -1768,7 +1768,7 @@ export default function SiteHeader({ settings, onLangToggleStart }: SiteHeaderPr
                                             fontSize: 13,
                                             fontWeight: 700,
                                             textTransform: "uppercase",
-                                            letterSpacing: "0.1em",
+                                            letterSpacing: lang === "ar" ? 0 : "0.1em",
                                             textDecoration: "none",
                                             display: "block",
                                             mb: 0.8,
@@ -1811,7 +1811,7 @@ export default function SiteHeader({ settings, onLangToggleStart }: SiteHeaderPr
                                             fontSize: 13,
                                             fontWeight: 600,
                                             textTransform: "uppercase",
-                                            letterSpacing: "0.1em",
+                                            letterSpacing: lang === "ar" ? 0 : "0.1em",
                                             textDecoration: "none",
                                             display: "block",
                                             fontFamily: '"Cairo", sans-serif',
@@ -1874,7 +1874,7 @@ export default function SiteHeader({ settings, onLangToggleStart }: SiteHeaderPr
                                   
                                   return (
                                     <Stack key={catIdx} spacing={1.2} sx={{ textAlign: lang === "ar" ? "right" : "left" }}>
-                                      <Typography sx={{ color: "#CB6116", fontSize: 11, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", fontFamily: '"Cairo", sans-serif' }}>
+                                      <Typography sx={{ color: "#CB6116", fontSize: 11, fontWeight: 700, letterSpacing: lang === "ar" ? 0 : "0.1em", textTransform: "uppercase", fontFamily: '"Cairo", sans-serif' }}>
                                         {catTitle}
                                       </Typography>
                                       <Box sx={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 1 }}>
@@ -1930,7 +1930,7 @@ export default function SiteHeader({ settings, onLangToggleStart }: SiteHeaderPr
                 py: 1,
                 fontSize: 11,
                 fontWeight: 700,
-                letterSpacing: "0.15em",
+                letterSpacing: lang === "ar" ? 0 : "0.15em",
                 fontFamily: '"Cairo", sans-serif',
                 "&:hover": { bgcolor: "rgba(255,255,255,0.05)" }
               }}
