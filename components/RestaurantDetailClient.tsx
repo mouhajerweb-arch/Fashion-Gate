@@ -51,7 +51,7 @@ export default function RestaurantDetailClient({ restaurantId, lang, initialSani
   const isAr = lang === "ar";
   const resolvedLogoUrl = initialSanityData?.headerLogo
     ? (typeof initialSanityData.headerLogo === 'string' ? initialSanityData.headerLogo : (initialSanityData.headerLogo.asset?.url || imageUrl(initialSanityData.headerLogo).url()))
-    : (isVilamore ? "/brand/vilamore-logo.png" : "/brand/arto-logo.png");
+    : (isVilamore ? "/brand/vilamore-logo.png" : "/brand/the-espresso-lab-logo.png");
   const accentColor = "#CB6116"; // Theme Orange
   const beigeBg = "#ECE4DE"; // Askim Warm Cream Beige
   const cardBg = "#FDFBF8"; // Soft cream paper card
@@ -59,7 +59,7 @@ export default function RestaurantDetailClient({ restaurantId, lang, initialSani
 
   // Tabs states
   const [vilamoreActiveTab, setVilamoreActiveTab] = useState(0);
-  const [artoActiveTab, setArtoActiveTab] = useState(0);
+  const [espressoActiveTab, setEspressoActiveTab] = useState(0);
 
   // Bespoke header states
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -79,7 +79,7 @@ export default function RestaurantDetailClient({ restaurantId, lang, initialSani
 
   // Scroll references for horizontal scrollbars
   const vilamoreScrollRef = useRef<HTMLDivElement>(null);
-  const artoScrollRef = useRef<HTMLDivElement>(null);
+  const espressoScrollRef = useRef<HTMLDivElement>(null);
 
   // Parallax Scroll Hooks
   const { scrollY } = useScroll();
@@ -111,10 +111,10 @@ export default function RestaurantDetailClient({ restaurantId, lang, initialSani
   const content = {
     en: {
       vilamoreTitle: "Vilamore Restaurant & Café",
-      artoTitle: "Arto Coffee",
+      artoTitle: "The Espresso Lab",
       artoHeroTitle: "THE ART OF BREWING",
       artoHeroSub: "Dubai-sourced single origin roasts, extracted to perfection in Damascus.",
-      artoStory: "Sourced directly from Dubai roasters, Arto Coffee represents the absolute pinnacle of premium coffee culture in Syria. Our beans are selected from micro-lots in Brazil, Ethiopia, and Colombia, roasted to highlight rich cocoa and floral notes, and brewed with state-of-the-art temperature controls.",
+      artoStory: "Sourced directly from Dubai roasters, The Espresso Lab represents the absolute pinnacle of premium coffee culture in Syria. Our beans are selected from micro-lots in Brazil, Ethiopia, and Colombia, roasted to highlight rich cocoa and floral notes, and brewed with state-of-the-art temperature controls.",
       vilamoreHeroTitle: "WELCOME TO VILAMORE",
       vilamoreHeroSub: "Your Premier Dining Destination in the Boulevard, Damascus",
       discoverTitle: "Discover Vilamore",
@@ -128,7 +128,7 @@ export default function RestaurantDetailClient({ restaurantId, lang, initialSani
       artoLocVal: "First Floor, Luxury Terrace, Fashion Gate Syria",
       hoursVal: "Daily 8:00 AM - 12:00 AM",
       contactVal: "+963 11 9988 (Ext. Vilamore)",
-      artoContactVal: "+963 11 9988 (Ext. Arto)",
+      artoContactVal: "+963 11 9988 (Ext. Espresso Lab)",
       dubaiRef: "Dubai Management: Inspired by Askim, Boulevard Heights, Downtown Dubai.",
       menuHeader: "Our Culinary Menu",
       ambianceHeader: "Terrace & Courtyard Ambiance",
@@ -210,31 +210,31 @@ export default function RestaurantDetailClient({ restaurantId, lang, initialSani
           { name: "Syrian Pistachio Baklava", desc: "Delicate layers of flaky phyllo pastry filled with premium ground green Aleppo pistachios and scented syrup.", image: "/brand/vilamore-bg.jpg", tag: "Classic", price: "TBC", note: "Freshly baked daily" },
           { name: "Halawet El-Jibn", desc: "Sweet cheese dough rolls filled with fresh clotted cream (Ashta), drizzled with rose water syrup, topped with pistachios.", image: "/brand/hero-woman.jpg", tag: "Levant Special", price: "TBC", note: "Traditional Homs recipe" },
           { name: "Warm Um Ali Pudding", desc: "Baked puff pastry soaked in warm sweetened milk, cream, coconut flakes, raisins, topped with roasted pistachios.", image: "/brand/hero-unisex-perfume.jpg", tag: "Comfort Food", price: "TBC", note: "Rich bread pudding style" },
-          { name: "Ghazal Al-Banat Ice Cream", desc: "Syrian cotton candy wrapped around authentic arabic mastic ice cream, heavily coated with ground pistachios.", image: "/brand/arto-bg.jpg", tag: "Signature", price: "TBC", note: "A cold Damascene masterpiece" },
+          { name: "Ghazal Al-Banat Ice Cream", desc: "Syrian cotton candy wrapped around authentic arabic mastic ice cream, heavily coated with ground pistachios.", image: "/brand/the-espresso-lab-bg.jpg", tag: "Signature", price: "TBC", note: "A cold Damascene masterpiece" },
           { name: "Damascus Muhallabia", desc: "Creamy cold milk pudding flavored with orange blossom water and mastic, garnished with sliced almonds and pistachios.", image: "/brand/hero-woman.jpg", tag: "Light Sweet", price: "TBC", note: "Delicate and refreshing" }
         ]
       },
       artoMenus: {
         coffee: [
-          { name: "Specialty Flat White", desc: "Double shot of espresso extracted from single-origin Brazilian beans, mixed with steamed velvety microfoam milk.", image: "/brand/arto-flatwhite.jpg", sub: "Single Origin Brazil", tag: "Popular", price: "TBC" },
-          { name: "V60 Drip Over Ice", desc: "Artisanal filter pour-over capturing the bright citrus, honey, and cocoa flavor notes of our specialty roasted beans.", image: "/brand/arto-bg.jpg", sub: "Hand-Crafted Drip", tag: "Specialty", price: "TBC" }
+          { name: "Specialty Flat White", desc: "Double shot of espresso extracted from single-origin Brazilian beans, mixed with steamed velvety microfoam milk.", image: "/brand/the-espresso-lab-flatwhite.jpg", sub: "Single Origin Brazil", tag: "Popular", price: "TBC" },
+          { name: "V60 Drip Over Ice", desc: "Artisanal filter pour-over capturing the bright citrus, honey, and cocoa flavor notes of our specialty roasted beans.", image: "/brand/the-espresso-lab-bg.jpg", sub: "Hand-Crafted Drip", tag: "Specialty", price: "TBC" }
         ],
         beverages: [
-          { name: "Signature Saffron Latte", desc: "Premium espresso combined with warm milk infused with wild organic saffron strands and honey.", image: "/brand/arto-bg.jpg", sub: "House Favorite", tag: "Aromatic", price: "TBC" },
+          { name: "Signature Saffron Latte", desc: "Premium espresso combined with warm milk infused with wild organic saffron strands and honey.", image: "/brand/the-espresso-lab-bg.jpg", sub: "House Favorite", tag: "Aromatic", price: "TBC" },
           { name: "Iced Pistachio Mocha", desc: "Cold espresso blended with roasted green pistachio paste, chocolate sauce, and milk, topped with whipped cream.", image: "/brand/hero-unisex-perfume.jpg", sub: "Sweet Brew", price: "TBC" }
         ],
         artoDesserts: [
-          { name: "San Sebastian Cheesecake", desc: "Rich and creamy crustless cheesecake with a caramelized burnt top, served with a pour of warm premium Belgian chocolate sauce.", image: "/brand/arto-bg.jpg", sub: "Baked Fresh Daily", tag: "Bestseller", price: "TBC" },
+          { name: "San Sebastian Cheesecake", desc: "Rich and creamy crustless cheesecake with a caramelized burnt top, served with a pour of warm premium Belgian chocolate sauce.", image: "/brand/the-espresso-lab-bg.jpg", sub: "Baked Fresh Daily", tag: "Bestseller", price: "TBC" },
           { name: "Layered Pistachio Honey Cake", desc: "Layered sponge cake soaked in organic forest honey, filled with a rich roasted green pistachio cream.", image: "/brand/hero-unisex-perfume.jpg", sub: "Signature Recipe", tag: "Sweet", price: "TBC" }
         ]
       }
     },
     ar: {
       vilamoreTitle: "مطعم ومقهى فيلامور",
-      artoTitle: "آرتو كافيه",
+      artoTitle: "ذا اسبريسو لاب",
       artoHeroTitle: "فن تحضير القهوة المختصة",
       artoHeroSub: "حبوب بن برازيلية مستوردة من دبي ومحضرة يدوياً بدقة عالية في دمشق.",
-      artoStory: "يستورد آرتو كافيه حبوب البن الفاخرة مباشرة من محامص دبي، ليمثل قمة ثقافة القهوة في سوريا. نختار حبوبنا من مزارع البرازيل وإثيوبيا وكولومبيا لتقديم فنجان غني بالنكهات والروائح العطرة.",
+      artoStory: "يستورد ذا اسبريسو لاب حبوب البن الفاخرة مباشرة من محامص دبي، ليمثل قمة ثقافة القهوة في سوريا. نختار حبوبنا من مزارع البرازيل وإثيوبيا وكولومبيا لتقديم فنجان غني بالنكهات والروائح العطرة.",
       vilamoreHeroTitle: "مرحباً بكم في فيلامور",
       vilamoreHeroSub: "وجهتكم الفاخرة لتناول الطعام في البوليفارد، دمشق",
       discoverTitle: "اكتشف فيلامور",
@@ -248,7 +248,7 @@ export default function RestaurantDetailClient({ restaurantId, lang, initialSani
       artoLocVal: "الطابق الأول، التراس الفاخر، فاشن غيت مول سوريا",
       hoursVal: "يومياً من 8:00 صباحاً حتى 12:00 منتصف الليل",
       contactVal: "+963 11 9988 (تحويلة فيلامور)",
-      artoContactVal: "+963 11 9988 (تحويلة آرتو)",
+      artoContactVal: "+963 11 9988 (تحويلة ذا اسبريسو لاب)",
       dubaiRef: "إدارة دبي: مستوحى من مطعم عاصكم، بوليفارد هايتس، وسط مدينة دبي.",
       menuHeader: "قائمتنا الشامية العريقة",
       ambianceHeader: "أجواء التراس والجلسات الخارجية",
@@ -330,21 +330,21 @@ export default function RestaurantDetailClient({ restaurantId, lang, initialSani
           { name: "صحن بقلاوة مشكلة بالفستق الحلبي", desc: "رقائق عجين البقلاوة الهشة والفاخرة محشوة بالفستق الحلبي الأخضر الممتاز والقطر المعطر.", image: "/brand/vilamore-bg.jpg", tag: "كلاسيك", price: "TBC", note: "تُخبز طازجة يومياً في مطبخنا" },
           { name: "حلاوة الجبن الحمصية بالقشطة البلدية", desc: "عجينة حلوى الجبن الطرية محشوة بالقشطة البلدية الطازجة، ترش بماء الورد وزهر الليمون والفستق.", image: "/brand/hero-woman.jpg", tag: "طبق شام عريق", price: "TBC", note: "على الطريقة الحمصية الأصلية" },
           { name: "أم علي دافئة بالمكسرات والقشطة", desc: "عجينة بف باستري مخبوزة مغمورة بحليب محلى دافئ، مكسرات مشكلة، زبيب، جوز هند وقشطة مخفوقة.", image: "/brand/hero-unisex-perfume.jpg", tag: "طبق دافئ", price: "TBC", note: "حلوى شتوية دافئة وغنية" },
-          { name: "بوظة غزل البنات بماء الزهر والمستكة", desc: "بوظة عربية تقليدية بالمسكة والمستكة مغطاة بغزل البنات الشامي الكثيف والفستق المطحون.", image: "/brand/arto-bg.jpg", tag: "توقيع المطعم", price: "TBC", note: "تحفة فنية باردة تجمع القشطة والفستق" },
+          { name: "بوظة غزل البنات بماء الزهر والمستكة", desc: "بوظة عربية تقليدية بالمسكة والمستكة مغطاة بغزل البنات الشامي الكثيف والفستق المطحون.", image: "/brand/the-espresso-lab-bg.jpg", tag: "توقيع المطعم", price: "TBC", note: "تحفة فنية باردة تجمع القشطة والفستق" },
           { name: "مهلبية دمشقية بماء الزهر واللوز", desc: "بودينغ حليب بارد معطر بماء الزهر والمستكة الطبيعية، مزين بشرائح اللوز والفستق الحلبي.", image: "/brand/hero-woman.jpg", tag: "حلوى خفيفة", price: "TBC", note: "باردة ومنعشة بعد المشاوي" }
         ]
       },
       artoMenus: {
         coffee: [
-          { name: "فلات وايت إسبريسو مختص", desc: "جرعة مزدوجة من الإسبريسو المستخلص من بن برازيلي أحادي المنشأ يمتزج مع حليب مخملي برغوة دقيقة.", image: "/brand/arto-flatwhite.jpg", sub: "بن برازيلي أحادي المنشأ", tag: "مفضل البيت", price: "قريباً" },
-          { name: "قهوة V60 المقطرة باردة", desc: "تقطير بارد للبن الفاخر يبرز نكهات الحمضيات والأزهار المنعشة لحبوب البن الخاصة بنا.", image: "/brand/arto-bg.jpg", sub: "حضر يدوياً", tag: "قهوة مختصة", price: "قريباً" }
+          { name: "فلات وايت إسبريسو مختص", desc: "جرعة مزدوجة من الإسبريسو المستخلص من بن برازيلي أحادي المنشأ يمتزج مع حليب مخملي برغوة دقيقة.", image: "/brand/the-espresso-lab-flatwhite.jpg", sub: "بن برازيلي أحادي المنشأ", tag: "مفضل البيت", price: "قريباً" },
+          { name: "قهوة V60 المقطرة باردة", desc: "تقطير بارد للبن الفاخر يبرز نكهات الحمضيات والأزهار المنعشة لحبوب البن الخاصة بنا.", image: "/brand/the-espresso-lab-bg.jpg", sub: "حضر يدوياً", tag: "قهوة مختصة", price: "قريباً" }
         ],
         beverages: [
-          { name: "لاتيه الزعفران المميز بالهيل", desc: "إسبريسو فاخر يمتزج مع الحليب الدافئ المنقوع بخيوط الزعفران البري وعسل الجبال الطبيعي.", image: "/brand/arto-bg.jpg", sub: "مشروب مميز", tag: "عطري", price: "قريباً" },
+          { name: "لاتيه الزعفران المميز بالهيل", desc: "إسبريسو فاخر يمتزج مع الحليب الدافئ المنقوع بخيوط الزعفران البري وعسل الجبال الطبيعي.", image: "/brand/the-espresso-lab-bg.jpg", sub: "مشروب مميز", tag: "عطري", price: "قريباً" },
           { name: "فرابيه الفستق الحلبي المثلج", desc: "إسبريسو بارد مخفوق مع كريمة الفستق الحلبي المحمصة، صلصة الكاكاو والحليب، مغطى بالكريمة.", image: "/brand/hero-unisex-perfume.jpg", sub: "فرابيه بارد", price: "قريباً" }
         ],
         artoDesserts: [
-          { name: "تشيز كيك سان سيباستيان", desc: "تشيز كيك كريمية مخبوزة بدون أطراف مع سطح مكرمل داكن، تقدم مع صبّة من الشوكولاتة البلجيكية الساخنة.", image: "/brand/arto-bg.jpg", sub: "تخبز طازجة يومياً", tag: "الأكثر مبيعاً", price: "قريباً" },
+          { name: "تشيز كيك سان سيباستيان", desc: "تشيز كيك كريمية مخبوزة بدون أطراف مع سطح مكرمل داكن، تقدم مع صبّة من الشوكولاتة البلجيكية الساخنة.", image: "/brand/the-espresso-lab-bg.jpg", sub: "تخبز طازجة يومياً", tag: "الأكثر مبيعاً", price: "قريباً" },
           { name: "كعكة العسل بالفستق الحلبي", desc: "كعكة إسفنجية خفيفة مشبعة بعسل الغابات الطبيعي، ومحشوة بكريمة الفستق الحلبي الأخضر الغنية.", image: "/brand/hero-unisex-perfume.jpg", sub: "كعكة التوقيع", tag: "حلويات فاخرة", price: "قريباً" }
         ]
       }
@@ -406,19 +406,19 @@ export default function RestaurantDetailClient({ restaurantId, lang, initialSani
   // Dynamic media resolvers
   const resolvedHeroBgImg = initialSanityData?.heroBgImage 
     ? (typeof initialSanityData.heroBgImage === 'string' ? initialSanityData.heroBgImage : (initialSanityData.heroBgImage.asset?.url || imageUrl(initialSanityData.heroBgImage).url()))
-    : (isVilamore ? "/brand/vilamore-bg.jpg" : "/brand/arto-bg.jpg");
+    : (isVilamore ? "/brand/vilamore-bg.jpg" : "/brand/the-espresso-lab-bg.jpg");
   const resolvedHeroBgType = initialSanityData?.heroBgType || "image";
   const resolvedHeroBgVideo = initialSanityData?.heroBgVideoUrl;
 
   const resolvedCollageImg1 = initialSanityData?.aboutImages?.[0]
     ? (typeof initialSanityData.aboutImages[0] === 'string' ? initialSanityData.aboutImages[0] : (initialSanityData.aboutImages[0].asset?.url || imageUrl(initialSanityData.aboutImages[0]).url()))
-    : (isVilamore ? "/brand/vilamore-bg.jpg" : "/brand/arto-bg.jpg");
+    : (isVilamore ? "/brand/vilamore-bg.jpg" : "/brand/the-espresso-lab-bg.jpg");
   const resolvedCollageImg2 = initialSanityData?.aboutImages?.[1]
     ? (typeof initialSanityData.aboutImages[1] === 'string' ? initialSanityData.aboutImages[1] : (initialSanityData.aboutImages[1].asset?.url || imageUrl(initialSanityData.aboutImages[1]).url()))
-    : (isVilamore ? "/brand/vilamore-kebab.jpg" : "/brand/arto-flatwhite.jpg");
+    : (isVilamore ? "/brand/vilamore-kebab.jpg" : "/brand/the-espresso-lab-flatwhite.jpg");
   const resolvedCollageImg3 = initialSanityData?.aboutImages?.[2]
     ? (typeof initialSanityData.aboutImages[2] === 'string' ? initialSanityData.aboutImages[2] : (initialSanityData.aboutImages[2].asset?.url || imageUrl(initialSanityData.aboutImages[2]).url()))
-    : (isVilamore ? "/brand/hero-woman.jpg" : "/brand/arto-bg.jpg");
+    : (isVilamore ? "/brand/hero-woman.jpg" : "/brand/the-espresso-lab-bg.jpg");
 
   const resolvedPanel1Img = initialSanityData?.panels?.[0]?.image
     ? (typeof initialSanityData.panels[0].image === 'string' ? initialSanityData.panels[0].image : (initialSanityData.panels[0].image.asset?.url || imageUrl(initialSanityData.panels[0].image).url()))
@@ -516,9 +516,9 @@ export default function RestaurantDetailClient({ restaurantId, lang, initialSani
     return menus.desserts;
   };
 
-  const getArtoActiveMenuList = () => {
+  const getEspressoActiveMenuList = () => {
     if (initialSanityData?.menus && initialSanityData.menus.length > 0) {
-      const filtered = initialSanityData.menus.filter((item: any) => item.categoryIndex === artoActiveTab);
+      const filtered = initialSanityData.menus.filter((item: any) => item.categoryIndex === espressoActiveTab);
       if (filtered.length > 0) {
         return filtered.map((item: any) => ({
           name: getVal(item.name, ""),
@@ -532,13 +532,13 @@ export default function RestaurantDetailClient({ restaurantId, lang, initialSani
     }
 
     const menus = t.artoMenus;
-    if (artoActiveTab === 0) return menus.coffee;
-    if (artoActiveTab === 1) return menus.beverages;
+    if (espressoActiveTab === 0) return menus.coffee;
+    if (espressoActiveTab === 1) return menus.beverages;
     return menus.artoDesserts;
   };
 
   const activeMenuList = getVilamoreActiveMenuList();
-  const activeArtoMenuList = getArtoActiveMenuList();
+  const activeEspressoMenuList = getEspressoActiveMenuList();
 
   // Helper to highlight key words in Orange (#CB6116)
   const highlightText = (text: string, wordsToHighlight: string[]) => {
@@ -734,7 +734,7 @@ export default function RestaurantDetailClient({ restaurantId, lang, initialSani
                   height: { 
                     md: `${initialSanityData?.logoHeight || 50}px` 
                   },
-                  maxHeight: { md: "50px", lg: "70px" },
+                  maxHeight: { md: "100px", lg: "140px" },
                   maxWidth: { md: "140px", lg: "220px" },
                   width: initialSanityData?.logoWidth ? `${initialSanityData.logoWidth}px` : "auto",
                   objectFit: "contain",
@@ -2104,7 +2104,7 @@ export default function RestaurantDetailClient({ restaurantId, lang, initialSani
 
                 <Stack direction="row" spacing={1.5}>
                   <Button
-                    onClick={() => scrollTerrace("left", artoScrollRef)}
+                    onClick={() => scrollTerrace("left", vilamoreScrollRef)}
                     sx={{
                       border: `2px solid ${accentColor}`,
                       color: accentColor,
@@ -2118,7 +2118,7 @@ export default function RestaurantDetailClient({ restaurantId, lang, initialSani
                     {isAr ? <ChevronRightIcon /> : <ChevronLeftIcon />}
                   </Button>
                   <Button
-                    onClick={() => scrollTerrace("right", artoScrollRef)}
+                    onClick={() => scrollTerrace("right", vilamoreScrollRef)}
                     sx={{
                       border: `2px solid ${accentColor}`,
                       color: accentColor,
@@ -2135,7 +2135,7 @@ export default function RestaurantDetailClient({ restaurantId, lang, initialSani
               </Stack>
 
               <Box
-                ref={artoScrollRef}
+                ref={vilamoreScrollRef}
                 sx={{
                   display: "flex",
                   overflowX: "auto",
@@ -2295,7 +2295,7 @@ export default function RestaurantDetailClient({ restaurantId, lang, initialSani
   });
 
   const oppositeLang = isAr ? "en" : "ar";
-  const oppositeLangPath = `/dining/arto-coffee/${oppositeLang}`;
+  const oppositeLangPath = `/dining/the-espresso-lab/${oppositeLang}`;
 
   const backHref = useMemo(() => {
     const rawLink = initialSanityData?.backButtonLink || "/dining";
@@ -2713,7 +2713,7 @@ export default function RestaurantDetailClient({ restaurantId, lang, initialSani
             <Grid size={{ xs: 12, md: 7 }}>
               <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1 }}>
                 <Typography sx={{ color: accentColor, fontWeight: 900, fontSize: 14, letterSpacing: "0.3em", textTransform: "uppercase", mb: 3 }}>
-                  {isAr ? "محامص قهوة أرتو" : "ARTO COFFEE ROASTERS"}
+                  {isAr ? "ذا اسبريسو لاب" : "THE ESPRESSO LAB"}
                 </Typography>
                 <Typography variant="h1" sx={{ fontFamily: "var(--heading-font)", fontWeight: 900, fontSize: { xs: "3.5rem", sm: "5rem", md: "7rem" }, lineHeight: 0.95, letterSpacing: "-0.03em", mb: 4 }}>
                   {t.artoHeroTitle}
@@ -2744,7 +2744,7 @@ export default function RestaurantDetailClient({ restaurantId, lang, initialSani
               >
                 <Box
                   component="img"
-                  src="/brand/arto-flatwhite.jpg"
+                  src="/brand/the-espresso-lab-flatwhite.jpg"
                   alt="Precision Coffee Extraction"
                   sx={{ position: "absolute", inset: 12, width: "calc(100% - 24px)", height: "calc(100% - 24px)", objectFit: "cover", borderRadius: "16px" }}
                 />
@@ -2760,7 +2760,7 @@ export default function RestaurantDetailClient({ restaurantId, lang, initialSani
               {lang === "ar" ? "«القهوة ليست مجرد شراب، بل هي لغة قائمة بذاتها تُقرب المسافات»" : "“Coffee is a language in itself, extracted carefully to bridge cultures and gather souls.”"}
             </Typography>
             <Typography variant="overline" sx={{ color: accentColor, fontWeight: 900, letterSpacing: "0.2em" }}>
-              {isAr ? "شعار أرتو" : "ARTO SLOGAN"}
+              {isAr ? "شعار ذا اسبريسو لاب" : "THE ESPRESSO LAB SLOGAN"}
             </Typography>
           </Container>
         </Box>
@@ -2770,7 +2770,7 @@ export default function RestaurantDetailClient({ restaurantId, lang, initialSani
           <Grid container spacing={8} alignItems="center" dir={lang === "ar" ? "rtl" : "ltr"}>
             <Grid size={{ xs: 12, md: 5 }}>
               <Box sx={{ border: "1px solid rgba(0,0,0,0.08)", p: 1.5, borderRadius: "24px", overflow: "hidden", boxShadow: "0 15px 35px rgba(0,0,0,0.03)" }}>
-                <Box component="img" src="/brand/arto-bg.jpg" alt="Specialty Roaster" sx={{ width: "100%", height: "460px", objectFit: "cover", borderRadius: "16px" }} />
+                <Box component="img" src="/brand/the-espresso-lab-bg.jpg" alt="Specialty Roaster" sx={{ width: "100%", height: "460px", objectFit: "cover", borderRadius: "16px" }} />
               </Box>
             </Grid>
             
@@ -2801,17 +2801,17 @@ export default function RestaurantDetailClient({ restaurantId, lang, initialSani
             </Box>
 
             <Stack direction="row" spacing={1.5}>
-              <Button onClick={() => scrollTerrace("left", artoScrollRef)} sx={{ border: "1px solid rgba(0,0,0,0.1)", color: "#000000", minWidth: 50, py: 1.5, borderRadius: "12px", "&:hover": { bgcolor: "#000000", color: "#ffffff" } }}>
+              <Button onClick={() => scrollTerrace("left", espressoScrollRef)} sx={{ border: "1px solid rgba(0,0,0,0.1)", color: "#000000", minWidth: 50, py: 1.5, borderRadius: "12px", "&:hover": { bgcolor: "#000000", color: "#ffffff" } }}>
                 <ChevronLeftIcon />
               </Button>
-              <Button onClick={() => scrollTerrace("right", artoScrollRef)} sx={{ border: "1px solid rgba(0,0,0,0.1)", color: "#000000", minWidth: 50, py: 1.5, borderRadius: "12px", "&:hover": { bgcolor: "#000000", color: "#ffffff" } }}>
+              <Button onClick={() => scrollTerrace("right", espressoScrollRef)} sx={{ border: "1px solid rgba(0,0,0,0.1)", color: "#000000", minWidth: 50, py: 1.5, borderRadius: "12px", "&:hover": { bgcolor: "#000000", color: "#ffffff" } }}>
                 <ChevronRightIcon />
               </Button>
             </Stack>
           </Stack>
 
           <Box
-            ref={artoScrollRef}
+            ref={espressoScrollRef}
             sx={{
               display: "flex",
               overflowX: "auto",
@@ -2826,12 +2826,12 @@ export default function RestaurantDetailClient({ restaurantId, lang, initialSani
           >
             {[
               {
-                img: "/brand/arto-flatwhite.jpg",
+                img: "/brand/the-espresso-lab-flatwhite.jpg",
                 title: isAr ? "01 / التقطير الدقيق" : "01 / Precision Pour-Over",
                 desc: isAr ? "ترشيح المياه بالحرارة المعايرة" : "Temperature calibrated water filtration"
               },
               {
-                img: "/brand/arto-bg.jpg",
+                img: "/brand/the-espresso-lab-bg.jpg",
                 title: isAr ? "02 / التحميص المختص" : "02 / Specialty Roasting",
                 desc: isAr ? "مراقبة منحنيات التحميص للدفعات الصغيرة" : "Micro-batch profile monitoring"
               },
@@ -2887,8 +2887,8 @@ export default function RestaurantDetailClient({ restaurantId, lang, initialSani
             {/* Tabs selector */}
             <Box sx={{ borderBottom: 1, borderColor: "rgba(0,0,0,0.08)", mb: 8, display: "flex", justifyContent: "center" }}>
               <Tabs
-                value={artoActiveTab}
-                onChange={(e, val) => setArtoActiveTab(val)}
+                value={espressoActiveTab}
+                onChange={(e, val) => setEspressoActiveTab(val)}
                 variant="scrollable"
                 scrollButtons="auto"
                 sx={{
@@ -2918,7 +2918,7 @@ export default function RestaurantDetailClient({ restaurantId, lang, initialSani
                 spacing={5}
                 dir={lang === "ar" ? "rtl" : "ltr"}
                 component={motion.div}
-                key={artoActiveTab}
+                key={espressoActiveTab}
                 variants={{
                   hidden: { opacity: 0 },
                   show: {
@@ -2932,7 +2932,7 @@ export default function RestaurantDetailClient({ restaurantId, lang, initialSani
                 animate="show"
                 exit={{ opacity: 0 }}
               >
-                {activeArtoMenuList.map((item: any, idx: number) => (
+                {activeEspressoMenuList.map((item: any, idx: number) => (
                   <Grid 
                     size={{ xs: 12, md: 6 }} 
                     key={idx}

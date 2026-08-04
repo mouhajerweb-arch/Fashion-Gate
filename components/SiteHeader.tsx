@@ -1278,7 +1278,7 @@ export default function SiteHeader({ settings, onLangToggleStart }: SiteHeaderPr
                               {isDining ? (
                                 [
                                   { label: lang === "ar" ? "مطعم فيلامور" : "RESTAURANT (VILAMORE)", href: `/dining/vilamore/${lang}` },
-                                  { label: lang === "ar" ? "مقهى آرتو" : "CAFE (ARTO COFFEE)", href: `/dining/arto-coffee/${lang}` }
+                                  { label: lang === "ar" ? "ذا اسبريسو لاب" : "CAFE (THE ESPRESSO LAB)", href: `/dining/the-espresso-lab/${lang}` }
                                 ].map((opt) => (
                                   <Typography
                                     key={opt.label}
@@ -1738,7 +1738,7 @@ export default function SiteHeader({ settings, onLangToggleStart }: SiteHeaderPr
                                   {isDining ? (
                                     [
                                       { label: lang === "ar" ? "مطعم فيلامور" : "Restaurant (Vilamore)", href: `/dining/vilamore/${lang}` },
-                                      { label: lang === "ar" ? "مقهى آرتو" : "Café (Arto Coffee)", href: `/dining/arto-coffee/${lang}` }
+                                      { label: lang === "ar" ? "ذا اسبريسو لاب" : "Café (The Espresso Lab)", href: `/dining/the-espresso-lab/${lang}` }
                                     ].map((opt) => (
                                       <MuiLink
                                         key={opt.label}

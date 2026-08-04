@@ -20,7 +20,7 @@ export const restaurantPage = defineType({
       name: "restaurantId",
       title: "Restaurant ID",
       type: "string",
-      description: 'Must match the route name exactly (e.g. "vilamore" or "arto-coffee")',
+      description: 'Must match the route name exactly (e.g. "vilamore" or "the-espresso-lab")',
       validation: (Rule) => Rule.required(),
     }),
     defineField({

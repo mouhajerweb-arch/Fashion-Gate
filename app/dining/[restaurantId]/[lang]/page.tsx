@@ -15,7 +15,7 @@ interface PageProps {
 
 export async function generateMetadata({ params }: PageProps) {
   const { restaurantId, lang } = await params;
-  if ((lang !== "en" && lang !== "ar") || (restaurantId !== "vilamore" && restaurantId !== "arto-coffee")) {
+  if ((lang !== "en" && lang !== "ar") || (restaurantId !== "vilamore" && restaurantId !== "the-espresso-lab")) {
     return {};
   }
 
@@ -30,12 +30,12 @@ export async function generateMetadata({ params }: PageProps) {
       descAr: "استمتع بأفخر المأكولات المتوسطية والشرقية، والإفطار الفاخر، وتجربة الطعام الاستثنائية في مطعم ومقهى فيلامور بوليفارد دمشق.",
       keywords: ["Vilamore Restaurant", "Vilamore Syria", "Luxury Dining Damascus", "مطعم فيلامور دمشق", "أرقى مطاعم سوريا"]
     },
-    "arto-coffee": {
-      title: "Arto Coffee | Specialty Artisanal Roastery at Fashion Gate Mall",
-      titleAr: "أرتو كوفي | مقهى ومحمصة القهوة المختصة في فاشن غيت مول",
-      desc: "Indulge in single-origin specialty coffees, freshly baked Levantine pastries, and refined lounge ambiance at Arto Coffee, Fashion Gate Mall Syria.",
-      descAr: "تذوق أجود أنواع القهوة المختصة أحادية المصدر والحلويات والمخبوزات الراقية في أرتو كوفي، فاشن غيت مول دمشق.",
-      keywords: ["Arto Coffee", "Specialty Coffee Damascus", "Arto Coffee Syria", "أرتو كوفي دمشق", "قهوة مختصة سوريا"]
+    "the-espresso-lab": {
+      title: "The Espresso Lab | Specialty Artisanal Roastery at Fashion Gate Mall",
+      titleAr: "ذا اسبريسو لاب | مقهى ومحمصة القهوة المختصة في فاشن غيت مول",
+      desc: "Indulge in single-origin specialty coffees, freshly baked artisanal pastries, and refined lounge ambiance at The Espresso Lab, Fashion Gate Mall Syria.",
+      descAr: "تذوق أجود أنواع القهوة المختصة أحادية المصدر والحلويات والمخبوزات الراقية في ذا اسبريسو لاب، فاشن غيت مول دمشق.",
+      keywords: ["The Espresso Lab", "Specialty Coffee Damascus", "The Espresso Lab Syria", "ذا اسبريسو لاب دمشق", "قهوة مختصة سوريا"]
     }
   };
 
@@ -60,7 +60,7 @@ export default async function RestaurantPage({ params }: PageProps) {
     notFound();
   }
 
-  if (restaurantId !== "vilamore" && restaurantId !== "arto-coffee") {
+  if (restaurantId !== "vilamore" && restaurantId !== "the-espresso-lab") {
     notFound();
   }
 
@@ -68,8 +68,8 @@ export default async function RestaurantPage({ params }: PageProps) {
   const sanityData = await getRestaurantPageData(restaurantId);
 
   const isAr = lang === "ar";
-  const restName = restaurantId === "arto-coffee"
-    ? (isAr ? "أرتو كوفي" : "Arto Coffee")
+  const restName = restaurantId === "the-espresso-lab"
+    ? (isAr ? "ذا اسبريسو لاب" : "The Espresso Lab")
     : (isAr ? "مطعم ومقهى فيلامور" : "VILAMORE Restaurant & Cafe");
 
   const restJsonLd = buildRestaurantJsonLd({

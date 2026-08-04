@@ -11,8 +11,8 @@ export async function generateMetadata() {
       seoData: data?.seo,
       fallback: {
         title: "Fine Dining & Cafes | Fashion Gate Mall Syria",
-        description: "Experience luxury dining at Fashion Gate Mall Syria featuring Vilamore Restaurant & Cafe and Arto Coffee at Damascus Boulevard.",
-        keywords: ["Fashion Gate Dining", "Vilamore Syria", "Arto Coffee Damascus", "Luxury Restaurant Damascus"]
+        description: "Experience luxury dining at Fashion Gate Mall Syria featuring Vilamore Restaurant & Cafe and The Espresso Lab at Damascus Boulevard.",
+        keywords: ["Fashion Gate Dining", "Vilamore Syria", "The Espresso Lab Damascus", "Luxury Restaurant Damascus"]
       },
       lang: "en",
       pathname: "dining/en"
