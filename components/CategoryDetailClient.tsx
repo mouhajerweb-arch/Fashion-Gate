@@ -258,7 +258,7 @@ export default function CategoryDetailClient({ categoryId, initialLang, initialP
   const t = categoryTranslations[lang];
 
   const fallbackDiningData = useMemo(() => ({
-    description: "At Fashion Gate Mall Syria, exceptional food and drink is something we take incredibly seriously. That is why we are proud to offer a destination featuring VILAMORE RESTAURANT & CAFE and Arto Coffee. We have carefully curated these establishments to provide an elevated culinary experience, ensuring that every visit offers both quality and variety. Whether you are looking for a refined meal or a perfect brew, our selection is designed to satisfy the most discerning tastes in a comfortable and sophisticated setting.",
+    description: "At Fashion Gate Mall Syria, exceptional food and drink is something we take incredibly seriously. That is why we are proud to offer a destination featuring VILAMORE RESTAURANT & CAFE and The Espresso Lab. We have carefully curated these establishments to provide an elevated culinary experience, ensuring that every visit offers both quality and variety. Whether you are looking for a refined meal or a perfect brew, our selection is designed to satisfy the most discerning tastes in a comfortable and sophisticated setting.",
     places: [
       {
         title: "VILAMORE RESTAURANT & CAFE",
@@ -277,17 +277,17 @@ export default function CategoryDetailClient({ categoryId, initialLang, initialP
         secondaryButtonPath: "https://wa.me/963119988"
       },
       {
-        title: "Arto Coffee",
-        description: "From the vibrant heart of Dubai Mall to the welcoming atmosphere of Fashion Gate Mall Syria, Arto Coffee brings a refined coffee culture to Syria. We take pride in in our dedication to excellence, sourcing premium specialty beans directly from Brazil and other renowned origins to ensure a superior cup in every pour. Whether you are pausing for a quiet moment during your shopping day or meeting friends to share our decadent selection of desserts, our cafe provides an inviting space where quality meets passion. We are thrilled to bring the same standard of artistry and flavor that our guests love in Dubai to our new home in Syria.",
-        image: "/brand/arto-bg.jpg",
-        logo: "/brand/arto-logo.png",
+        title: "The Espresso Lab",
+        description: "From the vibrant heart of Dubai to the welcoming atmosphere of Fashion Gate Mall Syria, The Espresso Lab brings a refined coffee culture to Syria. We take pride in our dedication to excellence, sourcing premium specialty beans directly from world-renowned origins to ensure a superior cup in every pour. Whether you are pausing for a quiet moment during your shopping day or meeting friends to share our selection of artisanal treats, our cafe provides an inviting space where quality meets passion.",
+        image: "/brand/the-espresso-lab-bg.jpg",
+        logo: "/brand/the-espresso-lab-logo.png",
         operatingHoursLabel: "Operating Hours",
         operatingHoursValue: "Daily TBC",
         contactUsLabel: "Contact Us",
         contactUsValue: "TBC",
         buttonText: "Explore Menu",
         redirectionType: "custom",
-        buttonPath: "/dining/arto-coffee",
+        buttonPath: "/dining/the-espresso-lab",
         showSecondaryButton: false,
         secondaryButtonText: "Book A Table",
         secondaryButtonPath: "https://wa.me/963119988"
@@ -1341,7 +1341,7 @@ export default function CategoryDetailClient({ categoryId, initialLang, initialP
                           </Grid>
                         </Grid>
 
-                        {/* Arto Coffee Showcase */}
+                        {/* The Espresso Lab Showcase */}
                         <Grid
                           container
                           spacing={{ xs: 0, md: 0 }}
@@ -1410,7 +1410,7 @@ export default function CategoryDetailClient({ categoryId, initialLang, initialP
                               <Box
                                 component="img"
                                 src={resolvedCafe.logo}
-                                alt="Arto Coffee Logo"
+                                alt="The Espresso Lab Logo"
                                 sx={{
                                   maxHeight: { xs: 65, md: 80 },
                                   maxWidth: "280px",

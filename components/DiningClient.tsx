@@ -18,7 +18,7 @@ export default function DiningClient({ initialLang, initialData }: DiningClientP
 
   const fallbackData = {
     en: {
-      description: "At Fashion Gate Mall Syria, exceptional food and drink is something we take incredibly seriously. That is why we are proud to offer a destination featuring VILAMORE RESTAURANT & CAFE and Arto Coffee. We have carefully curated these establishments to provide an elevated culinary experience, ensuring that every visit offers both quality and variety. Whether you are looking for a refined meal or a perfect brew, our selection is designed to satisfy the most discerning tastes in a comfortable and sophisticated setting.",
+      description: "At Fashion Gate Mall Syria, exceptional food and drink is something we take incredibly seriously. That is why we are proud to offer a destination featuring VILAMORE RESTAURANT & CAFE and The Espresso Lab. We have carefully curated these establishments to provide an elevated culinary experience, ensuring that every visit offers both quality and variety. Whether you are looking for a refined meal or a perfect brew, our selection is designed to satisfy the most discerning tastes in a comfortable and sophisticated setting.",
       places: [
         {
           title: "VILAMORE RESTAURANT & CAFE",
@@ -37,17 +37,17 @@ export default function DiningClient({ initialLang, initialData }: DiningClientP
           secondaryButtonPath: "https://wa.me/963119988"
         },
         {
-          title: "Arto Coffee",
-          description: "From the vibrant heart of Dubai Mall to the welcoming atmosphere of Fashion Gate Mall Syria, Arto Coffee brings a refined coffee culture to Syria. We take pride in in our dedication to excellence, sourcing premium specialty beans directly from Brazil and other renowned origins to ensure a superior cup in every pour. Whether you are pausing for a quiet moment during your shopping day or meeting friends to share our decadent selection of desserts, our cafe provides an inviting space where quality meets passion. We are thrilled to bring the same standard of artistry and flavor that our guests love in Dubai to our new home in Syria.",
-          image: "/brand/arto-bg.jpg",
-          logo: "/brand/arto-logo.png",
+          title: "The Espresso Lab",
+          description: "From the vibrant heart of Dubai to the welcoming atmosphere of Fashion Gate Mall Syria, The Espresso Lab brings a refined coffee culture to Syria. We take pride in our dedication to excellence, sourcing premium specialty beans directly from world-renowned origins to ensure a superior cup in every pour. Whether you are pausing for a quiet moment during your shopping day or meeting friends to share our selection of artisanal treats, our cafe provides an inviting space where quality meets passion.",
+          image: "/brand/the-espresso-lab-bg.jpg",
+          logo: "/brand/the-espresso-lab-logo.png",
           operatingHoursLabel: "Operating Hours",
           operatingHoursValue: "Daily TBC",
           contactUsLabel: "Contact Us",
           contactUsValue: "TBC",
           buttonText: "EXPLORE OUR MENU",
           redirectionType: "custom",
-          buttonPath: "/dining/arto-coffee",
+          buttonPath: "/dining/the-espresso-lab",
           showSecondaryButton: false,
           secondaryButtonText: "BOOK A TABLE",
           secondaryButtonPath: "https://wa.me/963119988"
@@ -55,7 +55,7 @@ export default function DiningClient({ initialLang, initialData }: DiningClientP
       ]
     },
     ar: {
-      description: "في فاشن غيت مول سوريا، نولي اهتماماً بالغاً لتقديم المأكولات والمشروبات الاستثنائية. ولهذا نفخر بتقديم وجهة فريدة تضم مطعم ومقهى فيلامور (VILAMORE RESTAURANT & CAFE) وآرتو كافيه (Arto Coffee). لقد اخترنا هذه المنشآت بعناية فائقة لنضمن تقديم تجربة طهي راقية ومتنوعة تلبي أرقى الأذواق في أجواء مريحة وفاخرة.",
+      description: "في فاشن غيت مول سوريا، نولي اهتماماً بالغاً لتقديم المأكولات والمشروبات الاستثنائية. ولهذا نفخر بتقديم وجهة فريدة تضم مطعم ومقهى فيلامور (VILAMORE RESTAURANT & CAFE) وذا اسبريسو لاب (The Espresso Lab). لقد اخترنا هذه المنشآت بعناية فائقة لنضمن تقديم تجربة طهي راقية ومتنوعة تلبي أرقى الأذواق في أجواء مريحة وفاخرة.",
       places: [
         {
           title: "مطعم ومقهى فيلامور",
@@ -74,17 +74,17 @@ export default function DiningClient({ initialLang, initialData }: DiningClientP
           secondaryButtonPath: "https://wa.me/963119988"
         },
         {
-          title: "أرتو كوفي",
-          description: "من القلب النابض لدبي مول إلى الأجواء الترحيبية لفاشن غيت مول سوريا، يجلب أرتو كوفي ثقافة القهوة الراقية إلى سوريا. نحن نفخر بتفانينا في التميز، حيث نستورد حبوب البن المختصة الممتازة مباشرة من البرازيل وغيرها من المصادر الشهيرة لضمان فنجان متميز في كل صبة. سواء كنت تأخذ استراحة للحظة هادئة خلال يوم التسوق الخاص بك أو تلتقي بالأصدقاء لمشاركة تشكيلتنا الفاخرة من الحلويات، فإن مقهانا يوفر مساحة جذابة حيث تلتقي الجودة بالشغف. يسعدنا تقديم نفس مستوى الفن والنكهة التي يحبها ضيوفنا في دبي إلى بيتنا الجديد في سوريا.",
-          image: "/brand/arto-bg.jpg",
-          logo: "/brand/arto-logo.png",
+          title: "ذا اسبريسو لاب",
+          description: "من عالم القهوة المختصة إلى قلب فاشن غيت مول سوريا، يقدم مقهى The Espresso Lab تجربة قهوة استثنائية ترتكز على الدقة، والحِرفية، والابتكار. يُحضَّر كل فنجان قهوة بعناية باستخدام أجود أنواع البن المختص المنتقى من أشهر مناطق زراعة القهوة حول العالم، ليُبرز النكهات الأصيلة لكل محصول من خلال أساليب تحميص واستخلاص متقنة. سواء كنتم تبحثون عن لحظة هادئة خلال جولتكم في التسوق أو لقاءٍ يجمعكم مع الأصدقاء حول قهوة مُحضّرة بإتقان ومخبوزات حرفية، يوفر مقهى ذا اسبريسو لاب وجهة تجمع بين الجودة، والإبداع، والشغف.",
+          image: "/brand/the-espresso-lab-bg.jpg",
+          logo: "/brand/the-espresso-lab-logo.png",
           operatingHoursLabel: "ساعات العمل",
           operatingHoursValue: "يومياً - يحدد لاحقاً",
           contactUsLabel: "اتصل بنا",
           contactUsValue: "يحدد لاحقاً",
           buttonText: "استكشف قائمتنا",
           redirectionType: "custom",
-          buttonPath: "/dining/arto-coffee",
+          buttonPath: "/dining/the-espresso-lab",
           showSecondaryButton: false,
           secondaryButtonText: "حجز طاولة",
           secondaryButtonPath: "https://wa.me/963119988"

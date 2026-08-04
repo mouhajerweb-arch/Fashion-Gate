@@ -31,7 +31,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   });
 
   // Dining / Restaurant pages
-  const diningSpots = ["vilamore", "arto-coffee"];
+  const diningSpots = ["vilamore", "the-espresso-lab"];
   diningSpots.forEach((spot) => {
     languages.forEach((lang) => {
       sitemapEntries.push({

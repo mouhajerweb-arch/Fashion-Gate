@@ -174,12 +174,12 @@ export const structure: StructureResolver = (S) =>
                     .title("Vilamore Restaurant")
                 ),
               S.listItem()
-                .title("Arto Coffee")
+                .title("The Espresso Lab")
                 .child(
                   S.document()
                     .schemaType("restaurantPage")
                     .documentId("arto-coffee")
-                    .title("Arto Coffee")
+                    .title("The Espresso Lab")
                 ),
             ])
         ),

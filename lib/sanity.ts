@@ -791,7 +791,7 @@ export async function getHeaderSettings() {
 
 export async function getRestaurantPageData(restaurantId: string) {
   try {
-    return await sanityClient.fetch(`*[_type == "restaurantPage" && restaurantId == $restaurantId][0] {
+    return await sanityClient.fetch(`*[_type == "restaurantPage" && (restaurantId == $restaurantId || (restaurantId == "The-Espresso-Lab-coffee" && $restaurantId == "the-espresso-lab") || (_id == "arto-coffee" && $restaurantId == "the-espresso-lab"))][0] {
       restaurantId,
       title,
       headerLogo { asset->{ url } },
