@@ -31,7 +31,7 @@ export function resolvePath(href: string, lang: "ar" | "en") {
     return `/brand/${lang}`;
   }
 
-  const categories = ["women", "men", "perfumes", "skincare", "beauty", "makeup", "fashion", "designers"];
+  const categories = ["women", "men", "perfumes", "skincare", "beauty", "makeup", "fashion", "designers", "dining"];
   const parts = cleanHref.split("/");
   const firstPart = parts[0];
   
