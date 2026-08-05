@@ -400,6 +400,8 @@ export default function RestaurantDetailClient({ restaurantId, lang, initialSani
     hoursVal: initialSanityData?.hoursVal ? getVal(initialSanityData.hoursVal, baseT.hoursVal) : baseT.hoursVal,
     contact: initialSanityData?.contactTitle ? getVal(initialSanityData.contactTitle, baseT.contact) : baseT.contact,
     contactVal: initialSanityData?.contactVal ? getVal(initialSanityData.contactVal, baseT.contactVal) : baseT.contactVal,
+    artoContactVal: initialSanityData?.contactVal ? getVal(initialSanityData.contactVal, baseT.artoContactVal) : baseT.artoContactVal,
+    artoLocVal: initialSanityData?.addressVal ? getVal(initialSanityData.addressVal, baseT.artoLocVal) : baseT.artoLocVal,
     footerAddress: initialSanityData?.addressVal ? getVal(initialSanityData.addressVal, baseT.footerAddress) : baseT.footerAddress,
   };
 
@@ -2391,7 +2393,7 @@ export default function RestaurantDetailClient({ restaurantId, lang, initialSani
                 height: { 
                   md: `${initialSanityData?.logoHeight || 50}px` 
                 },
-                maxHeight: { md: "50px", lg: "70px" },
+                // maxHeight: { md: "50px", lg: "70px" },
                 maxWidth: { md: "140px", lg: "220px" },
                 width: initialSanityData?.logoWidth ? `${initialSanityData.logoWidth}px` : "auto",
                 objectFit: "contain",
@@ -2580,7 +2582,7 @@ export default function RestaurantDetailClient({ restaurantId, lang, initialSani
               alt="Logo" 
               sx={{ 
                 height: `${initialSanityData?.logoHeightMobile || 30}px`,
-                maxHeight: "32px",
+                // maxHeight: "32px",
                 maxWidth: { xs: "90px", sm: "140px" },
                 width: "auto",
                 objectFit: "contain",
