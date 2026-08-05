@@ -447,7 +447,7 @@ export default function RestaurantDetailClient({ restaurantId, lang, initialSani
           if (link.linkType === "url") {
             let path = link.urlPath || "/";
             if (path === "/dining") {
-              path = `/dining/${lang}`;
+              path = `/category/dining/${lang}`;
             } else if (path === "/" || path === "/home") {
               path = `/${lang}`;
             } else if (path.startsWith("/dining") && !path.endsWith("/ar") && !path.endsWith("/en")) {
@@ -595,7 +595,7 @@ export default function RestaurantDetailClient({ restaurantId, lang, initialSani
     const backHref = useMemo(() => {
       const rawLink = initialSanityData?.backButtonLink || "/dining";
       if (rawLink === "/dining") {
-        return `/dining/${lang}`;
+        return `/category/dining/${lang}`;
       }
       if (rawLink === "/" || rawLink === "/home") {
         return `/${lang}`;
@@ -2300,7 +2300,7 @@ export default function RestaurantDetailClient({ restaurantId, lang, initialSani
   const backHref = useMemo(() => {
     const rawLink = initialSanityData?.backButtonLink || "/dining";
     if (rawLink === "/dining") {
-      return `/dining/${lang}`;
+      return `/category/dining/${lang}`;
     }
     if (rawLink === "/" || rawLink === "/home") {
       return `/${lang}`;

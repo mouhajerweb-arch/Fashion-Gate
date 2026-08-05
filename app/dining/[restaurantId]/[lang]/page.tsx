@@ -81,7 +81,7 @@ export default async function RestaurantPage({ params }: PageProps) {
 
   const breadcrumbsJsonLd = buildBreadcrumbsJsonLd([
     { name: isAr ? "الرئيسية" : "Home", url: `https://fashiongatemall.com/${lang}` },
-    { name: isAr ? "المطاعم" : "Dining", url: `https://fashiongatemall.com/dining/${lang}` },
+    { name: isAr ? "المطاعم" : "Dining", url: `https://fashiongatemall.com/category/dining/${lang}` },
     { name: restName, url: `https://fashiongatemall.com/dining/${restaurantId}/${lang}` }
   ]);
 

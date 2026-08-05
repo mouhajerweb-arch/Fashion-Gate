@@ -1150,7 +1150,7 @@ export default function CategoryDetailClient({ categoryId, initialLang, initialP
                           sx={{
                             textAlign: "left",
                             maxWidth: "850px",
-                            mx: "auto",
+                            // mx: "auto",
                             mb: 8,
                             px: 2
                           }}
