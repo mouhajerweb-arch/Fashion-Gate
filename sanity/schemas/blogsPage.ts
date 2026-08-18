@@ -55,6 +55,28 @@ export const blogsPage = defineType({
       description: "Select and order the blog posts to display on this page."
     }),
     defineField({
+      name: "editorialVision",
+      title: "Editorial Vision Section",
+      type: "object",
+      fields: [
+        defineField({
+          name: "eyebrow",
+          title: "Eyebrow",
+          type: "localizedString",
+        }),
+        defineField({
+          name: "quote",
+          title: "Quote",
+          type: "localizedText",
+        }),
+        defineField({
+          name: "attribution",
+          title: "Attribution",
+          type: "localizedString",
+        }),
+      ],
+    }),
+    defineField({
       name: "seo",
       title: "SEO Settings",
       type: "seo"

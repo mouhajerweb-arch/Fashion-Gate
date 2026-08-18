@@ -52,7 +52,92 @@ export const fashionPage = defineType({
       title: "Featured Brands in this Page",
       description: "Select which brands appear in this category page list.",
       type: "array",
-      of: [{ type: "reference", to: [{ type: "brand" }] }]
+      of: [
+        {
+          type: "object",
+          name: "featuredCategoryBrand",
+          title: "Featured Brand",
+          fields: [
+            defineField({
+              name: "brand",
+              title: "Brand",
+              type: "reference",
+              to: [{ type: "brand" }],
+              validation: (Rule) => Rule.required(),
+            }),
+            defineField({
+              name: "categoryLogoScale",
+              title: "Fashion Card Logo Scale",
+              type: "number",
+              description: "Page-specific scale used only for this brand on the Fashion page cards. It does not change the Brand document or any other page.",
+              initialValue: 1,
+              validation: (Rule) => Rule.min(0.01),
+            }),
+          ],
+          preview: {
+            select: {
+              title: "brand.title",
+              media: "brand.image",
+              scale: "categoryLogoScale",
+            },
+            prepare({ title, media, scale }) {
+              return {
+                title: title || "Featured Brand",
+                subtitle: scale ? `Fashion card scale: ${scale}` : "Default Fashion card scale",
+                media,
+              };
+            },
+          },
+        },
+        {
+          type: "reference",
+          title: "Brand Reference (legacy, no page scale)",
+          to: [{ type: "brand" }],
+        },
+      ]
+    }),
+    defineField({
+      name: "brandLogoScaleOverrides",
+      title: "Fashion Brand Card Logo Scale Overrides",
+      description: "Optional per-brand logo scales used only on the Fashion page brand cards. These do not affect the main Brand document or any global brand placement.",
+      type: "array",
+      of: [
+        {
+          type: "object",
+          name: "fashionBrandLogoScaleOverride",
+          title: "Fashion Brand Logo Scale",
+          fields: [
+            defineField({
+              name: "brand",
+              title: "Brand",
+              type: "reference",
+              to: [{ type: "brand" }],
+              validation: (Rule) => Rule.required(),
+            }),
+            defineField({
+              name: "scale",
+              title: "Scale",
+              type: "number",
+              initialValue: 1,
+              validation: (Rule) => Rule.required().min(0.01),
+            }),
+          ],
+          preview: {
+            select: {
+              title: "brand.title",
+              media: "brand.image",
+              scale: "scale",
+            },
+            prepare({ title, media, scale }) {
+              return {
+                title: title || "Brand Logo Scale",
+                subtitle: `Fashion card scale: ${scale || 1}`,
+                media,
+              };
+            },
+          },
+        },
+      ],
     }),
     defineField({
       name: "seo",

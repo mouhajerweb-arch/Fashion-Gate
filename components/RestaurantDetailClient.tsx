@@ -111,10 +111,10 @@ export default function RestaurantDetailClient({ restaurantId, lang, initialSani
   const content = {
     en: {
       vilamoreTitle: "Vilamore Restaurant & Café",
-      artoTitle: "The Espresso Lab",
-      artoHeroTitle: "THE ART OF BREWING",
-      artoHeroSub: "Dubai-sourced single origin roasts, extracted to perfection in Damascus.",
-      artoStory: "Sourced directly from Dubai roasters, The Espresso Lab represents the absolute pinnacle of premium coffee culture in Syria. Our beans are selected from micro-lots in Brazil, Ethiopia, and Colombia, roasted to highlight rich cocoa and floral notes, and brewed with state-of-the-art temperature controls.",
+      espressoTitle: "The Espresso Lab",
+      espressoHeroTitle: "THE ART OF BREWING",
+      espressoHeroSub: "Dubai-sourced single origin roasts, extracted to perfection in Damascus.",
+      espressoStory: "Sourced directly from Dubai roasters, The Espresso Lab represents the absolute pinnacle of premium coffee culture in Syria. Our beans are selected from micro-lots in Brazil, Ethiopia, and Colombia, roasted to highlight rich cocoa and floral notes, and brewed with state-of-the-art temperature controls.",
       vilamoreHeroTitle: "WELCOME TO VILAMORE",
       vilamoreHeroSub: "Your Premier Dining Destination in the Boulevard, Damascus",
       discoverTitle: "Discover Vilamore",
@@ -125,16 +125,16 @@ export default function RestaurantDetailClient({ restaurantId, lang, initialSani
       hours: "Operating Hours",
       contact: "Direct Line",
       vilamoreLocVal: "Ground Floor, Grand Promenade, Fashion Gate Syria",
-      artoLocVal: "First Floor, Luxury Terrace, Fashion Gate Syria",
+      espressoLocVal: "First Floor, Luxury Terrace, Fashion Gate Syria",
       hoursVal: "Daily 8:00 AM - 12:00 AM",
       contactVal: "+963 11 9988 (Ext. Vilamore)",
-      artoContactVal: "+963 11 9988 (Ext. Espresso Lab)",
+      espressoContactVal: "+963 11 9988 (Ext. Espresso Lab)",
       dubaiRef: "Dubai Management: Inspired by Askim, Boulevard Heights, Downtown Dubai.",
       menuHeader: "Our Culinary Menu",
       ambianceHeader: "Terrace & Courtyard Ambiance",
       processHeader: "The Brew Process",
       menuTabs: ["Breakfast & Bakery", "Cold Mezza", "Hot Mezza & Pastries", "Charcoal Grills & Mains", "Levantine Desserts"],
-      artoMenuTabs: ["Specialty Coffee", "Specialty Beverages", "Decadent Desserts"],
+      espressoMenuTabs: ["Specialty Coffee", "Specialty Beverages", "Decadent Desserts"],
       
       // Why Choose Vilamore panels
       panel1Title: "A Tantalizing Mix of Levantine Grills",
@@ -214,7 +214,7 @@ export default function RestaurantDetailClient({ restaurantId, lang, initialSani
           { name: "Damascus Muhallabia", desc: "Creamy cold milk pudding flavored with orange blossom water and mastic, garnished with sliced almonds and pistachios.", image: "/brand/hero-woman.jpg", tag: "Light Sweet", price: "TBC", note: "Delicate and refreshing" }
         ]
       },
-      artoMenus: {
+      espressoMenus: {
         coffee: [
           { name: "Specialty Flat White", desc: "Double shot of espresso extracted from single-origin Brazilian beans, mixed with steamed velvety microfoam milk.", image: "/brand/the-espresso-lab-flatwhite.jpg", sub: "Single Origin Brazil", tag: "Popular", price: "TBC" },
           { name: "V60 Drip Over Ice", desc: "Artisanal filter pour-over capturing the bright citrus, honey, and cocoa flavor notes of our specialty roasted beans.", image: "/brand/the-espresso-lab-bg.jpg", sub: "Hand-Crafted Drip", tag: "Specialty", price: "TBC" }
@@ -223,7 +223,7 @@ export default function RestaurantDetailClient({ restaurantId, lang, initialSani
           { name: "Signature Saffron Latte", desc: "Premium espresso combined with warm milk infused with wild organic saffron strands and honey.", image: "/brand/the-espresso-lab-bg.jpg", sub: "House Favorite", tag: "Aromatic", price: "TBC" },
           { name: "Iced Pistachio Mocha", desc: "Cold espresso blended with roasted green pistachio paste, chocolate sauce, and milk, topped with whipped cream.", image: "/brand/hero-unisex-perfume.jpg", sub: "Sweet Brew", price: "TBC" }
         ],
-        artoDesserts: [
+        espressoDesserts: [
           { name: "San Sebastian Cheesecake", desc: "Rich and creamy crustless cheesecake with a caramelized burnt top, served with a pour of warm premium Belgian chocolate sauce.", image: "/brand/the-espresso-lab-bg.jpg", sub: "Baked Fresh Daily", tag: "Bestseller", price: "TBC" },
           { name: "Layered Pistachio Honey Cake", desc: "Layered sponge cake soaked in organic forest honey, filled with a rich roasted green pistachio cream.", image: "/brand/hero-unisex-perfume.jpg", sub: "Signature Recipe", tag: "Sweet", price: "TBC" }
         ]
@@ -231,10 +231,10 @@ export default function RestaurantDetailClient({ restaurantId, lang, initialSani
     },
     ar: {
       vilamoreTitle: "مطعم ومقهى فيلامور",
-      artoTitle: "ذا اسبريسو لاب",
-      artoHeroTitle: "فن تحضير القهوة المختصة",
-      artoHeroSub: "حبوب بن برازيلية مستوردة من دبي ومحضرة يدوياً بدقة عالية في دمشق.",
-      artoStory: "يستورد ذا اسبريسو لاب حبوب البن الفاخرة مباشرة من محامص دبي، ليمثل قمة ثقافة القهوة في سوريا. نختار حبوبنا من مزارع البرازيل وإثيوبيا وكولومبيا لتقديم فنجان غني بالنكهات والروائح العطرة.",
+      espressoTitle: "ذا اسبريسو لاب",
+      espressoHeroTitle: "فن تحضير القهوة المختصة",
+      espressoHeroSub: "حبوب بن برازيلية مستوردة من دبي ومحضرة يدوياً بدقة عالية في دمشق.",
+      espressoStory: "يستورد ذا اسبريسو لاب حبوب البن الفاخرة مباشرة من محامص دبي، ليمثل قمة ثقافة القهوة في سوريا. نختار حبوبنا من مزارع البرازيل وإثيوبيا وكولومبيا لتقديم فنجان غني بالنكهات والروائح العطرة.",
       vilamoreHeroTitle: "مرحباً بكم في فيلامور",
       vilamoreHeroSub: "وجهتكم الفاخرة لتناول الطعام في البوليفارد، دمشق",
       discoverTitle: "اكتشف فيلامور",
@@ -245,16 +245,16 @@ export default function RestaurantDetailClient({ restaurantId, lang, initialSani
       hours: "أوقات العمل",
       contact: "خط الاتصال المباشر",
       vilamoreLocVal: "الطابق الأرضي، الممشى الرئيسي، فاشن غيت مول سوريا",
-      artoLocVal: "الطابق الأول، التراس الفاخر، فاشن غيت مول سوريا",
+      espressoLocVal: "الطابق الأول، التراس الفاخر، فاشن غيت مول سوريا",
       hoursVal: "يومياً من 8:00 صباحاً حتى 12:00 منتصف الليل",
       contactVal: "+963 11 9988 (تحويلة فيلامور)",
-      artoContactVal: "+963 11 9988 (تحويلة ذا اسبريسو لاب)",
+      espressoContactVal: "+963 11 9988 (تحويلة ذا اسبريسو لاب)",
       dubaiRef: "إدارة دبي: مستوحى من مطعم عاصكم، بوليفارد هايتس، وسط مدينة دبي.",
       menuHeader: "قائمتنا الشامية العريقة",
       ambianceHeader: "أجواء التراس والجلسات الخارجية",
       processHeader: "خطوات التحضير الفني للقهوة",
       menuTabs: ["الفطور والمخبوزات", "المزة والمقبلات الباردة", "المزة الساخنة والمعجنات", "المشويات الشامية والأطباق الرئيسية", "الحلويات الشرقية"],
-      artoMenuTabs: ["القهوة المختصة", "المشروبات الخاصة", "الحلويات الفاخرة"],
+      espressoMenuTabs: ["القهوة المختصة", "المشروبات الخاصة", "الحلويات الفاخرة"],
       
       // Why Choose Vilamore panels
       panel1Title: "مزيج يداعب الحواس من المشاوي الشامية",
@@ -334,7 +334,7 @@ export default function RestaurantDetailClient({ restaurantId, lang, initialSani
           { name: "مهلبية دمشقية بماء الزهر واللوز", desc: "بودينغ حليب بارد معطر بماء الزهر والمستكة الطبيعية، مزين بشرائح اللوز والفستق الحلبي.", image: "/brand/hero-woman.jpg", tag: "حلوى خفيفة", price: "TBC", note: "باردة ومنعشة بعد المشاوي" }
         ]
       },
-      artoMenus: {
+      espressoMenus: {
         coffee: [
           { name: "فلات وايت إسبريسو مختص", desc: "جرعة مزدوجة من الإسبريسو المستخلص من بن برازيلي أحادي المنشأ يمتزج مع حليب مخملي برغوة دقيقة.", image: "/brand/the-espresso-lab-flatwhite.jpg", sub: "بن برازيلي أحادي المنشأ", tag: "مفضل البيت", price: "قريباً" },
           { name: "قهوة V60 المقطرة باردة", desc: "تقطير بارد للبن الفاخر يبرز نكهات الحمضيات والأزهار المنعشة لحبوب البن الخاصة بنا.", image: "/brand/the-espresso-lab-bg.jpg", sub: "حضر يدوياً", tag: "قهوة مختصة", price: "قريباً" }
@@ -343,7 +343,7 @@ export default function RestaurantDetailClient({ restaurantId, lang, initialSani
           { name: "لاتيه الزعفران المميز بالهيل", desc: "إسبريسو فاخر يمتزج مع الحليب الدافئ المنقوع بخيوط الزعفران البري وعسل الجبال الطبيعي.", image: "/brand/the-espresso-lab-bg.jpg", sub: "مشروب مميز", tag: "عطري", price: "قريباً" },
           { name: "فرابيه الفستق الحلبي المثلج", desc: "إسبريسو بارد مخفوق مع كريمة الفستق الحلبي المحمصة، صلصة الكاكاو والحليب، مغطى بالكريمة.", image: "/brand/hero-unisex-perfume.jpg", sub: "فرابيه بارد", price: "قريباً" }
         ],
-        artoDesserts: [
+        espressoDesserts: [
           { name: "تشيز كيك سان سيباستيان", desc: "تشيز كيك كريمية مخبوزة بدون أطراف مع سطح مكرمل داكن، تقدم مع صبّة من الشوكولاتة البلجيكية الساخنة.", image: "/brand/the-espresso-lab-bg.jpg", sub: "تخبز طازجة يومياً", tag: "الأكثر مبيعاً", price: "قريباً" },
           { name: "كعكة العسل بالفستق الحلبي", desc: "كعكة إسفنجية خفيفة مشبعة بعسل الغابات الطبيعي، ومحشوة بكريمة الفستق الحلبي الأخضر الغنية.", image: "/brand/hero-unisex-perfume.jpg", sub: "كعكة التوقيع", tag: "حلويات فاخرة", price: "قريباً" }
         ]
@@ -400,8 +400,8 @@ export default function RestaurantDetailClient({ restaurantId, lang, initialSani
     hoursVal: initialSanityData?.hoursVal ? getVal(initialSanityData.hoursVal, baseT.hoursVal) : baseT.hoursVal,
     contact: initialSanityData?.contactTitle ? getVal(initialSanityData.contactTitle, baseT.contact) : baseT.contact,
     contactVal: initialSanityData?.contactVal ? getVal(initialSanityData.contactVal, baseT.contactVal) : baseT.contactVal,
-    artoContactVal: initialSanityData?.contactVal ? getVal(initialSanityData.contactVal, baseT.artoContactVal) : baseT.artoContactVal,
-    artoLocVal: initialSanityData?.addressVal ? getVal(initialSanityData.addressVal, baseT.artoLocVal) : baseT.artoLocVal,
+    espressoContactVal: initialSanityData?.contactVal ? getVal(initialSanityData.contactVal, baseT.espressoContactVal) : baseT.espressoContactVal,
+    espressoLocVal: initialSanityData?.addressVal ? getVal(initialSanityData.addressVal, baseT.espressoLocVal) : baseT.espressoLocVal,
     footerAddress: initialSanityData?.addressVal ? getVal(initialSanityData.addressVal, baseT.footerAddress) : baseT.footerAddress,
   };
 
@@ -533,10 +533,10 @@ export default function RestaurantDetailClient({ restaurantId, lang, initialSani
       }
     }
 
-    const menus = t.artoMenus;
+    const menus = t.espressoMenus;
     if (espressoActiveTab === 0) return menus.coffee;
     if (espressoActiveTab === 1) return menus.beverages;
-    return menus.artoDesserts;
+    return menus.espressoDesserts;
   };
 
   const activeMenuList = getVilamoreActiveMenuList();
@@ -2284,8 +2284,8 @@ export default function RestaurantDetailClient({ restaurantId, lang, initialSani
     );
   }
 
-  // 2. ARTO COFFEE DESIGN: MINIMALIST PORTFOLIO WITH SCANDINAVIAN WHITE & BOLD TYPOGRAPHY
-  const artoTheme = createTheme({
+  // 2. THE ESPRESSO LAB DESIGN: MINIMALIST PORTFOLIO WITH SCANDINAVIAN WHITE & BOLD TYPOGRAPHY
+  const espressoTheme = createTheme({
     palette: {
       primary: { main: "#000000" },
       background: { default: "#FFFFFF", paper: "#FFFFFF" },
@@ -2314,10 +2314,10 @@ export default function RestaurantDetailClient({ restaurantId, lang, initialSani
   }, [initialSanityData?.backButtonLink, lang]);
 
   return (
-    <ThemeProvider theme={artoTheme}>
+    <ThemeProvider theme={espressoTheme}>
       <Box sx={{ bgcolor: "#FFFFFF", color: "#000000", minHeight: "100vh", pb: 15, overflowX: "hidden", pt: "100px", position: "relative" }}>
         
-        {/* ==================== ARTO COFFEE HEADER ==================== */}
+        {/* ==================== THE ESPRESSO LAB HEADER ==================== */}
         
         {/* Desktop Fixed Navigation Buttons (Locks to sides, centered wordmark) */}
         <Box
@@ -2718,10 +2718,10 @@ export default function RestaurantDetailClient({ restaurantId, lang, initialSani
                   {isAr ? "ذا اسبريسو لاب" : "THE ESPRESSO LAB"}
                 </Typography>
                 <Typography variant="h1" sx={{ fontFamily: "var(--heading-font)", fontWeight: 900, fontSize: { xs: "3.5rem", sm: "5rem", md: "7rem" }, lineHeight: 0.95, letterSpacing: "-0.03em", mb: 4 }}>
-                  {t.artoHeroTitle}
+                  {t.espressoHeroTitle}
                 </Typography>
                 <Typography sx={{ fontSize: 18, lineHeight: 1.9, color: "rgba(0,0,0,0.65)", maxWidth: "580px" }}>
-                  {t.artoHeroSub}
+                  {t.espressoHeroSub}
                 </Typography>
               </motion.div>
             </Grid>
@@ -2784,7 +2784,7 @@ export default function RestaurantDetailClient({ restaurantId, lang, initialSani
                 {lang === "ar" ? "شغف الاستخلاص المتوازن" : "THE PURSUIT OF COFFEE SYMMETRY"}
               </Typography>
               <Typography sx={{ fontSize: 17, lineHeight: 2.1, color: "rgba(0,0,0,0.65)" }}>
-                {t.artoStory}
+                {t.espressoStory}
               </Typography>
             </Grid>
           </Grid>
@@ -2907,7 +2907,7 @@ export default function RestaurantDetailClient({ restaurantId, lang, initialSani
                   "& .MuiTabs-indicator": { backgroundColor: accentColor, height: "3px" }
                 }}
               >
-                {t.artoMenuTabs.map((tabName: string, idx: number) => (
+                {t.espressoMenuTabs.map((tabName: string, idx: number) => (
                   <Tab label={tabName} key={idx} />
                 ))}
               </Tabs>
@@ -3074,7 +3074,7 @@ export default function RestaurantDetailClient({ restaurantId, lang, initialSani
                       {lang === "ar" ? "العنوان" : "Address"}
                     </Typography>
                     <Typography sx={{ fontSize: 15, color: "rgba(0,0,0,0.65)", lineHeight: 1.6 }}>
-                      {t.artoLocVal}
+                      {t.espressoLocVal}
                     </Typography>
                   </Box>
                 </Stack>
@@ -3098,7 +3098,7 @@ export default function RestaurantDetailClient({ restaurantId, lang, initialSani
                       {lang === "ar" ? "خط الاتصال" : "Contact"}
                     </Typography>
                     <Typography sx={{ fontSize: 15, color: "rgba(0,0,0,0.65)" }}>
-                      {t.artoContactVal}
+                      {t.espressoContactVal}
                     </Typography>
                   </Box>
                 </Stack>

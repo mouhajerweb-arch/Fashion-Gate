@@ -517,7 +517,7 @@ export default function SiteFooter() {
       </Container>
 
       {/* Sleek Floating WhatsApp Button */}
-      <IconButton
+      {/* <IconButton
         href={floatingWhatsAppUrl}
         aria-label="WhatsApp"
         sx={{
@@ -537,7 +537,7 @@ export default function SiteFooter() {
         }}
       >
         <SiWhatsapp style={{ fontSize: 22 }} />
-      </IconButton>
+      </IconButton> */}
     </Box>
   );
 }

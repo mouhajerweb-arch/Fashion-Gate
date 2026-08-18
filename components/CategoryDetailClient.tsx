@@ -67,6 +67,70 @@ interface CategoryDetailClientProps {
   initialProducts?: Product[];
 }
 
+function BrandLogoMark({ brand, variant = "default" }: { brand: any; variant?: "default" | "category-card" }) {
+  if (brand.logoUrl) {
+    const sizeMultiplier = variant === "category-card" ? 1 : brand.logoSize === "large" ? 1.15 : brand.logoSize === "small" ? 0.82 : 1;
+    const rawScale = variant === "category-card"
+      ? Number(brand.categoryLogoScale || 1)
+      : Number(brand.logoScale || 1) * sizeMultiplier;
+    const maxScale = variant === "category-card" ? 8 : 3;
+    const scale = Math.max(0.25, Math.min(rawScale, maxScale));
+
+    return (
+      <Box
+        component="img"
+        src={brand.logoUrl}
+        alt={brand.name}
+        sx={{
+          display: "block",
+          maxHeight: variant === "category-card" ? 72 : 112,
+          maxWidth: variant === "category-card" ? "74%" : "82%",
+          objectFit: "contain",
+          transform: `scale(${scale})`,
+          transformOrigin: "center",
+        }}
+      />
+    );
+  }
+
+  return (
+    <Typography sx={{ fontSize: 16, fontWeight: 700, letterSpacing: "0.05em", color: "#111111" }}>
+      {brand.name}
+    </Typography>
+  );
+}
+
+function BrandLogoCard({ brand, lang }: { brand: any; lang: "en" | "ar" }) {
+  return (
+    <Grid size={{ xs: 12, sm: 6, md: 3 }} key={brand.id}>
+      <Link href={`/brand/${brand.id}/${lang}`} style={{ textDecoration: "none", color: "inherit" }}>
+        <Box
+          sx={{
+            bgcolor: "#ffffff",
+            border: "1px solid rgba(0,0,0,0.06)",
+            p: 3,
+            height: "190px",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            textAlign: "center",
+            transition: "all 0.4s cubic-bezier(0.25, 1, 0.5, 1)",
+            "&:hover": {
+              borderColor: "#CB6116",
+              boxShadow: "0 10px 24px rgba(203, 97, 22, 0.06)",
+              transform: "translateY(-4px)"
+            }
+          }}
+        >
+          <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", minHeight: 104, width: "100%", color: "#111111" }}>
+            <BrandLogoMark brand={brand} variant="category-card" />
+          </Box>
+        </Box>
+      </Link>
+    </Grid>
+  );
+}
+
 // Translations for category names and UI
 const categoryTranslations = {
   en: {
@@ -191,6 +255,16 @@ export default function CategoryDetailClient({ categoryId, initialLang, initialP
 
   const processedBrands = useMemo(() => {
     let rawList: any[] = [];
+    const scaleOverrides = new Map<string, number>();
+
+    (categoryCmsData?.brandLogoScaleOverrides || []).forEach((override: any) => {
+      const id = override?.brand?.slug?.current || override?.brand?._id;
+      const scale = Number(override?.scale);
+      if (id && Number.isFinite(scale) && scale > 0) {
+        scaleOverrides.set(id, scale);
+      }
+    });
+
     if (categoryCmsData?.allowedBrands && categoryCmsData.allowedBrands.length > 0) {
       rawList = categoryCmsData.allowedBrands;
     } else {
@@ -219,7 +293,11 @@ export default function CategoryDetailClient({ categoryId, initialLang, initialP
       }
     }
 
-    return rawList.map((sb: any) => {
+    return rawList.map((entry: any) => {
+      const sb = entry?.brand || entry;
+      const pageCategoryLogoScale = entry?.brand ? Number(entry.categoryLogoScale) : NaN;
+      const brandCategoryLogoScale = Number(sb.categoryLogoScale);
+      const brandId = sb.slug?.current || sb._id || sb.id;
       const fb = fallbackBrands.find((b) => b.id === (sb.slug?.current || sb.id || sb._id));
       const name = sb.title || fb?.name || "";
       const nameAr = sb.titleAr || fb?.nameAr || name;
@@ -230,15 +308,19 @@ export default function CategoryDetailClient({ categoryId, initialLang, initialP
       const headline = sb.headline?.en || sb.headline || fb?.headline || "";
       const headlineAr = sb.headline?.ar || sb.headline || fb?.headlineAr || headline;
 
-      const logoUrl = sb.image?.asset?.url || sb.logoUrl || null;
-      const fallbackLogo = logoUrl;
+      const logoUrl = (lang === "ar" ? sb.imageAr?.asset?.url : undefined) || sb.image?.asset?.url || sb.logoUrl || null;
 
       return {
-        id: sb.slug?.current || sb._id || sb.id,
+        id: brandId,
         name: lang === "ar" ? nameAr : name,
         headline: lang === "ar" ? headlineAr : headline,
         description: lang === "ar" ? descriptionAr : description,
-        logoUrl: fallbackLogo,
+        logoUrl,
+        logoScale: typeof sb.scale === "number" ? sb.scale : 1,
+        categoryLogoScale: scaleOverrides.get(brandId)
+          || (Number.isFinite(pageCategoryLogoScale) && pageCategoryLogoScale > 0 ? pageCategoryLogoScale : undefined)
+          || (Number.isFinite(brandCategoryLogoScale) && brandCategoryLogoScale > 0 ? brandCategoryLogoScale : 2),
+        logoSize: sb.size || "medium",
         bgImage: sb.bgImage?.asset?.url || sb.bgImage || fb?.backdropUrl || "/brand-pages/page_01.jpg"
       };
     });
@@ -674,7 +756,7 @@ export default function CategoryDetailClient({ categoryId, initialLang, initialP
 
                         {/* Brands Grid Section */}
                         <Typography sx={{ fontSize: 20, fontWeight: 600, fontFamily: "var(--heading-font)", mb: 4, textAlign: "center", color: "#111111" }}>
-                          {getLocalizedValue(categoryCmsData.brandsHeading, lang, lang === "ar" ? "علاماتنا التجارية الفاخرة" : "Our Luxury Brands")}
+                          {getLocalizedValue(categoryCmsData?.brandsHeading, lang, lang === "ar" ? "علاماتنا التجارية الفاخرة" : "Our Luxury Brands")}
                         </Typography>
 
                         <Grid container spacing={3}>
@@ -705,26 +787,13 @@ export default function CategoryDetailClient({ categoryId, initialLang, initialP
                                   }}
                                 >
                                   <Box sx={{ flexGrow: 1, display: "flex", alignItems: "center", justifyContent: "center", minHeight: 40, width: "100%", color: "#111111" }}>
-                                    {brand.logoUrl ? (
-                                      <Box
-                                        component="img"
-                                        src={brand.logoUrl}
-                                        alt={brand.name}
-                                        sx={{ maxHeight: 120, maxWidth: "80%", objectFit: "contain" }}
-                                      />
-                                    ) : (
-                                      brandVectorLogos[brand.id] || (
-                                        <Typography sx={{ fontSize: 16, fontWeight: 700, letterSpacing: "0.05em" }}>
-                                          {brand.name}
-                                        </Typography>
-                                      )
-                                    )}
+                                    <BrandLogoMark brand={brand} variant="category-card" />
                                   </Box>
 
                                   <Stack spacing={0.5} sx={{ mt: 1.5, width: "100%" }}>
-                                    <Typography sx={{ fontSize: 13, fontWeight: 600, color: "#111111", fontFamily: '"Cairo", sans-serif', textTransform: "uppercase" }}>
+                                    {/* <Typography sx={{ fontSize: 13, fontWeight: 600, color: "#111111", fontFamily: '"Cairo", sans-serif', textTransform: "uppercase" }}>
                                       {brand.name}
-                                    </Typography>
+                                    </Typography> */}
                                     <Typography sx={{ fontSize: 11.5, color: "rgba(0,0,0,0.5)", fontWeight: 300, fontFamily: '"Cairo", sans-serif', overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                                       {brand.headline || brand.description}
                                     </Typography>
@@ -795,7 +864,7 @@ export default function CategoryDetailClient({ categoryId, initialLang, initialP
 
                         {/* Brands Grid Section */}
                         <Typography sx={{ fontSize: 20, fontWeight: 600, fontFamily: "var(--heading-font)", mb: 4, textAlign: "center", color: "#111111" }}>
-                          {lang === "ar" ? "علاماتنا التجارية الفاخرة" : "Our Luxury Brands"}
+                          {getLocalizedValue(categoryCmsData?.brandsHeading, lang, lang === "ar" ? "علاماتنا التجارية الفاخرة" : "Our Luxury Brands")}
                         </Typography>
 
                         <Grid container spacing={3}>
@@ -826,20 +895,7 @@ export default function CategoryDetailClient({ categoryId, initialLang, initialP
                                   }}
                                 >
                                   <Box sx={{ flexGrow: 1, display: "flex", alignItems: "center", justifyContent: "center", minHeight: 40, width: "100%", color: "#111111" }}>
-                                    {brand.logoUrl ? (
-                                      <Box
-                                        component="img"
-                                        src={brand.logoUrl}
-                                        alt={brand.name}
-                                        sx={{ maxHeight: 120, maxWidth: "80%", objectFit: "contain" }}
-                                      />
-                                    ) : (
-                                      brandVectorLogos[brand.id] || (
-                                        <Typography sx={{ fontSize: 16, fontWeight: 700, letterSpacing: "0.05em" }}>
-                                          {brand.name}
-                                        </Typography>
-                                      )
-                                    )}
+                                    <BrandLogoMark brand={brand} variant="category-card" />
                                   </Box>
 
                                   <Stack spacing={0.5} sx={{ mt: 1.5, width: "100%" }}>
@@ -939,15 +995,11 @@ export default function CategoryDetailClient({ categoryId, initialLang, initialP
 
                         {/* Perfumes Brands Grid Section */}
                         <Typography sx={{ fontSize: 20, fontWeight: 600, fontFamily: "var(--heading-font)", mb: 4, textAlign: "center", color: "#111111" }}>
-                          {lang === "ar" ? "دور العطور العالمية الفاخرة" : "Luxury Fragrance Houses"}
+                          {getLocalizedValue(categoryCmsData?.brandsHeading, lang, lang === "ar" ? "دور العطور العالمية الفاخرة" : "Luxury Fragrance Houses")}
                         </Typography>
 
                         <Grid container spacing={3}>
-                          {processedBrands
-                            .filter((brand) =>
-                              ["elie-saab", "gucci", "prada", "valentino", "ysl", "cartier", "lancome", "calvin-klein", "giorgio-armani", "hugo-boss"].includes(brand.id)
-                            )
-                            .map((brand) => (
+                          {processedBrands.map((brand) => (
                               <Grid size={{ xs: 12, sm: 6, md: 3 }} key={brand.id}>
                                 <Link href={`/brand/${brand.id}/${lang}`} style={{ textDecoration: "none", color: "inherit" }}>
                                   <Box
@@ -955,7 +1007,7 @@ export default function CategoryDetailClient({ categoryId, initialLang, initialP
                                       bgcolor: "#ffffff",
                                       border: "1px solid rgb(255 255 255) !important",
 
-                                      p: 3,
+                                      p: 2,
                                       height: "190px",
                                       display: "flex",
                                       flexDirection: "column",
@@ -975,20 +1027,7 @@ export default function CategoryDetailClient({ categoryId, initialLang, initialP
                                     }}
                                   >
                                     <Box sx={{ flexGrow: 1, display: "flex", alignItems: "center", justifyContent: "center", minHeight: 40, width: "100%", color: "#111111" }}>
-                                      {brand.logoUrl ? (
-                                        <Box
-                                          component="img"
-                                          src={brand.logoUrl}
-                                          alt={brand.name}
-                                          sx={{ maxHeight: 120, maxWidth: "80%", objectFit: "contain" }}
-                                        />
-                                      ) : (
-                                        brandVectorLogos[brand.id] || (
-                                          <Typography sx={{ fontSize: 16, fontWeight: 700, letterSpacing: "0.05em" }}>
-                                            {brand.name}
-                                          </Typography>
-                                        )
-                                      )}
+                                      <BrandLogoMark brand={brand} variant="category-card" />
                                     </Box>
 
                                     <Stack spacing={0.5} sx={{ mt: 1.5, width: "100%" }}>
@@ -1101,20 +1140,7 @@ export default function CategoryDetailClient({ categoryId, initialLang, initialP
                                     }}
                                   >
                                     <Box sx={{ flexGrow: 1, display: "flex", alignItems: "center", justifyContent: "center", minHeight: 40, width: "100%", color: "#111111" }}>
-                                      {brand.logoUrl ? (
-                                        <Box
-                                          component="img"
-                                          src={brand.logoUrl}
-                                          alt={brand.name}
-                                          sx={{ maxHeight: 120, maxWidth: "80%", objectFit: "contain" }}
-                                        />
-                                      ) : (
-                                        brandVectorLogos[brand.id] || (
-                                          <Typography sx={{ fontSize: 16, fontWeight: 700, letterSpacing: "0.05em" }}>
-                                            {brand.name}
-                                          </Typography>
-                                        )
-                                      )}
+                                      <BrandLogoMark brand={brand} variant="category-card" />
                                     </Box>
 
                                     <Stack spacing={0.5} sx={{ mt: 1.5, width: "100%" }}>

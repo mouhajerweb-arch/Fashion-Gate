@@ -178,7 +178,7 @@ export const structure: StructureResolver = (S) =>
                 .child(
                   S.document()
                     .schemaType("restaurantPage")
-                    .documentId("arto-coffee")
+                    .documentId("the-espresso-lab")
                     .title("The Espresso Lab")
                 ),
             ])

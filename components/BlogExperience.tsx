@@ -102,6 +102,18 @@ export default function BlogExperience({
     ? (settings?.stat3?.ar || "١٢ مذكرة يومية") 
     : (settings?.stat3?.en || "12 Journal Notes");
 
+  const editorialVisionEyebrow = initialLang === "ar"
+    ? (settings?.editorialVision?.eyebrow?.ar || "Ø§Ù„Ø±Ø¤ÙŠØ© Ø§Ù„ØªØ­Ø±ÙŠØ±ÙŠØ©")
+    : (settings?.editorialVision?.eyebrow?.en || "Editorial Vision");
+
+  const editorialVisionQuote = initialLang === "ar"
+    ? (settings?.editorialVision?.quote?.ar || '"Ù…Ø´Ø§Ø±ÙŠØ¹ Ø­Ù‚ÙŠÙ‚ÙŠØ© ØªØªØ±Ø¬Ù… Ø¥Ù„Ù‰ Ù…ØµØ¯Ø§Ù‚ÙŠØ©ØŒ ÙˆØ«Ù‚Ø© Ø§Ù„Ø¹Ù…Ù„Ø§Ø¡ØŒ ÙˆØ±Ø³ÙˆØ® Ø§Ù„Ø¹Ù„Ø§Ù…Ø© Ø§Ù„ØªØ¬Ø§Ø±ÙŠØ©."')
+    : (settings?.editorialVision?.quote?.en || '"Real projects translated into search relevance, client trust, and brand authority."');
+
+  const editorialVisionAttribution = initialLang === "ar"
+    ? (settings?.editorialVision?.attribution?.ar || "ÙØ§Ø´Ù† ØºÙŠØª Ù…ÙˆÙ„")
+    : (settings?.editorialVision?.attribution?.en || "Fashion Gate Mall");
+
   const theme = createTheme({
     palette: {
       mode: "dark",
@@ -390,16 +402,13 @@ export default function BlogExperience({
           <Container maxWidth="xl">
             <Stack spacing={2.5} alignItems="center" textAlign="center">
               <Typography sx={{ color: "primary.main", fontSize: 11, fontWeight: 800, letterSpacing: "0.22em", textTransform: "none" }}>
-                {isAr ? "الرؤية التحريرية" : "Editorial Vision"}
+                {editorialVisionEyebrow}
               </Typography>
               <Typography sx={{ fontFamily: "var(--heading-font)", fontSize: { xs: "2rem", md: "3.2rem" }, lineHeight: 1.15, fontWeight: 500, maxWidth: 820 }}>
-                {isAr 
-                  ? '"مشاريع حقيقية تترجم إلى مصداقية، وثقة العملاء، ورسوخ العلامة التجارية."'
-                  : '"Real projects translated into search relevance, client trust, and brand authority."'
-                }
+                {editorialVisionQuote}
               </Typography>
               <Typography sx={{ color: "rgba(0,0,0,0.48)", fontSize: 11, fontWeight: 700, letterSpacing: isAr ? 0 : "0.15em", textTransform: "none" }}>
-                {isAr ? "بوابة الأزياء دمشق" : "Fashion Gate Damascus"}
+                {editorialVisionAttribution}
               </Typography>
             </Stack>
           </Container>
@@ -410,3 +419,4 @@ export default function BlogExperience({
     </ThemeProvider>
   );
 }
+
