@@ -7,7 +7,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import NorthEastIcon from "@mui/icons-material/NorthEast";
 import { Box, Button, Container, Drawer, IconButton, Stack, ThemeProvider, Tooltip, Typography, createTheme } from "@mui/material";
 import { motion, AnimatePresence } from "framer-motion";
-import { imageUrl, getAnnouncements, getLocalizedValue } from "@/lib/sanity";
+import { imageUrl, getAnnouncements, getLocalizedValue, getContactPageData } from "@/lib/sanity";
 import type { CollectionItem, MediaItem, SanityImage, Section, SiteSettings } from "@/lib/types";
 import Link from "next/link";
 import { useParams, useRouter, usePathname } from "next/navigation";
@@ -24,7 +24,7 @@ import BoulevardSelectionSection from "./storefront/BoulevardSelectionSection";
 import EditorialSection from "./storefront/EditorialSection";
 import AtelierShowcaseSection from "./storefront/AtelierShowcaseSection";
 import BrandMarquee from "./storefront/BrandMarquee";
-import ContactInquirySection from "./storefront/ContactInquirySection";
+import ContactDetailsFormSection from "./storefront/ContactDetailsFormSection";
 
 
 const MotionBox = motion.create(Box);
@@ -722,6 +722,7 @@ export default function Storefront({
   
   const [lang, setLang] = useState<"ar" | "en">(initialLang);
   const [isLangTransitioning, setIsLangTransitioning] = useState(false);
+  const [contactSectionData, setContactSectionData] = useState<any>(null);
 
   useEffect(() => {
     if (pathname) {
@@ -733,6 +734,14 @@ export default function Storefront({
   useEffect(() => {
     setIsLangTransitioning(false);
   }, [lang]);
+
+  useEffect(() => {
+    getContactPageData()
+      .then((data) => {
+        if (data) setContactSectionData(data);
+      })
+      .catch((err) => console.error("Failed to load homepage contact section:", err));
+  }, []);
 
   const { setLoading } = useLoader();
 
@@ -798,11 +807,7 @@ export default function Storefront({
               </Box>
             );
           })}
-          {/* Have a Question / Contact Us Section */}
-          {(() => {
-            const contactInquirySec = sections.find((s: any) => s._type === "contactInquirySection" || s.type === "contactInquiry");
-            return <ContactInquirySection lang={lang} section={contactInquirySec} />;
-          })()}
+          <ContactDetailsFormSection lang={lang} data={contactSectionData} withOuterSpacing />
         </Box>
       </Box>
     </ThemeProvider>

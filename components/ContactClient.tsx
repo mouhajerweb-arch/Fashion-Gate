@@ -279,14 +279,15 @@ export default function ContactClient({ initialLang, initialData }: ContactClien
                 { title: t.locationTitle, body: t.locationBody, href: undefined as string | undefined, cta: undefined as string | undefined },
                 { title: t.hoursTitle, body: t.hoursBody, href: undefined, cta: undefined },
                 { title: t.emailTitle, body: t.emailBody, href: `mailto:${t.emailBody}`, cta: undefined },
-                { title: t.whatsappTitle, body: t.whatsappBody, href: t.whatsappLink, cta: t.whatsappCta },
+                // Hidden for now.
+                // { title: t.whatsappTitle, body: t.whatsappBody, href: t.whatsappLink, cta: t.whatsappCta },
               ]).map((item, i) => (
                 <Grid
                   key={i}
-                  size={{ xs: 12, sm: 6, md: 3 }}
+                  size={{ xs: 12, sm: 4 }}
                   sx={{
-                    borderRight: { sm: (i === 1 || i === 3) ? "none" : `1px solid ${TK.border}`, md: i < 3 ? `1px solid ${TK.border}` : "none" },
-                    borderBottom: { xs: i < 3 ? `1px solid ${TK.border}` : "none", sm: i < 2 ? `1px solid ${TK.border}` : "none", md: "none" },
+                    borderRight: { sm: i < 2 ? `1px solid ${TK.border}` : "none" },
+                    borderBottom: { xs: i < 2 ? `1px solid ${TK.border}` : "none", sm: "none" },
                   }}
                 >
                   <MotionBox

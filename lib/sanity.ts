@@ -349,7 +349,9 @@ export async function getFooterSettings() {
       xUrl
     }`);
   } catch (err) {
-    console.error("Error fetching footer settings:", err);
+    if (typeof window === "undefined") {
+      console.error("Error fetching footer settings:", err);
+    }
     return null;
   }
 }
@@ -672,6 +674,11 @@ export async function getBlogsPageSettings(): Promise<any> {
       stat1 { en, ar },
       stat2 { en, ar },
       stat3 { en, ar },
+      editorialVision {
+        eyebrow { en, ar },
+        quote { en, ar },
+        attribution { en, ar }
+      },
       seo { metaTitle, metaDescription, keywords, ogImage { asset->{ url } }, canonicalUrl, noIndex }
     }`);
     return raw || null;
@@ -791,7 +798,7 @@ export async function getHeaderSettings() {
 
 export async function getRestaurantPageData(restaurantId: string) {
   try {
-    return await sanityClient.fetch(`*[_type == "restaurantPage" && (restaurantId == $restaurantId || (restaurantId == "The-Espresso-Lab-coffee" && $restaurantId == "the-espresso-lab") || (_id == "arto-coffee" && $restaurantId == "the-espresso-lab"))][0] {
+    return await sanityClient.fetch(`*[_type == "restaurantPage" && (restaurantId == $restaurantId || (restaurantId == "The-Espresso-Lab-coffee" && $restaurantId == "the-espresso-lab") || (_id == "the-espresso-lab" && $restaurantId == "the-espresso-lab") || (_id == "arto-coffee" && $restaurantId == "the-espresso-lab") || _id == $restaurantId)][0] {
       restaurantId,
       title,
       headerLogo { asset->{ url } },
@@ -918,7 +925,15 @@ export async function getCategoryPageData(categoryId: string): Promise<any> {
       ? "fashionPage"
       : "categoryPage";
       
-    return sanityClient.fetch(`*[_type == $docType && (categoryId == $categoryId || _id == $categoryId)][0] {
+    return sanityClient.fetch(`*[
+      _type == $docType &&
+      (
+        categoryId == $categoryId ||
+        _id == $categoryId ||
+        _id == $docType ||
+        !defined(categoryId)
+      )
+    ][0] {
       _id,
       categoryId,
       title { en, ar },
@@ -931,15 +946,46 @@ export async function getCategoryPageData(categoryId: string): Promise<any> {
         link
       },
       brandsHeading { en, ar },
-      allowedBrands[]-> {
-        _id,
-        title,
-        titleAr,
-        slug,
-        headline,
-        description,
-        image { asset->{ url } },
-        bgImage { asset->{ url } }
+      allowedBrands[] {
+        _type,
+        _type == "reference" => @-> {
+          _id,
+          title,
+          titleAr,
+          slug,
+          headline,
+          description,
+          image { asset->{ url } },
+          imageAr { asset->{ url } },
+          size,
+          scale,
+          categoryLogoScale,
+          bgImage { asset->{ url } }
+        },
+        _type != "reference" => {
+          categoryLogoScale,
+          "brand": brand-> {
+            _id,
+            title,
+            titleAr,
+            slug,
+            headline,
+            description,
+            image { asset->{ url } },
+            imageAr { asset->{ url } },
+            size,
+            scale,
+            categoryLogoScale,
+            bgImage { asset->{ url } }
+          }
+        }
+      },
+      brandLogoScaleOverrides[] {
+        scale,
+        brand-> {
+          _id,
+          slug
+        }
       },
       seo { metaTitle, metaDescription, keywords, ogImage { asset->{ url } }, canonicalUrl, noIndex }
     }`, { docType, categoryId });

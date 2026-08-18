@@ -277,14 +277,14 @@ export function buildRestaurantJsonLd(restaurant: {
 }) {
   return {
     "@context": "https://schema.org",
-    "@type": (restaurant.id === "the-espresso-lab" || restaurant.id === "arto-coffee") ? "CafeOrCoffeeShop" : "Restaurant",
+    "@type": (restaurant.id === "the-espresso-lab" || restaurant.id === "The-Espresso-Lab-coffee" || restaurant.id === "the-espresso-lab-coffee" || restaurant.id === "arto-coffee") ? "CafeOrCoffeeShop" : "Restaurant",
     name: restaurant.name,
     description: restaurant.description,
     image: restaurant.image ? [restaurant.image] : [`${SITE_URL}/brand-pages/page_01.jpg`],
     url: restaurant.url,
     telephone: restaurant.telephone || "+963-930-000-000",
     priceRange: "$$$",
-    servesCuisine: restaurant.servesCuisine || ((restaurant.id === "the-espresso-lab" || restaurant.id === "arto-coffee") ? ["Specialty Coffee", "Artisanal Bakery", "Levantine Pastries"] : ["Mediterranean", "Levantine Fine Dining", "Charcoal Grills"]),
+    servesCuisine: restaurant.servesCuisine || ((restaurant.id === "the-espresso-lab" || restaurant.id === "The-Espresso-Lab-coffee" || restaurant.id === "the-espresso-lab-coffee" || restaurant.id === "arto-coffee") ? ["Specialty Coffee", "Artisanal Bakery", "Levantine Pastries"] : ["Mediterranean", "Levantine Fine Dining", "Charcoal Grills"]),
     address: {
       "@type": "PostalAddress",
       streetAddress: "Damascus Boulevard District, Fashion Gate Mall",
