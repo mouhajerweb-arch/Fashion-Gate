@@ -122,6 +122,7 @@ export default function SiteFooter() {
     lang,
     lang === "ar" ? "جميع الحقوق محفوظة." : "All rights reserved."
   );
+  const appVersion = process.env.NEXT_PUBLIC_APP_VERSION;
 
   const facebookUrl = settings?.facebookUrl || "#";
   const instagramUrl = settings?.instagramUrl || "#";
@@ -314,6 +315,19 @@ export default function SiteFooter() {
             }}
           >
             © {new Date().getFullYear()} {lang === "ar" ? "فاشن غيت مول" : "Fashion Gate Mall"}. {copyrightText}
+            {appVersion && (
+              <Box
+                component="span"
+                sx={{
+                  color: "#FAF8F5",
+                  userSelect: "text",
+                  ml: lang === "ar" ? 0 : 1,
+                  mr: lang === "ar" ? 1 : 0
+                }}
+              >
+                v{appVersion}
+              </Box>
+            )}
           </Typography>
 
           {/* Social Links */}
