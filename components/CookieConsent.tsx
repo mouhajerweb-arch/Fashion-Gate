@@ -164,8 +164,7 @@ export default function CookieConsent({ lang, settings }: CookieConsentProps) {
         boxShadow: "0 -15px 50px rgba(0, 0, 0, 0.08)",
         py: { xs: 2.5, md: 3 },
         // Add left padding to keep content clear of the bottom-left floating 'N' badge
-        pl: { xs: "84px", sm: "96px", md: "110px" },
-        pr: { xs: "16px", sm: "24px", md: "40px" },
+        px: { xs: 2, sm: 3, md: 5 },
         color: "#111111",
         
         // Fluid transform transition instead of sudden mounting
@@ -202,11 +201,11 @@ export default function CookieConsent({ lang, settings }: CookieConsentProps) {
           <Stack
             direction={{ xs: "column", md: "row" }}
             justifyContent="space-between"
-            alignItems={{ xs: "flex-start", md: "center" }}
-            sx={{ gap: 3 }}
+            alignItems={{ xs: "stretch", md: "center" }}
+            sx={{ gap: { xs: 2, md: 3 } }}
           >
             {/* Left Column: Text & Icon */}
-            <Stack direction="row" spacing={2} alignItems="flex-start" sx={{ flexGrow: 1, maxWidth: { md: "60%" } }}>
+            <Stack direction="row" spacing={1.5} alignItems="flex-start" sx={{ flexGrow: 1, maxWidth: { md: "60%" }, minWidth: 0 }}>
               <CookieIcon sx={{ color: "primary.main", fontSize: 24, mt: 0.3 }} />
               <Stack spacing={0.5}>
                 <Typography
@@ -231,7 +230,7 @@ export default function CookieConsent({ lang, settings }: CookieConsentProps) {
               sx={{ 
                 width: { xs: "100%", md: "auto" }, 
                 minWidth: { md: 420 },
-                gap: 2 
+                gap: { xs: 1, sm: 1.5, md: 2 }
               }}
             >
               <Button
@@ -263,7 +262,6 @@ export default function CookieConsent({ lang, settings }: CookieConsentProps) {
               <Button
                 onClick={handleRejectAll}
                 variant="outlined"
-                fullWidth
                 sx={{
                   color: "#111111",
                   borderColor: "rgba(0, 0, 0, 0.15)",
@@ -274,6 +272,8 @@ export default function CookieConsent({ lang, settings }: CookieConsentProps) {
                   px: 3,
                   fontFamily: '"Cairo", sans-serif',
                   whiteSpace: "nowrap",
+                  width: { xs: "100%", sm: "auto" },
+                  minWidth: { sm: 118 },
                   "&:hover": {
                     borderColor: "#111111",
                     bgcolor: "rgba(0, 0, 0, 0.04)",
@@ -286,7 +286,6 @@ export default function CookieConsent({ lang, settings }: CookieConsentProps) {
               <Button
                 onClick={handleAcceptAll}
                 variant="contained"
-                fullWidth
                 sx={{
                   bgcolor: "primary.main",
                   color: "#ffffff",
@@ -297,6 +296,8 @@ export default function CookieConsent({ lang, settings }: CookieConsentProps) {
                   px: 3,
                   fontFamily: '"Cairo", sans-serif',
                   whiteSpace: "nowrap",
+                  width: { xs: "100%", sm: "auto" },
+                  minWidth: { sm: 118 },
                   "&:hover": { bgcolor: "primary.dark" },
                 }}
               >
