@@ -311,7 +311,8 @@ export default function SiteFooter() {
             sx={{
               color: "rgba(0,0,0,0.48)",
               fontSize: 12.5,
-              fontFamily: '"Cairo", sans-serif'
+              fontFamily: '"Cairo", sans-serif',
+              position: "relative"
             }}
           >
             © {new Date().getFullYear()} {lang === "ar" ? "فاشن غيت مول" : "Fashion Gate Mall"}. {copyrightText}
@@ -319,13 +320,16 @@ export default function SiteFooter() {
               <Box
                 component="span"
                 sx={{
+                  position: "absolute",
+                  insetInlineStart: "100%",
+                  top: 0,
                   color: "#FAF8F5",
                   userSelect: "text",
-                  ml: lang === "ar" ? 0 : 1,
-                  mr: lang === "ar" ? 1 : 0
+                  width: "max-content",
+                  pointerEvents: "none"
                 }}
               >
-                v{appVersion}
+                app version : {appVersion}
               </Box>
             )}
           </Typography>
