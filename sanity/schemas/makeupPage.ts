@@ -50,9 +50,45 @@ export const makeupPage = defineType({
     defineField({
       name: "allowedBrands",
       title: "Featured Brands in this Page",
-      description: "Select which brands appear in this category page list.",
+      description: "Select, order, and toggle brands for this page only. Turning a row off does not affect the Brand document or other pages.",
       type: "array",
-      of: [{ type: "reference", to: [{ type: "brand" }] }]
+      of: [
+        {
+          type: "object",
+          name: "featuredMakeupBrand",
+          title: "Featured Brand",
+          fields: [
+            defineField({
+              name: "brand",
+              title: "Brand",
+              type: "reference",
+              to: [{ type: "brand" }],
+              validation: (Rule) => Rule.required(),
+            }),
+            defineField({
+              name: "isVisible",
+              title: "Show this brand on Makeup page",
+              type: "boolean",
+              description: "Turn this off to hide the brand only from the Makeup page. The brand can still appear elsewhere.",
+              initialValue: true,
+            }),
+          ],
+          preview: {
+            select: {
+              title: "brand.title",
+              media: "brand.image",
+              isVisible: "isVisible",
+            },
+            prepare({ title, media, isVisible }) {
+              return {
+                title: title || "Featured Brand",
+                subtitle: isVisible === false ? "Hidden on Makeup page" : "Visible on Makeup page",
+                media,
+              };
+            },
+          },
+        },
+      ]
     }),
     defineField({
       name: "seo",

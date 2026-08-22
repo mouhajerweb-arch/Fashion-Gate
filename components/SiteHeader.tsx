@@ -28,7 +28,7 @@ export function resolvePath(href: string, lang: "ar" | "en") {
   if (cleanHref === "") return `/${lang}`;
 
   if (cleanHref === "designers" || cleanHref === "category/designers" || cleanHref.includes("designers")) {
-    return `/brand/${lang}`;
+    return `/designers/${lang}`;
   }
 
   const categories = ["women", "men", "perfumes", "skincare", "beauty", "makeup", "fashion", "designers", "dining"];
@@ -343,7 +343,7 @@ function AnnouncementBar({ lang }: { lang: "ar" | "en" }) {
                 <Typography
                   sx={{
                     fontFamily: '"Cairo", sans-serif',
-                    fontSize: "13px",
+                    fontSize: "15px",
                     fontWeight: 600,
                     letterSpacing: "0.06em",
                     color: "#ffffff"
@@ -685,6 +685,9 @@ export default function SiteHeader({ settings, onLangToggleStart }: SiteHeaderPr
   const router = useRouter();
 
   const lang = (pathname?.endsWith("/ar") || pathname?.includes("/ar/") ? "ar" : "en") as "en" | "ar";
+  const normalizedPathname = pathname || (typeof window !== "undefined" ? window.location.pathname : "");
+  const activeSectionPath = normalizedPathname.replace(/\/(en|ar)(\/|$)/, "/").replace(/\/+$/g, "") || "/";
+  const isDesignersPage = normalizedPathname === "/designers" || normalizedPathname.startsWith("/designers/");
   const [open, setOpen] = useState(false);
   const [searchActive, setSearchActive] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -1165,19 +1168,23 @@ export default function SiteHeader({ settings, onLangToggleStart }: SiteHeaderPr
               const isSkincare = item.href?.includes("/category/skincare");
               const isBeauty = item.href?.includes("/category/beauty") || isSkincare || item.label?.en?.toLowerCase() === "beauty" || item.label?.en?.toLowerCase() === "skincare";
               const isDining = item.href?.includes("/dining");
+              const labelStr = lang === "ar" ? item.label?.ar || item.label?.en : item.label?.en || item.label?.ar;
+              const normalizedLabel = `${item.label?.en || ""} ${item.label?.ar || ""} ${labelStr || ""}`.toLowerCase();
+              const isDesigners = item.href?.includes("/designers") || item.href?.includes("designers") || normalizedLabel.includes("designer") || normalizedLabel.includes("مصمم");
               const isCategoryDropdown = isFashion || isPerfumes || isBeauty || isDining;
               const hasDropdown = isCategoryDropdown || (item.designerCategories && item.designerCategories.length > 0);
-              const labelStr = lang === "ar" ? item.label?.ar || item.label?.en : item.label?.en || item.label?.ar;
               
-              const finalHref = resolvePath(item.href, lang);
+              const finalHref = isDesigners ? `/designers/${lang}` : resolvePath(item.href, lang);
 
               const isCurrentActive = (() => {
-                if (!pathname) return false;
-                const cleanPath = pathname.replace(/\/(en|ar)(\/|$)/, "") || "/";
+                if (!activeSectionPath) return false;
+                if (isDesigners && isDesignersPage) return true;
+                const cleanPath = activeSectionPath;
                 const cleanHref = item.href ? item.href.replace(/\/(en|ar)(\/|$)/, "") || "/" : "/";
                 if (cleanHref === "/") return cleanPath === "/";
                 if (cleanHref.startsWith("/category/")) return cleanPath.startsWith(cleanHref);
                 if (cleanHref.startsWith("/brand/")) return cleanPath.startsWith("/brand/");
+                if (isDesigners) return cleanPath === "/designers" || cleanPath.startsWith("/designers/");
                 return cleanPath === cleanHref || cleanPath.startsWith(cleanHref);
               })();
 
@@ -1187,25 +1194,34 @@ export default function SiteHeader({ settings, onLangToggleStart }: SiteHeaderPr
                   onMouseEnter={() => hasDropdown && handleMenuHover(idx)}
                   onMouseLeave={() => hasDropdown && handleMenuHover(null)}
                   sx={{ display: "inline-block", height: "100%", position: "relative" }}
-                >
-                  <Button
-                    component={hasDropdown && !isCategoryDropdown ? "button" : Link}
-                    href={hasDropdown && !isCategoryDropdown ? undefined : finalHref}
-                    className="luxury-link"
+                  >
+                    <Button
+                    component={isDesigners || !hasDropdown || isCategoryDropdown ? Link : "button"}
+                    href={isDesigners || !hasDropdown || isCategoryDropdown ? finalHref : undefined}
+                    className={`luxury-link${isCurrentActive ? " luxury-link-active" : ""}`}
                     onClick={(e: React.MouseEvent) => {
-                      if (hasDropdown && !isCategoryDropdown) {
+                      if (isDesigners) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        setActiveDropdown(null);
+                        router.push(finalHref);
+                        return;
+                      }
+                      if (hasDropdown && !isCategoryDropdown && !isDesigners) {
                         e.preventDefault();
                       }
                     }}
                     sx={{
-                      color: (activeDropdown === idx || isCurrentActive) ? "#CB6116" : "rgba(255,255,255,.76)",
+                      color: isCurrentActive ? "#CB6116" : activeDropdown === idx ? "#ffffff" : "rgba(255,255,255,.76)",
                       px: 0,
                       minWidth: 0,
                       textTransform: "uppercase",
                       fontSize: 11,
                       fontWeight: 600,
                       letterSpacing: lang === "ar" ? 0 : "0.18em",
-                      fontFamily: '"Cairo", sans-serif'
+                      fontFamily: '"Cairo", sans-serif',
+                      position: "relative",
+                      zIndex: 130
                     }}
                   >
                     {labelStr}
@@ -1682,21 +1698,23 @@ export default function SiteHeader({ settings, onLangToggleStart }: SiteHeaderPr
                 const isSkincare = item.href?.includes("/category/skincare");
                 const isBeauty = item.href?.includes("/category/beauty") || isSkincare || item.label?.en?.toLowerCase() === "beauty" || item.label?.en?.toLowerCase() === "skincare";
                 const isDining = item.href?.includes("/dining");
+                const labelStr = lang === "ar" ? item.label?.ar || item.label?.en : item.label?.en || item.label?.ar;
+                const normalizedLabel = `${item.label?.en || ""} ${item.label?.ar || ""} ${labelStr || ""}`.toLowerCase();
+                const isDesigners = item.href?.includes("/designers") || item.href?.includes("designers") || normalizedLabel.includes("designer") || normalizedLabel.includes("مصمم");
                 const isCategoryDropdown = isFashion || isPerfumes || isBeauty;
                 const hasDropdown = isCategoryDropdown || (item.designerCategories && item.designerCategories.length > 0);
-                const labelStr = lang === "ar" ? item.label?.ar || item.label?.en : item.label?.en || item.label?.ar;
                 
-                const finalHref = resolvePath(item.href, lang);
+                const finalHref = isDesigners ? `/designers/${lang}` : resolvePath(item.href, lang);
 
                 const isExpanded = expandedMobileItem === idx;
 
                 return (
                   <Stack key={idx} spacing={1.5} sx={{ width: "100%", alignItems: "center" }}>
                     <MuiLink
-                      component={hasDropdown ? "span" : Link}
-                      href={hasDropdown ? undefined : finalHref}
+                      component={isDesigners || !hasDropdown ? Link : "span"}
+                      href={isDesigners || !hasDropdown ? finalHref : undefined}
                       onClick={(e: React.MouseEvent) => {
-                        if (hasDropdown) {
+                        if (hasDropdown && !isDesigners) {
                           e.preventDefault();
                           setExpandedMobileItem(isExpanded ? null : idx);
                         } else {

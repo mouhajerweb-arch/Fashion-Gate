@@ -50,7 +50,7 @@ export const fashionPage = defineType({
     defineField({
       name: "allowedBrands",
       title: "Featured Brands in this Page",
-      description: "Select which brands appear in this category page list.",
+      description: "Select, order, and toggle brands for this page only. Turning a row off does not affect the Brand document or other pages.",
       type: "array",
       of: [
         {
@@ -66,6 +66,13 @@ export const fashionPage = defineType({
               validation: (Rule) => Rule.required(),
             }),
             defineField({
+              name: "isVisible",
+              title: "Show this brand on Fashion page",
+              type: "boolean",
+              description: "Turn this off to hide the brand only from the Fashion page. The brand can still appear in navigation, other category pages, and brand detail pages.",
+              initialValue: true,
+            }),
+            defineField({
               name: "categoryLogoScale",
               title: "Fashion Card Logo Scale",
               type: "number",
@@ -79,20 +86,16 @@ export const fashionPage = defineType({
               title: "brand.title",
               media: "brand.image",
               scale: "categoryLogoScale",
+              isVisible: "isVisible",
             },
-            prepare({ title, media, scale }) {
+            prepare({ title, media, scale, isVisible }) {
               return {
                 title: title || "Featured Brand",
-                subtitle: scale ? `Fashion card scale: ${scale}` : "Default Fashion card scale",
+                subtitle: `${isVisible === false ? "Hidden on Fashion page" : "Visible on Fashion page"} - ${scale ? `Fashion card scale: ${scale}` : "Default Fashion card scale"}`,
                 media,
               };
             },
           },
-        },
-        {
-          type: "reference",
-          title: "Brand Reference (legacy, no page scale)",
-          to: [{ type: "brand" }],
         },
       ]
     }),

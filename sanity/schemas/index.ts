@@ -47,6 +47,7 @@ import { perfumePage } from "./perfumePage";
 import { skincarePage } from "./skincarePage";
 import { makeupPage } from "./makeupPage";
 import { fashionPage } from "./fashionPage";
+import { designerPage } from "./designerPage";
 
 export const schemaTypes = [
   // E-commerce & Base
@@ -100,4 +101,5 @@ export const schemaTypes = [
   skincarePage,
   makeupPage,
   fashionPage,
+  designerPage,
 ];
