@@ -75,8 +75,8 @@ export const structure: StructureResolver = (S) =>
                 .title("Designers Page")
                 .child(
                   S.document()
-                    .schemaType("page")
-                    .documentId("designers")
+                    .schemaType("designerPage")
+                    .documentId("designersPage")
                     .title("Designers Page")
                 ),
               S.listItem()
@@ -247,7 +247,8 @@ export const structure: StructureResolver = (S) =>
             "perfumePage",
             "skincarePage",
             "makeupPage",
-            "fashionPage"
+            "fashionPage",
+            "designerPage"
           ].includes(listItem.getId() || "")
       ),
     ]);

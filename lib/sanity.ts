@@ -356,6 +356,178 @@ export async function getFooterSettings() {
   }
 }
 
+export async function getDesignerPageData() {
+  try {
+    return await sanityClient.fetch(`coalesce(
+      *[_type == "designerPage" && _id == "designersPage"][0],
+      *[_type == "designerPage" && _id == "designers"][0]
+    ) {
+      eyebrow { en, ar },
+      title { en, ar },
+      description { en, ar },
+      heroImage { asset->{ url } },
+      heroImagePosition,
+      heroImagePositionMobile,
+      categoriesHeading { en, ar },
+      featuredBrandsHeading { en, ar },
+      searchPlaceholder { en, ar },
+      allCategoriesLabel { en, ar },
+      exploreBrandLabel { en, ar },
+      seo { metaTitle, metaDescription, keywords, ogImage { asset->{ url } }, canonicalUrl, noIndex }
+    }`);
+  } catch (err) {
+    console.error("Error fetching designer page data:", err);
+    return null;
+  }
+}
+
+export async function getDesignerCategories() {
+  try {
+    const headerCategories = await sanityClient.fetch(`*[_type == "header"][0].menuItems[
+      href match "*designers*" ||
+      label.en match "*Designer*" ||
+      label.en match "*Designers*" ||
+      label.ar match "*مصمم*"
+    ][0].designerCategories[]-> {
+      _id,
+      title { en, ar },
+      order,
+      brands[@->isActive != false]->{
+        _id,
+        title,
+        titleAr,
+        slug,
+        image { asset->{ url, metadata { dimensions { aspectRatio } } } },
+        imageAr { asset->{ url, metadata { dimensions { aspectRatio } } } },
+        size,
+        scale,
+        headline { en, ar },
+        description { en, ar },
+        bgImage { asset->{ url } }
+      }
+    }`);
+
+    if (Array.isArray(headerCategories) && headerCategories.length > 0) {
+      return headerCategories;
+    }
+
+    return [];
+  } catch (err) {
+    console.error("Error fetching designer categories:", err);
+    return [];
+  }
+}
+
+export async function getDesignerPageCategories() {
+  try {
+    const data = await sanityClient.fetch(`{
+      "navCategoryIds": *[_type == "header"][0].menuItems[
+        href match "*designers*" ||
+        label.en match "*Designer*" ||
+        label.en match "*Designers*"
+      ][0].designerCategories[]._ref,
+      "pageSections": coalesce(
+        *[_type == "designerPage" && _id == "designersPage"][0],
+        *[_type == "designerPage" && _id == "designers"][0]
+      ).categorySections[]{
+        isVisible,
+        sectionImage { asset->{ url } },
+        category->{
+          _id,
+          title { en, ar },
+          order,
+          brands[@->isActive != false]->{
+            _id,
+            title,
+            titleAr,
+            slug,
+            image { asset->{ url, metadata { dimensions { aspectRatio } } } },
+            imageAr { asset->{ url, metadata { dimensions { aspectRatio } } } },
+            size,
+            scale,
+            headline { en, ar },
+            description { en, ar },
+            bgImage { asset->{ url } }
+          }
+        },
+        brands[]{
+          isVisible,
+          cardImage { asset->{ url } },
+          brand->{
+            _id,
+            title,
+            titleAr,
+            slug,
+            image { asset->{ url, metadata { dimensions { aspectRatio } } } },
+            imageAr { asset->{ url, metadata { dimensions { aspectRatio } } } },
+            size,
+            scale,
+            headline { en, ar },
+            description { en, ar },
+            bgImage { asset->{ url } }
+          }
+        }
+      },
+      "headerCategories": *[_type == "header"][0].menuItems[
+        href match "*designers*" ||
+        label.en match "*Designer*" ||
+        label.en match "*Designers*"
+      ][0].designerCategories[]-> {
+        _id,
+        title { en, ar },
+        order,
+        brands[@->isActive != false]->{
+          _id,
+          title,
+          titleAr,
+          slug,
+          image { asset->{ url, metadata { dimensions { aspectRatio } } } },
+          imageAr { asset->{ url, metadata { dimensions { aspectRatio } } } },
+          size,
+          scale,
+          headline { en, ar },
+          description { en, ar },
+          bgImage { asset->{ url } }
+        }
+      }
+    }`);
+
+    const navIds = new Set((data?.navCategoryIds || []).filter(Boolean));
+    const pageSections = Array.isArray(data?.pageSections) ? data.pageSections : [];
+    const configuredSections = pageSections
+      .filter((section: any) => section?.isVisible !== false && section?.category?._id && navIds.has(section.category._id))
+      .map((section: any) => {
+        const configuredBrands = Array.isArray(section.brands)
+          ? section.brands
+              .filter((item: any) => item?.isVisible !== false && item?.brand)
+              .map((item: any) => ({
+                ...item.brand,
+                cardImage: item.cardImage,
+              }))
+          : [];
+
+        return {
+          ...section.category,
+          sectionImage: section.sectionImage,
+          brands: configuredBrands.length > 0 ? configuredBrands : section.category.brands,
+        };
+      });
+
+    if (configuredSections.length > 0) {
+      return configuredSections;
+    }
+
+    if (Array.isArray(data?.headerCategories) && data.headerCategories.length > 0) {
+      return data.headerCategories;
+    }
+
+    return [];
+  } catch (err) {
+    console.error("Error fetching designer page categories:", err);
+    return [];
+  }
+}
+
 export async function getAllSanityProductSlugs(): Promise<{ id: string }[]> {
   try {
     const slugs = await sanityClient.fetch<string[]>(`*[_type == "product" && defined(slug.current)].slug.current`);
@@ -963,6 +1135,7 @@ export async function getCategoryPageData(categoryId: string): Promise<any> {
           bgImage { asset->{ url } }
         },
         _type != "reference" => {
+          isVisible,
           categoryLogoScale,
           "brand": brand-> {
             _id,

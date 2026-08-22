@@ -293,7 +293,10 @@ export default function CategoryDetailClient({ categoryId, initialLang, initialP
       }
     }
 
-    return rawList.map((entry: any) => {
+    return rawList.filter((entry: any) => {
+      const sb = entry?.brand || entry;
+      return Boolean(sb) && (entry?._type === "reference" || entry?.isVisible !== false);
+    }).map((entry: any) => {
       const sb = entry?.brand || entry;
       const pageCategoryLogoScale = entry?.brand ? Number(entry.categoryLogoScale) : NaN;
       const brandCategoryLogoScale = Number(sb.categoryLogoScale);
@@ -308,7 +311,7 @@ export default function CategoryDetailClient({ categoryId, initialLang, initialP
       const headline = sb.headline?.en || sb.headline || fb?.headline || "";
       const headlineAr = sb.headline?.ar || sb.headline || fb?.headlineAr || headline;
 
-      const logoUrl = (lang === "ar" ? sb.imageAr?.asset?.url : undefined) || sb.image?.asset?.url || sb.logoUrl || null;
+      const logoUrl = sb.image?.asset?.url || sb.logoUrl || sb.imageAr?.asset?.url || null;
 
       return {
         id: brandId,
@@ -759,7 +762,7 @@ export default function CategoryDetailClient({ categoryId, initialLang, initialP
                           {getLocalizedValue(categoryCmsData?.brandsHeading, lang, lang === "ar" ? "علاماتنا التجارية الفاخرة" : "Our Luxury Brands")}
                         </Typography>
 
-                        <Grid container spacing={3}>
+                        <Grid container spacing={3} sx={{ justifyContent: "center" }}>
                           {processedBrands.map((brand) => (
                             <Grid size={{ xs: 12, sm: 6, md: 3 }} key={brand.id}>
                               <Link href={`/brand/${brand.id}/${lang}`} style={{ textDecoration: "none", color: "inherit" }}>
@@ -867,7 +870,7 @@ export default function CategoryDetailClient({ categoryId, initialLang, initialP
                           {getLocalizedValue(categoryCmsData?.brandsHeading, lang, lang === "ar" ? "علاماتنا التجارية الفاخرة" : "Our Luxury Brands")}
                         </Typography>
 
-                        <Grid container spacing={3}>
+                        <Grid container spacing={3} sx={{ justifyContent: "center" }}>
                           {processedBrands.map((brand) => (
                             <Grid size={{ xs: 12, sm: 6, md: 3 }} key={brand.id}>
                               <Link href={`/brand/${brand.id}/${lang}`} style={{ textDecoration: "none", color: "inherit" }}>
@@ -998,7 +1001,7 @@ export default function CategoryDetailClient({ categoryId, initialLang, initialP
                           {getLocalizedValue(categoryCmsData?.brandsHeading, lang, lang === "ar" ? "دور العطور العالمية الفاخرة" : "Luxury Fragrance Houses")}
                         </Typography>
 
-                        <Grid container spacing={3}>
+                        <Grid container spacing={3} sx={{ justifyContent: "center" }}>
                           {processedBrands.map((brand) => (
                               <Grid size={{ xs: 12, sm: 6, md: 3 }} key={brand.id}>
                                 <Link href={`/brand/${brand.id}/${lang}`} style={{ textDecoration: "none", color: "inherit" }}>
@@ -1108,7 +1111,7 @@ export default function CategoryDetailClient({ categoryId, initialLang, initialP
                           {lang === "ar" ? "علامات العناية بالبشرة الفاخرة" : "Luxury Skincare Houses"}
                         </Typography>
 
-                        <Grid container spacing={3}>
+                        <Grid container spacing={3} sx={{ justifyContent: "center" }}>
                           {processedBrands
                             .filter((brand) =>
                               ["lancome", "moje", "sandro-moje", "maxmara", "adidas"].includes(brand.id)

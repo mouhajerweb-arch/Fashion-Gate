@@ -50,7 +50,7 @@ export const perfumePage = defineType({
     defineField({
       name: "allowedBrands",
       title: "Featured Brands in this Page",
-      description: "Select which brands appear in this category page list.",
+      description: "Select, order, and toggle brands for this page only. Turning a row off does not affect the Brand document or other pages.",
       type: "array",
       of: [
         {
@@ -66,6 +66,13 @@ export const perfumePage = defineType({
               validation: (Rule) => Rule.required(),
             }),
             defineField({
+              name: "isVisible",
+              title: "Show this brand on Perfume page",
+              type: "boolean",
+              description: "Turn this off to hide the brand only from the Perfume page. The brand can still appear in navigation, other category pages, and brand detail pages.",
+              initialValue: true,
+            }),
+            defineField({
               name: "categoryLogoScale",
               title: "Perfume Card Logo Scale",
               type: "number",
@@ -79,20 +86,16 @@ export const perfumePage = defineType({
               title: "brand.title",
               media: "brand.image",
               scale: "categoryLogoScale",
+              isVisible: "isVisible",
             },
-            prepare({ title, media, scale }) {
+            prepare({ title, media, scale, isVisible }) {
               return {
                 title: title || "Featured Brand",
-                subtitle: scale ? `Perfume card scale: ${scale}` : "Default Perfume card scale",
+                subtitle: `${isVisible === false ? "Hidden on Perfume page" : "Visible on Perfume page"} - ${scale ? `Perfume card scale: ${scale}` : "Default Perfume card scale"}`,
                 media,
               };
             },
           },
-        },
-        {
-          type: "reference",
-          title: "Brand Reference (legacy, no page scale)",
-          to: [{ type: "brand" }],
         },
       ]
     }),
