@@ -24,30 +24,32 @@ interface PreparedBrand {
   imageUrl: string;
 }
 
+const CATEGORY_BRAND_PREVIEW_LIMIT = 6;
+
 const fallbackCategoryConfig = [
   {
     title: { en: "Luxury Fashion & Haute Couture", ar: "الأزياء الفاخرة والهوت كوتور" },
-    brandIds: ["elie-saab", "gucci", "maxmara", "prada", "valentino", "ysl"],
+    brandIds: ["elie-saab", "gucci", "maxmara", "prada", "valentino", "ysl", "chloe"],
     image: "/brand/hero-look-01.jpg",
   },
   {
     title: { en: "Contemporary & Premium Apparel", ar: "الأزياء المعاصرة والراقية" },
-    brandIds: ["calvin-klein", "hugo-boss", "giorgio-armani", "paul-shark", "sandro", "editorial"],
+    brandIds: ["nean-com", "acler", "weekend-maxmara", "persona-marina-rinaldi", "max-and-co", "editorial", "sandro", "giorgio-armani", "hugo-boss", "calvin-klein", "paul-shark", "almais"],
     image: "/brand/hero-look-04.jpg",
   },
   {
     title: { en: "Independent & Creative Design", ar: "التصميم المستقل والإبداعي" },
-    brandIds: ["moje"],
+    brandIds: ["moje", "almais"],
     image: "/brand/modern-sophistication.png",
   },
   {
     title: { en: "Footwear & Athletic Lifestyle", ar: "الأحذية وأسلوب الحياة الرياضي" },
-    brandIds: ["adidas", "skechers"],
+    brandIds: ["adidas", "puma", "emporio-armani-ea7", "skechers"],
     image: "/brand/designer-collections.png",
   },
   {
     title: { en: "Jewelry, Beauty & Accessories", ar: "المجوهرات والجمال والإكسسوارات" },
-    brandIds: ["cartier", "lancome", "jimmy-choo", "coach"],
+    brandIds: ["cartier", "loreal", "gucci", "prada", "ysl", "giorgio-armani", "lancome", "valentino", "elie-saab", "atelier-rebul", "jimmy-choo", "coach", "chloe"],
     image: "/brand/luxury-beauty.png",
   },
 ];
@@ -135,6 +137,27 @@ export default function DesignersClient({ pageData, categories, initialLang }: D
       }))
       .filter((category) => category.brands.length > 0);
   }, [activeCategory, preparedCategories, query]);
+
+  const normalizedQuery = query.trim().toLowerCase();
+  const isSearching = normalizedQuery.length > 0;
+
+  const searchedBrands = useMemo(() => {
+    if (!isSearching) return [];
+    const seen = new Set<string>();
+
+    return filteredCategories.flatMap((category) =>
+      category.brands
+        .filter((brand: PreparedBrand) => {
+          if (seen.has(brand.id)) return false;
+          seen.add(brand.id);
+          return true;
+        })
+        .map((brand: PreparedBrand) => ({
+          ...brand,
+          categoryTitle: category.title,
+        }))
+    );
+  }, [filteredCategories, isSearching]);
 
   const copy = {
     eyebrow: localize(pageData?.eyebrow, lang, isAr ? "دليل المصممين" : "Designer Directory"),
@@ -299,7 +322,79 @@ export default function DesignersClient({ pageData, categories, initialLang }: D
             ))}
           </Box>
 
-          {activeCategory !== "all" && selectedCategoryBrands.length > 0 && (
+          {/* <Box
+            sx={{
+              display: "grid",
+              gridTemplateColumns: {
+                xs: "1fr",
+                sm: "repeat(2, minmax(0, 1fr))",
+                md: "repeat(3, minmax(0, 1fr))",
+                lg: "repeat(4, minmax(0, 1fr))",
+              },
+              gap: { xs: 2, md: 2.5 },
+              alignItems: "start",
+            }}
+          >
+            {preparedCategories.map((category) => {
+              const visibleBrands = (category.brands || []).slice(0, CATEGORY_BRAND_PREVIEW_LIMIT);
+              if (visibleBrands.length === 0) return null;
+
+              return (
+                <Box
+                  key={`directory-${category.id}`}
+                  sx={{
+                    bgcolor: "#fff",
+                    border: "1px solid rgba(0,0,0,0.07)",
+                    p: { xs: 2.25, md: 2.75 },
+                    minHeight: 180,
+                  }}
+                >
+                  <Typography
+                    sx={{
+                      color: "#CB6116",
+                      fontSize: 11,
+                      fontWeight: 800,
+                      letterSpacing: isAr ? 0 : "0.14em",
+                      textTransform: "uppercase",
+                      mb: 1.6,
+                      fontFamily: '"Cairo", sans-serif',
+                    }}
+                  >
+                    {localize(category.title, lang)}
+                  </Typography>
+                  <Stack spacing={1}>
+                    {visibleBrands.map((brand: PreparedBrand) => (
+                      <Typography
+                        key={`${category.id}-${brand.id}`}
+                        component={Link}
+                        href={`/brand/${brand.id}/${lang}`}
+                        sx={{
+                          color: "#222",
+                          textDecoration: "none",
+                          fontSize: 13,
+                          lineHeight: 1.45,
+                          fontWeight: 500,
+                          fontFamily: '"Cairo", sans-serif',
+                          display: "inline-flex",
+                          alignItems: "center",
+                          gap: 0.8,
+                          width: "fit-content",
+                          "&:hover": { color: "#CB6116" },
+                        }}
+                      >
+                        <Box component="span" sx={{ color: "#CB6116", fontSize: 12, lineHeight: 1 }}>
+                          ›
+                        </Box>
+                        <span>{brand.name}</span>
+                      </Typography>
+                    ))}
+                  </Stack>
+                </Box>
+              );
+            })}
+          </Box> */}
+
+          {/* {activeCategory !== "all" && selectedCategoryBrands.length > 0 && (
             <Grid container spacing={2.5}>
               {selectedCategoryBrands.map((brand: PreparedBrand) => (
                 <Grid size={{ xs: 6, md: 2 }} key={brand.id}>
@@ -307,16 +402,60 @@ export default function DesignersClient({ pageData, categories, initialLang }: D
                     {brand.logoUrl ? (
                       <Box component="img" src={brand.logoUrl} alt={brand.name} sx={{ maxWidth: "86%", maxHeight: 76, objectFit: "contain" }} />
                     ) : (
-                      <Typography sx={{ fontWeight: 800, textAlign: "center", letterSpacing: "0.06em", textTransform: "uppercase" }}>{brand.name}</Typography>
+                      <Typography sx={{ fontWeight: 800, textAlign: "center", letterSpacing: "0.04em" }}>{brand.name}</Typography>
                     )}
                   </Box>
                 </Grid>
               ))}
             </Grid>
-          )}
+          )} */}
 
           {activeCategory !== "all" && <Divider sx={{ borderColor: "rgba(0,0,0,0.08)" }} />}
 
+          {isSearching ? (
+            <Grid container spacing={2.5}>
+              {searchedBrands.map((brand: PreparedBrand & { categoryTitle?: any }) => (
+                <Grid size={{ xs: 12, sm: 6, lg: 4 }} key={`search-${brand.id}`}>
+                  <Box
+                    component={Link}
+                    href={`/brand/${brand.id}/${lang}`}
+                    sx={{
+                      minHeight: 340,
+                      textDecoration: "none",
+                      color: "inherit",
+                      bgcolor: "#fff",
+                      border: "1px solid rgba(0,0,0,0.06)",
+                      display: "flex",
+                      flexDirection: "column",
+                      overflow: "hidden",
+                      transition: "transform 0.3s ease, border-color 0.3s ease",
+                      "&:hover": { transform: "translateY(-4px)", borderColor: "#CB6116" },
+                    }}
+                  >
+                    <Box sx={{ position: "relative", aspectRatio: "16 / 10", bgcolor: "#111", overflow: "hidden" }}>
+                      <Box component="img" src={brand.imageUrl} alt="" sx={{ width: "100%", height: "100%", objectFit: "cover", opacity: 0.68 }} />
+                      <Box sx={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", px: 3 }}>
+                        {brand.logoUrl ? (
+                          <Box component="img" src={brand.logoUrl} alt={brand.name} sx={{ maxWidth: 180, maxHeight: 150, objectFit: "contain", filter: "brightness(0) invert(1)" }} />
+                        ) : (
+                          <Typography sx={{ color: "#fff", fontSize: 18, fontWeight: 800, textAlign: "center", letterSpacing: "0.04em" }}>{brand.name}</Typography>
+                        )}
+                      </Box>
+                    </Box>
+                    <Stack spacing={1.2} sx={{ p: 3, flex: 1 }}>
+                      <Typography sx={{ color: "#CB6116", fontSize: 10, fontWeight: 800, letterSpacing: isAr ? 0 : "0.14em", textTransform: "uppercase", fontFamily: '"Cairo", sans-serif' }}>
+                        {localize(brand.categoryTitle, lang)}
+                      </Typography>
+                      <Typography sx={{ fontSize: 18, fontWeight: 800, fontFamily: '"Cairo", sans-serif' }}>{brand.name}</Typography>
+                      <Typography sx={{ color: "rgba(0,0,0,0.58)", fontSize: 13.5, lineHeight: 1.7, fontFamily: '"Cairo", sans-serif', display: "-webkit-box", WebkitLineClamp: 3, WebkitBoxOrient: "vertical", overflow: "hidden" }}>
+                        {brand.headline || brand.description}
+                      </Typography>
+                    </Stack>
+                  </Box>
+                </Grid>
+              ))}
+            </Grid>
+          ) : (
           <Stack spacing={{ xs: 5, md: 7 }}>
             {filteredCategories.map((category) => (
               <Box key={category.id}>
@@ -331,7 +470,7 @@ export default function DesignersClient({ pageData, categories, initialLang }: D
                   </Grid>
                   <Grid size={{ xs: 12, md: 8 }}>
                     <Grid container spacing={2}>
-                      {category.brands.map((brand: PreparedBrand) => (
+                      {category.brands.slice(0, CATEGORY_BRAND_PREVIEW_LIMIT).map((brand: PreparedBrand) => (
                         <Grid size={{ xs: 12, sm: 6 }} key={brand.id}>
                           <Box
                             component={Link}
@@ -355,7 +494,7 @@ export default function DesignersClient({ pageData, categories, initialLang }: D
                                 {brand.logoUrl ? (
                                   <Box component="img" src={brand.logoUrl} alt={brand.name} sx={{ maxWidth: 180, maxHeight: 180, objectFit: "contain", filter: "brightness(0) invert(1)" }} />
                                 ) : (
-                                  <Typography sx={{ color: "#fff", fontSize: 18, fontWeight: 800, textAlign: "center", letterSpacing: "0.08em", textTransform: "uppercase" }}>{brand.name}</Typography>
+                                  <Typography sx={{ color: "#fff", fontSize: 18, fontWeight: 800, textAlign: "center", letterSpacing: "0.04em" }}>{brand.name}</Typography>
                                 )}
                               </Box>
                             </Box>
@@ -364,8 +503,31 @@ export default function DesignersClient({ pageData, categories, initialLang }: D
                               <Typography sx={{ color: "rgba(0,0,0,0.58)", fontSize: 13.5, lineHeight: 1.7, fontFamily: '"Cairo", sans-serif', display: "-webkit-box", WebkitLineClamp: 3, WebkitBoxOrient: "vertical", overflow: "hidden" }}>
                                 {brand.headline || brand.description}
                               </Typography>
-                              <Button endIcon={!isAr ? <ArrowForwardIcon /> : undefined} startIcon={isAr ? <ArrowBackIcon /> : undefined} sx={{ mt: "auto", alignSelf: isAr ? "flex-end" : "flex-start", color: "#CB6116", px: 0, fontWeight: 800, fontSize: 11, letterSpacing: isAr ? 0 : "0.12em" }}>
-                                {resolvedExploreLabel}
+                              <Button
+                                endIcon={!isAr ? <ArrowForwardIcon /> : undefined}
+                                dir={isAr ? "ltr" : undefined}
+                                sx={{
+                                  mt: "auto",
+                                  alignSelf: "flex-start",
+                                  ml: isAr ? "auto" : 0,
+                                  mr: isAr ? 0 : "auto",
+                                  color: "#CB6116",
+                                  px: 0,
+                                  minWidth: 0,
+                                  width: "auto",
+                                  justifyContent: "flex-start",
+                                  flexDirection: "row",
+                                  gap: 0.75,
+                                  fontWeight: 800,
+                                  fontSize: 11,
+                                  letterSpacing: isAr ? 0 : "0.12em",
+                                  "& .MuiButton-endIcon": {
+                                    ml: isAr ? 0 : 0.75,
+                                  },
+                                }}
+                              >
+                                {isAr ? <ArrowBackIcon sx={{ fontSize: 18, flexShrink: 0 }} /> : null}
+                                <span dir={isAr ? "rtl" : undefined}>{resolvedExploreLabel}</span>
                               </Button>
                             </Stack>
                           </Box>
@@ -377,6 +539,7 @@ export default function DesignersClient({ pageData, categories, initialLang }: D
               </Box>
             ))}
           </Stack>
+          )}
         </Stack>
       </Container>
     </Box>

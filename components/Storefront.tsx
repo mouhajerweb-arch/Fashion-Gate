@@ -694,7 +694,7 @@ function SectionRenderer({
   const type = section.type || (section._type && section._type.replace("Section", ""));
   
   if (type === "hero") return <HeroSection section={section} t={t} lang={lang} />;
-  if (type === "brandMarquee") return <BrandMarquee section={section} lang={lang} />;
+  if (type === "brandMarquee") return <BrandMarquee section={section} lang={lang} brands={brands} />;
   if (type === "manifesto") return <ManifestoSection section={section} t={t} lang={lang} />;
   if (type === "collections") return <CollectionsSection section={section} t={t} lang={lang} />;
   // if (type === "lookbook") return <LookbookSection section={section} t={t} lang={lang} brands={brands} />;

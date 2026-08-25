@@ -72,23 +72,75 @@ export const makeupPage = defineType({
               description: "Turn this off to hide the brand only from the Makeup page. The brand can still appear elsewhere.",
               initialValue: true,
             }),
+            defineField({
+              name: "categoryLogoScale",
+              title: "Makeup Card Logo Scale",
+              type: "number",
+              description: "Page-specific scale used only for this brand on the Makeup page cards.",
+              initialValue: 1,
+              validation: (Rule) => Rule.min(0.01),
+            }),
           ],
           preview: {
             select: {
               title: "brand.title",
               media: "brand.image",
+              scale: "categoryLogoScale",
               isVisible: "isVisible",
             },
-            prepare({ title, media, isVisible }) {
+            prepare({ title, media, scale, isVisible }) {
               return {
                 title: title || "Featured Brand",
-                subtitle: isVisible === false ? "Hidden on Makeup page" : "Visible on Makeup page",
+                subtitle: `${isVisible === false ? "Hidden on Makeup page" : "Visible on Makeup page"} - ${scale ? `Makeup card scale: ${scale}` : "Default Makeup card scale"}`,
                 media,
               };
             },
           },
         },
       ]
+    }),
+    defineField({
+      name: "brandLogoScaleOverrides",
+      title: "Makeup Brand Card Logo Scale Overrides",
+      description: "Optional per-brand logo scales used only on the Makeup page brand cards.",
+      type: "array",
+      of: [
+        {
+          type: "object",
+          name: "makeupBrandLogoScaleOverride",
+          title: "Makeup Brand Logo Scale",
+          fields: [
+            defineField({
+              name: "brand",
+              title: "Brand",
+              type: "reference",
+              to: [{ type: "brand" }],
+              validation: (Rule) => Rule.required(),
+            }),
+            defineField({
+              name: "scale",
+              title: "Scale",
+              type: "number",
+              initialValue: 1,
+              validation: (Rule) => Rule.required().min(0.01),
+            }),
+          ],
+          preview: {
+            select: {
+              title: "brand.title",
+              media: "brand.image",
+              scale: "scale",
+            },
+            prepare({ title, media, scale }) {
+              return {
+                title: title || "Brand Logo Scale",
+                subtitle: `Makeup card scale: ${scale || 1}`,
+                media,
+              };
+            },
+          },
+        },
+      ],
     }),
     defineField({
       name: "seo",

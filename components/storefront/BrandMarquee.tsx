@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { useMemo } from "react";
 import { getLocalizedValue, imageUrl } from "@/lib/sanity";
-import { getBrandById } from "@/lib/brandData";
+import { getAllBrands, getBrandById } from "@/lib/brandData";
 
 const brandsList = [
   { 
@@ -52,7 +52,7 @@ const brandsList = [
     id: "calvin-klein", 
     logo: (
       <svg viewBox="0 0 140 30" fill="currentColor">
-        <text x="50%" y="22" fontFamily="'Helvetica Neue', 'Arial', sans-serif" fontSize="16" fontWeight="bold" letterSpacing="0.25em" textAnchor="middle">CALVIN KLEIN</text>
+        <text x="50%" y="22" fontFamily="'Helvetica Neue', 'Arial', sans-serif" fontSize="16" fontWeight="bold" letterSpacing="0.12em" textAnchor="middle">Calvin Klein</text>
       </svg>
     )
   },
@@ -60,7 +60,7 @@ const brandsList = [
     id: "skechers", 
     logo: (
       <svg viewBox="0 0 120 30" fill="currentColor">
-        <text x="50%" y="22" fontFamily="'Futura', sans-serif" fontSize="18" fontWeight="900" letterSpacing="0.15em" textAnchor="middle">SKECHERS</text>
+        <text x="50%" y="22" fontFamily="'Futura', sans-serif" fontSize="18" fontWeight="900" letterSpacing="0.08em" textAnchor="middle">Skechers</text>
       </svg>
     )
   },
@@ -68,7 +68,7 @@ const brandsList = [
     id: "maxmara", 
     logo: (
       <svg viewBox="0 0 160 30" fill="currentColor">
-        <text x="50%" y="22" fontFamily="'Times New Roman', Times, serif" fontSize="20" fontWeight="bold" letterSpacing="0.2em" textAnchor="middle">MaxMara</text>
+        <text x="50%" y="22" fontFamily="'Times New Roman', Times, serif" fontSize="20" fontWeight="bold" letterSpacing="0.08em" textAnchor="middle">Max Mara</text>
       </svg>
     )
   },
@@ -76,7 +76,7 @@ const brandsList = [
     id: "editorial", 
     logo: (
       <svg viewBox="0 0 120 30" fill="currentColor">
-        <text x="50%" y="22" fontFamily="'Didot', Bodoni, serif" fontSize="18" fontWeight="bold" letterSpacing="0.22em" textAnchor="middle">EDITORIAL</text>
+        <text x="50%" y="22" fontFamily="'Didot', Bodoni, serif" fontSize="18" fontWeight="bold" letterSpacing="0.12em" textAnchor="middle">Editorial</text>
       </svg>
     )
   },
@@ -84,7 +84,7 @@ const brandsList = [
     id: "paul-shark", 
     logo: (
       <svg viewBox="0 0 160 30" fill="currentColor">
-        <text x="50%" y="22" fontFamily="'Futura', sans-serif" fontSize="15" fontWeight="900" letterSpacing="0.18em" textAnchor="middle">PAUL & SHARK</text>
+        <text x="50%" y="22" fontFamily="'Futura', sans-serif" fontSize="15" fontWeight="900" letterSpacing="0.08em" textAnchor="middle">Paul & Shark</text>
       </svg>
     )
   },
@@ -92,7 +92,7 @@ const brandsList = [
     id: "sandro", 
     logo: (
       <svg viewBox="0 0 120 30" fill="currentColor">
-        <text x="50%" y="22" fontFamily="'Helvetica Neue', 'Arial', sans-serif" fontSize="18" fontWeight="bold" letterSpacing="0.28em" textAnchor="middle">SANDRO</text>
+        <text x="50%" y="22" fontFamily="'Helvetica Neue', 'Arial', sans-serif" fontSize="18" fontWeight="bold" letterSpacing="0.08em" textAnchor="middle">Sandro</text>
       </svg>
     )
   },
@@ -100,7 +100,7 @@ const brandsList = [
     id: "moje", 
     logo: (
       <svg viewBox="0 0 100 30" fill="currentColor">
-        <text x="50%" y="22" fontFamily="'Didot', 'Times New Roman', serif" fontSize="21" fontStyle="italic" fontWeight="bold" letterSpacing="0.1em" textAnchor="middle">moje</text>
+        <text x="50%" y="22" fontFamily="'Didot', 'Times New Roman', serif" fontSize="21" fontStyle="italic" fontWeight="bold" letterSpacing="0.06em" textAnchor="middle">Moje</text>
       </svg>
     )
   },
@@ -167,25 +167,144 @@ const brandsList = [
         <text x="50%" y="22" fontFamily="'Century Gothic', sans-serif" fontSize="19" fontWeight="bold" letterSpacing="0.15em" textAnchor="middle">Chloé</text>
       </svg>
     )
+  },
+  {
+    id: "loreal",
+    logo: (
+      <svg viewBox="0 0 120 30" fill="currentColor">
+        <text x="50%" y="22" fontFamily="'Helvetica Neue', Arial, sans-serif" fontSize="18" fontWeight="500" letterSpacing="0.08em" textAnchor="middle">Loreal</text>
+      </svg>
+    )
+  },
+  {
+    id: "atelier-rebul",
+    logo: (
+      <svg viewBox="0 0 160 30" fill="currentColor">
+        <text x="50%" y="22" fontFamily="'Times New Roman', serif" fontSize="15" fontWeight="bold" letterSpacing="0.16em" textAnchor="middle">ATELIER REBUL</text>
+      </svg>
+    )
+  },
+  {
+    id: "nean-com",
+    logo: (
+      <svg viewBox="0 0 120 30" fill="currentColor">
+        <text x="50%" y="22" fontFamily="'Helvetica Neue', Arial, sans-serif" fontSize="18" fontWeight="500" letterSpacing="0.08em" textAnchor="middle">NEAN.COM</text>
+      </svg>
+    )
+  },
+  {
+    id: "acler",
+    logo: (
+      <svg viewBox="0 0 100 30" fill="currentColor">
+        <text x="50%" y="22" fontFamily="'Helvetica Neue', Arial, sans-serif" fontSize="22" fontWeight="500" letterSpacing="0.02em" textAnchor="middle">Acler</text>
+      </svg>
+    )
+  },
+  {
+    id: "weekend-maxmara",
+    logo: (
+      <svg viewBox="0 0 170 30" fill="currentColor">
+        <text x="50%" y="22" fontFamily="'Times New Roman', serif" fontSize="15" fontWeight="bold" letterSpacing="0.12em" textAnchor="middle">WEEKEND MAX MARA</text>
+      </svg>
+    )
+  },
+  {
+    id: "persona-marina-rinaldi",
+    logo: (
+      <svg viewBox="0 0 180 30" fill="currentColor">
+        <text x="50%" y="22" fontFamily="'Helvetica Neue', Arial, sans-serif" fontSize="13" fontWeight="600" letterSpacing="0.12em" textAnchor="middle">PERSONA</text>
+      </svg>
+    )
+  },
+  {
+    id: "max-and-co",
+    logo: (
+      <svg viewBox="0 0 120 30" fill="currentColor">
+        <text x="50%" y="22" fontFamily="'Helvetica Neue', Arial, sans-serif" fontSize="20" fontWeight="600" letterSpacing="0.08em" textAnchor="middle">MAX&CO</text>
+      </svg>
+    )
+  },
+  {
+    id: "puma",
+    logo: (
+      <svg viewBox="0 0 100 30" fill="currentColor">
+        <text x="50%" y="22" fontFamily="'Helvetica Neue', Arial, sans-serif" fontSize="22" fontWeight="800" letterSpacing="0.08em" textAnchor="middle">Puma</text>
+      </svg>
+    )
+  },
+  {
+    id: "emporio-armani-ea7",
+    logo: (
+      <svg viewBox="0 0 160 30" fill="currentColor">
+        <text x="50%" y="22" fontFamily="'Times New Roman', serif" fontSize="14" fontWeight="600" letterSpacing="0.12em" textAnchor="middle">EMPORIO ARMANI EA7</text>
+      </svg>
+    )
+  },
+  {
+    id: "almais",
+    logo: (
+      <svg viewBox="0 0 110 30" fill="currentColor">
+        <text x="50%" y="22" fontFamily="'Times New Roman', serif" fontSize="20" fontWeight="600" letterSpacing="0.16em" textAnchor="middle">ALMAIS</text>
+      </svg>
+    )
   }
 ];
 
 export default function BrandMarquee({
   section,
+  brands,
   lang: propLang
 }: {
   section?: any;
+  brands?: any[];
   lang?: "ar" | "en";
 }) {
   const pathname = usePathname();
   const lang = propLang || ((pathname?.endsWith("/ar") || pathname?.includes("/ar/") ? "ar" : "en") as "ar" | "en");
 
   const unifiedBrands = useMemo(() => {
-    if (section?.brands?.length) {
-      const activeBrands = section.brands.filter((b: any) => b.isActive !== false);
-      return activeBrands.map((b: any, index: number) => {
+    const sourceBrands = (() => {
+      const configured = Array.isArray(section?.brands) ? section.brands : [];
+      const globalBrands = Array.isArray(brands) ? brands : [];
+      const localFallback = getAllBrands().map((brand) => ({
+        id: brand.id,
+        title: brand.name,
+        titleAr: brand.nameAr,
+        slug: { current: brand.id },
+        headline: { en: brand.headline, ar: brand.headlineAr },
+        description: { en: brand.description, ar: brand.descriptionAr },
+        bgImage: { asset: { url: brand.backdropUrl } },
+        isActive: brand.isActive,
+      }));
+
+      const merged: any[] = [];
+      const seen = new Set<string>();
+      const disabled = new Set<string>();
+
+      [...configured, ...globalBrands].forEach((brand) => {
+        const slug = brand?.slug?.current || brand?.id || brand?._id;
+        if (slug && brand?.isActive === false) {
+          disabled.add(slug);
+        }
+      });
+
+      const fallbackBrands = configured.length === 0 && globalBrands.length === 0 ? localFallback : [];
+
+      [...configured, ...globalBrands, ...fallbackBrands].forEach((brand) => {
+        const slug = brand?.slug?.current || brand?.id || brand?._id;
+        if (!slug || seen.has(slug) || disabled.has(slug) || brand?.isActive === false) return;
+        seen.add(slug);
+        merged.push(brand);
+      });
+
+      return merged;
+    })();
+
+    if (sourceBrands.length) {
+      return sourceBrands.map((b: any, index: number) => {
         const slugStr = b.slug?.current || b.id || "";
         const staticMatch = brandsList.find(s => s.id === slugStr);
+        const local = getBrandById(slugStr);
         const localizedTitle = (lang === "ar" && b.titleAr) ? b.titleAr : b.title;
 
         let brandLogoNode: React.ReactNode = null;
@@ -227,14 +346,14 @@ export default function BrandMarquee({
 
         return {
           id: slugStr || `brand-${index}`,
-          title: localizedTitle,
+          title: localizedTitle || (lang === "ar" ? local?.nameAr : local?.name) || slugStr,
           size: b.size,
           scale: b.scale,
           logo: brandLogoNode || (staticMatch ? (
             staticMatch.logo
           ) : (
-            <Typography sx={{ fontFamily: "var(--heading-font)", fontSize: 18, fontWeight: "bold", letterSpacing: "0.2em", textTransform: "uppercase" }}>
-              {localizedTitle}
+            <Typography sx={{ fontFamily: "var(--heading-font)", fontSize: 18, fontWeight: "bold", letterSpacing: "0.04em", textTransform: "none", whiteSpace: "nowrap" }}>
+              {localizedTitle || (lang === "ar" ? local?.nameAr : local?.name) || slugStr}
             </Typography>
           ))
         };
@@ -253,7 +372,7 @@ export default function BrandMarquee({
         logo: item.logo
       };
     });
-  }, [section?.brands, lang]);
+  }, [section?.brands, brands, lang]);
 
   // Double/Triple the array to make the infinite loop seamless
   const scrollingItems = [...unifiedBrands, ...unifiedBrands, ...unifiedBrands];
@@ -366,7 +485,7 @@ export default function BrandMarquee({
             width: "max-content",
             alignItems: "center",
             gap: { xs: 16, md: 25 },
-            animation: "scrollMarquee 64s linear infinite",
+            animation: "scrollMarquee 150s linear infinite",
             "&:hover": {
               animationPlayState: "paused" // Pauses scroll on hover
             },

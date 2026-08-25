@@ -25,37 +25,37 @@ const brandVectorLogos: Record<string, React.ReactNode> = {
   ),
   "calvin-klein": (
     <svg width="100%" height="24" viewBox="0 0 140 30" fill="currentColor">
-      <text x="50%" y="22" fontFamily="'Futura', 'Helvetica Neue', 'Arial', sans-serif" fontSize="17" fontWeight="bold" letterSpacing="0.25em" textAnchor="middle">CALVIN KLEIN</text>
+      <text x="50%" y="22" fontFamily="'Futura', 'Helvetica Neue', 'Arial', sans-serif" fontSize="17" fontWeight="bold" letterSpacing="0.12em" textAnchor="middle">Calvin Klein</text>
     </svg>
   ),
   skechers: (
     <svg width="100%" height="24" viewBox="0 0 140 30" fill="currentColor">
-      <text x="50%" y="22" fontFamily="'Arial Black', sans-serif" fontSize="18" fontWeight="900" letterSpacing="0.15em" textAnchor="middle">SKECHERS</text>
+      <text x="50%" y="22" fontFamily="'Arial Black', sans-serif" fontSize="18" fontWeight="900" letterSpacing="0.08em" textAnchor="middle">Skechers</text>
     </svg>
   ),
   "paul-shark": (
     <svg width="100%" height="24" viewBox="0 0 160 30" fill="currentColor">
-      <text x="50%" y="22" fontFamily="'Futura', 'Arial Black', sans-serif" fontSize="16" fontWeight="900" letterSpacing="0.18em" textAnchor="middle">PAUL & SHARK</text>
+      <text x="50%" y="22" fontFamily="'Futura', 'Arial Black', sans-serif" fontSize="16" fontWeight="900" letterSpacing="0.08em" textAnchor="middle">Paul & Shark</text>
     </svg>
   ),
   maxmara: (
     <svg width="100%" height="24" viewBox="0 0 120 30" fill="currentColor">
-      <text x="50%" y="22" fontFamily="'Granjon', 'Garamond', serif" fontSize="21" fontWeight="bold" letterSpacing="0.15em" textAnchor="middle">MaxMara</text>
+      <text x="50%" y="22" fontFamily="'Granjon', 'Garamond', serif" fontSize="21" fontWeight="bold" letterSpacing="0.08em" textAnchor="middle">Max Mara</text>
     </svg>
   ),
   editorial: (
     <svg width="100%" height="24" viewBox="0 0 120 30" fill="currentColor">
-      <text x="50%" y="22" fontFamily='"Apple Garamond", "EB Garamond", "Cormorant Garamond", serif"' fontSize="18" fontWeight="bold" letterSpacing="0.3em" textAnchor="middle">EDITORIAL</text>
+      <text x="50%" y="22" fontFamily='"Apple Garamond", "EB Garamond", "Cormorant Garamond", serif"' fontSize="18" fontWeight="bold" letterSpacing="0.12em" textAnchor="middle">Editorial</text>
     </svg>
   ),
   sandro: (
     <svg width="100%" height="24" viewBox="0 0 120 30" fill="currentColor">
-      <text x="50%" y="22" fontFamily="'Futura', 'Helvetica Neue', 'Arial', sans-serif" fontSize="20" fontWeight="bold" letterSpacing="0.15em" textAnchor="middle">SANDRO</text>
+      <text x="50%" y="22" fontFamily="'Futura', 'Helvetica Neue', 'Arial', sans-serif" fontSize="20" fontWeight="bold" letterSpacing="0.08em" textAnchor="middle">Sandro</text>
     </svg>
   ),
   moje: (
     <svg width="100%" height="24" viewBox="0 0 100 30" fill="currentColor">
-      <text x="50%" y="22" fontFamily="'Didot', 'Times New Roman', serif" fontSize="21" fontStyle="italic" fontWeight="bold" letterSpacing="0.1em" textAnchor="middle">moje</text>
+      <text x="50%" y="22" fontFamily="'Didot', 'Times New Roman', serif" fontSize="21" fontStyle="italic" fontWeight="bold" letterSpacing="0.06em" textAnchor="middle">Moje</text>
     </svg>
   )
 
@@ -138,6 +138,7 @@ const categoryTranslations = {
     men: "Men",
     perfumes: "Perfumes",
     skincare: "Skincare",
+    beauty: "Beauty",
     dining: "Dining",
     fashion: "Fashion",
     designers: "Designers & Brands",
@@ -174,6 +175,7 @@ const categoryTranslations = {
     men: "الرجال",
     perfumes: "العطور",
     skincare: "العناية بالبشرة",
+    beauty: "الجمال",
     dining: "المطاعم والمقاهي",
     fashion: "الأزياء والموضة",
     designers: "المصممين والعلامات التجارية",
@@ -232,7 +234,7 @@ export default function CategoryDetailClient({ categoryId, initialLang, initialP
           }
         });
       });
-    } else if (["fashion", "perfumes", "skincare", "makeup"].includes(categoryId)) {
+    } else if (["fashion", "perfumes", "beauty", "skincare", "makeup"].includes(categoryId)) {
       import("@/lib/sanity").then(({ getCategoryPageData }) => {
         getCategoryPageData(categoryId).then((data) => {
           if (data) {
@@ -284,7 +286,40 @@ export default function CategoryDetailClient({ categoryId, initialLang, initialP
         }
       });
 
-      if (categoryId === "skincare") {
+      if (categoryId === "beauty") {
+        rawList = list.filter((b) => [
+          "lancome",
+          "loreal",
+          "gucci",
+          "prada",
+          "ysl",
+          "giorgio-armani",
+          "valentino",
+          "jimmy-choo",
+          "cartier",
+          "chloe",
+          "coach",
+          "elie-saab",
+          "atelier-rebul",
+          "clarins-paris",
+          "elizabeth-arden",
+          "anastasia-beverly-hills",
+          "the-face-shop",
+          "belif",
+          "dr-belmeur",
+          "beyond",
+          "fmgt",
+          "suntique",
+          "allione",
+          "your-vegan",
+          "dermedic",
+          "gemology",
+          "lakme",
+          "alfaparf-milano",
+          "mavala",
+          "shiseido"
+        ].includes(b.slug?.current || b._id));
+      } else if (categoryId === "skincare") {
         rawList = list.filter((b) => ["lancome", "moje", "sandro-moje", "maxmara", "adidas"].includes(b.slug?.current || b._id));
       } else if (categoryId === "perfumes") {
         rawList = list.filter((b) => ["elie-saab", "gucci", "prada", "valentino", "ysl", "cartier", "lancome", "calvin-klein", "giorgio-armani", "hugo-boss"].includes(b.slug?.current || b._id));
@@ -452,11 +487,11 @@ export default function CategoryDetailClient({ categoryId, initialLang, initialP
 
     return [
       { id: "adidas", label: getBrandName("adidas", "adidas") },
-      { id: "calvin-klein", label: getBrandName("calvin-klein", "CALVIN KLEIN") },
-      { id: "skechers", label: getBrandName("skechers", "SKECHERS") },
-      { id: "maxmara", label: getBrandName("maxmara", "MaxMara") },
-      { id: "editorial", label: getBrandName("editorial", "EDITORIAL") },
-      { id: "paul-shark", label: getBrandName("paul-shark", "PAUL & SHARK") },
+      { id: "calvin-klein", label: getBrandName("calvin-klein", "Calvin Klein") },
+      { id: "skechers", label: getBrandName("skechers", "Skechers") },
+      { id: "maxmara", label: getBrandName("maxmara", "Max Mara") },
+      { id: "editorial", label: getBrandName("editorial", "Editorial") },
+      { id: "paul-shark", label: getBrandName("paul-shark", "Paul & Shark") },
       { id: "brands-link", label: lang === "ar" ? "العلامات التجارية" : "Brands" }
     ];
   }, [categoryId, lang]);
@@ -902,7 +937,7 @@ export default function CategoryDetailClient({ categoryId, initialLang, initialP
                                   </Box>
 
                                   <Stack spacing={0.5} sx={{ mt: 1.5, width: "100%" }}>
-                                    <Typography sx={{ fontSize: 13, fontWeight: 600, color: "#111111", fontFamily: '"Cairo", sans-serif', textTransform: "uppercase" }}>
+                                    <Typography sx={{ fontSize: 13, fontWeight: 600, color: "#111111", fontFamily: '"Cairo", sans-serif' }}>
                                       {brand.name}
                                     </Typography>
                                     <Typography sx={{ fontSize: 11.5, color: "rgba(0,0,0,0.5)", fontWeight: 300, fontFamily: '"Cairo", sans-serif', overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
@@ -1034,7 +1069,7 @@ export default function CategoryDetailClient({ categoryId, initialLang, initialP
                                     </Box>
 
                                     <Stack spacing={0.5} sx={{ mt: 1.5, width: "100%" }}>
-                                      <Typography sx={{ fontSize: 13, fontWeight: 600, color: "#111111", fontFamily: '"Cairo", sans-serif', textTransform: "uppercase" }}>
+                                      <Typography sx={{ fontSize: 13, fontWeight: 600, color: "#111111", fontFamily: '"Cairo", sans-serif' }}>
                                         {brand.name}
                                       </Typography>
                                       <Typography sx={{ fontSize: 11.5, color: "rgba(0,0,0,0.5)", fontWeight: 300, fontFamily: '"Cairo", sans-serif', overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
@@ -1052,6 +1087,130 @@ export default function CategoryDetailClient({ categoryId, initialLang, initialP
                                 </Link>
                               </Grid>
                             ))}
+                        </Grid>
+                      </Box>
+                    ) : categoryId === "beauty" ? (
+                      <Box sx={{ mb: 6 }} dir={lang === "ar" ? "rtl" : "ltr"}>
+                        <Grid container spacing={4} sx={{ mb: 5 }}>
+                          <Grid size={{ xs: 12, sm: 6 }}>
+                            <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                              <Box
+                                sx={{
+                                  height: { xs: "280px", sm: "440px" },
+                                  backgroundImage: 'url("/brand/luxury-beauty.png")',
+                                  backgroundSize: "cover",
+                                  backgroundPosition: "center center",
+                                  border: "1px solid rgb(255 255 255) !important"
+                                }}
+                              />
+                              <Stack alignItems="center" spacing={0.5} sx={{ py: 1 }}>
+                                <Typography sx={{ fontFamily: '"Apple Garamond", "EB Garamond", "Cormorant Garamond", serif', fontSize: 22, fontWeight: 500, letterSpacing: lang === "ar" ? 0 : "0.15em", textTransform: "uppercase", color: "#111111", textAlign: "center" }}>
+                                  {lang === "ar" ? "Makeup" : "MAKEUP"}
+                                </Typography>
+                                <Typography sx={{ fontSize: 9.5, letterSpacing: lang === "ar" ? 0 : "0.25em", textTransform: "uppercase", fontWeight: 700, color: "#CB6116", fontFamily: '"Cairo", sans-serif', textAlign: "center" }}>
+                                  {lang === "ar" ? "Color, artistry and radiance" : "COLOR, ARTISTRY & RADIANCE"}
+                                </Typography>
+                              </Stack>
+                            </Box>
+                          </Grid>
+
+                          <Grid size={{ xs: 12, sm: 6 }}>
+                            <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                              <Box
+                                sx={{
+                                  height: { xs: "280px", sm: "440px" },
+                                  backgroundImage: 'url("/brand/hero-look-07.jpg")',
+                                  backgroundSize: "cover",
+                                  backgroundPosition: "center top",
+                                  border: "1px solid rgb(255 255 255) !important"
+                                }}
+                              />
+                              <Stack alignItems="center" spacing={0.5} sx={{ py: 1 }}>
+                                <Typography sx={{ fontFamily: '"Apple Garamond", "EB Garamond", "Cormorant Garamond", serif', fontSize: 22, fontWeight: 500, letterSpacing: lang === "ar" ? 0 : "0.15em", textTransform: "uppercase", color: "#111111", textAlign: "center" }}>
+                                  {lang === "ar" ? "Skincare" : "SKINCARE"}
+                                </Typography>
+                                <Typography sx={{ fontSize: 9.5, letterSpacing: lang === "ar" ? 0 : "0.25em", textTransform: "uppercase", fontWeight: 700, color: "#CB6116", fontFamily: '"Cairo", sans-serif', textAlign: "center" }}>
+                                  {lang === "ar" ? "Ritual, care and glow" : "RITUAL, CARE & GLOW"}
+                                </Typography>
+                              </Stack>
+                            </Box>
+                          </Grid>
+                        </Grid>
+
+                        <Box sx={{ display: "flex", flexDirection: "column", gap: 2, mb: 8 }}>
+                          <Box
+                            sx={{
+                              height: { xs: "260px", sm: "420px" },
+                              backgroundImage: 'url("/brand/hero-woman-wide.png")',
+                              backgroundSize: "cover",
+                              backgroundPosition: "center center",
+                              border: "1px solid rgb(255 255 255) !important"
+                            }}
+                          />
+                          <Stack alignItems="center" spacing={0.5} sx={{ py: 1 }}>
+                            <Typography sx={{ fontFamily: '"Apple Garamond", "EB Garamond", "Cormorant Garamond", serif', fontSize: 22, fontWeight: 500, letterSpacing: lang === "ar" ? 0 : "0.15em", textTransform: "uppercase", color: "#111111", textAlign: "center" }}>
+                              {lang === "ar" ? "Beauty Houses" : "BEAUTY HOUSES"}
+                            </Typography>
+                            <Typography sx={{ fontSize: 9.5, letterSpacing: lang === "ar" ? 0 : "0.25em", textTransform: "uppercase", fontWeight: 700, color: "#CB6116", fontFamily: '"Cairo", sans-serif', textAlign: "center" }}>
+                              {lang === "ar" ? "World-renowned beauty, skincare and fragrance brands" : "WORLD-RENOWNED BEAUTY, SKINCARE & FRAGRANCE BRANDS"}
+                            </Typography>
+                          </Stack>
+                        </Box>
+
+                        <Typography sx={{ fontSize: 20, fontWeight: 600, fontFamily: "var(--heading-font)", mb: 4, textAlign: "center", color: "#111111" }}>
+                          {lang === "ar" ? "Luxury Beauty Houses" : "Luxury Beauty Houses"}
+                        </Typography>
+
+                        <Grid container spacing={3} sx={{ justifyContent: "center" }}>
+                          {processedBrands.map((brand) => (
+                            <Grid size={{ xs: 12, sm: 6, md: 3 }} key={brand.id}>
+                              <Link href={`/brand/${brand.id}/${lang}`} style={{ textDecoration: "none", color: "inherit" }}>
+                                <Box
+                                  sx={{
+                                    bgcolor: "#ffffff",
+                                    border: "1px solid rgba(0,0,0,0.06)",
+                                    p: 3,
+                                    height: "190px",
+                                    display: "flex",
+                                    flexDirection: "column",
+                                    justifyContent: "space-between",
+                                    alignItems: "center",
+                                    textAlign: "center",
+                                    transition: "all 0.4s cubic-bezier(0.25, 1, 0.5, 1)",
+                                    "&:hover": {
+                                      borderColor: "#CB6116",
+                                      boxShadow: "0 10px 24px rgba(203, 97, 22, 0.06)",
+                                      transform: "translateY(-4px)",
+                                      "& .brand-action-arrow": {
+                                        color: "#CB6116",
+                                        transform: lang === "ar" ? "translateX(-4px)" : "translateX(4px)"
+                                      }
+                                    }
+                                  }}
+                                >
+                                  <Box sx={{ flexGrow: 1, display: "flex", alignItems: "center", justifyContent: "center", minHeight: 40, width: "100%", color: "#111111" }}>
+                                    <BrandLogoMark brand={brand} variant="category-card" />
+                                  </Box>
+
+                                  <Stack spacing={0.5} sx={{ mt: 1.5, width: "100%" }}>
+                                    <Typography sx={{ fontSize: 13, fontWeight: 600, color: "#111111", fontFamily: '"Cairo", sans-serif' }}>
+                                      {brand.name}
+                                    </Typography>
+                                    <Typography sx={{ fontSize: 11.5, color: "rgba(0,0,0,0.5)", fontWeight: 300, fontFamily: '"Cairo", sans-serif', overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                                      {brand.headline || brand.description}
+                                    </Typography>
+                                  </Stack>
+
+                                  <Stack direction="row" alignItems="center" spacing={0.5} className="brand-action-arrow" sx={{ mt: 1.5, color: "rgba(0,0,0,0.3)", transition: "all 0.3s ease" }}>
+                                    <Typography sx={{ fontSize: 9.5, fontWeight: 700, textTransform: "uppercase", letterSpacing: lang === "ar" ? 0 : "0.12em", fontFamily: '"Cairo", sans-serif' }}>
+                                      {lang === "ar" ? "Explore" : "Explore"}
+                                    </Typography>
+                                    {lang === "ar" ? <ArrowBackIcon sx={{ fontSize: 12 }} /> : <ArrowForwardIcon sx={{ fontSize: 12 }} />}
+                                  </Stack>
+                                </Box>
+                              </Link>
+                            </Grid>
+                          ))}
                         </Grid>
                       </Box>
                     ) : categoryId === "skincare" ? (
@@ -1112,11 +1271,7 @@ export default function CategoryDetailClient({ categoryId, initialLang, initialP
                         </Typography>
 
                         <Grid container spacing={3} sx={{ justifyContent: "center" }}>
-                          {processedBrands
-                            .filter((brand) =>
-                              ["lancome", "moje", "sandro-moje", "maxmara", "adidas"].includes(brand.id)
-                            )
-                            .map((brand) => (
+                          {processedBrands.map((brand) => (
                               <Grid size={{ xs: 12, sm: 6, md: 3 }} key={brand.id}>
                                 <Link href={`/brand/${brand.id}/${lang}`} style={{ textDecoration: "none", color: "inherit" }}>
                                   <Box
@@ -1147,7 +1302,7 @@ export default function CategoryDetailClient({ categoryId, initialLang, initialP
                                     </Box>
 
                                     <Stack spacing={0.5} sx={{ mt: 1.5, width: "100%" }}>
-                                      <Typography sx={{ fontSize: 13, fontWeight: 600, color: "#111111", fontFamily: '"Cairo", sans-serif', textTransform: "uppercase" }}>
+                                      <Typography sx={{ fontSize: 13, fontWeight: 600, color: "#111111", fontFamily: '"Cairo", sans-serif' }}>
                                         {brand.name}
                                       </Typography>
                                       <Typography sx={{ fontSize: 11.5, color: "rgba(0,0,0,0.5)", fontWeight: 300, fontFamily: '"Cairo", sans-serif', overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>

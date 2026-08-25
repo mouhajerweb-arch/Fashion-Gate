@@ -1,9 +1,9 @@
 import { defineType, defineField } from "sanity";
 import { Sparkles } from "lucide-react";
 
-export const skincarePage = defineType({
-  name: "skincarePage",
-  title: "Skincare Page",
+export const beautyPage = defineType({
+  name: "beautyPage",
+  title: "Beauty Page",
   type: "document",
   icon: Sparkles,
   fields: [
@@ -30,17 +30,17 @@ export const skincarePage = defineType({
             defineField({ name: "title", title: "Banner Title", type: "localizedString" }),
             defineField({ name: "subtitle", title: "Banner Subtitle", type: "localizedString" }),
             defineField({ name: "image", title: "Banner Image", type: "image", options: { hotspot: true } }),
-            defineField({ name: "link", title: "Redirection Link Path", type: "string" })
+            defineField({ name: "link", title: "Redirection Link Path", type: "string" }),
           ],
           preview: {
             select: {
               title: "title.en",
               subtitle: "subtitle.en",
-              media: "image"
-            }
-          }
-        }
-      ]
+              media: "image",
+            },
+          },
+        },
+      ],
     }),
     defineField({
       name: "brandsHeading",
@@ -55,7 +55,7 @@ export const skincarePage = defineType({
       of: [
         {
           type: "object",
-          name: "featuredSkincareBrand",
+          name: "featuredBeautyBrand",
           title: "Featured Brand",
           fields: [
             defineField({
@@ -67,16 +67,16 @@ export const skincarePage = defineType({
             }),
             defineField({
               name: "isVisible",
-              title: "Show this brand on Skincare page",
+              title: "Show this brand on Beauty page",
               type: "boolean",
-              description: "Turn this off to hide the brand only from the Skincare page. The brand can still appear elsewhere.",
+              description: "Turn this off to hide the brand only from the Beauty page. The brand can still appear elsewhere.",
               initialValue: true,
             }),
             defineField({
               name: "categoryLogoScale",
-              title: "Skincare Card Logo Scale",
+              title: "Beauty Card Logo Scale",
               type: "number",
-              description: "Page-specific scale used only for this brand on the Skincare page cards.",
+              description: "Page-specific scale used only for this brand on the Beauty page cards.",
               initialValue: 1,
               validation: (Rule) => Rule.min(0.01),
             }),
@@ -91,24 +91,24 @@ export const skincarePage = defineType({
             prepare({ title, media, scale, isVisible }) {
               return {
                 title: title || "Featured Brand",
-                subtitle: `${isVisible === false ? "Hidden on Skincare page" : "Visible on Skincare page"} - ${scale ? `Skincare card scale: ${scale}` : "Default Skincare card scale"}`,
+                subtitle: `${isVisible === false ? "Hidden on Beauty page" : "Visible on Beauty page"} - ${scale ? `Beauty card scale: ${scale}` : "Default Beauty card scale"}`,
                 media,
               };
             },
           },
         },
-      ]
+      ],
     }),
     defineField({
       name: "brandLogoScaleOverrides",
-      title: "Skincare Brand Card Logo Scale Overrides",
-      description: "Optional per-brand logo scales used only on the Skincare page brand cards.",
+      title: "Beauty Brand Card Logo Scale Overrides",
+      description: "Optional per-brand logo scales used only on the Beauty page brand cards.",
       type: "array",
       of: [
         {
           type: "object",
-          name: "skincareBrandLogoScaleOverride",
-          title: "Skincare Brand Logo Scale",
+          name: "beautyBrandLogoScaleOverride",
+          title: "Beauty Brand Logo Scale",
           fields: [
             defineField({
               name: "brand",
@@ -134,7 +134,7 @@ export const skincarePage = defineType({
             prepare({ title, media, scale }) {
               return {
                 title: title || "Brand Logo Scale",
-                subtitle: `Skincare card scale: ${scale || 1}`,
+                subtitle: `Beauty card scale: ${scale || 1}`,
                 media,
               };
             },
@@ -146,7 +146,7 @@ export const skincarePage = defineType({
       name: "seo",
       title: "SEO Settings",
       type: "seo",
-    })
+    }),
   ],
   preview: {
     select: {
@@ -154,9 +154,9 @@ export const skincarePage = defineType({
     },
     prepare({ title }) {
       return {
-        title: title || "Skincare Page Settings",
-        subtitle: "Bilingual page content settings"
+        title: title || "Beauty Page Settings",
+        subtitle: "Bilingual page content settings",
       };
-    }
-  }
+    },
+  },
 });
