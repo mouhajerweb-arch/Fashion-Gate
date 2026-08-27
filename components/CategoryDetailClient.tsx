@@ -67,11 +67,35 @@ interface CategoryDetailClientProps {
   initialProducts?: Product[];
 }
 
+const CATEGORY_CARD_DEFAULT_LOGO_SCALE = 1.5;
+const PAGE_ROW_DEFAULT_LOGO_SCALE = 1;
+const CATEGORY_SCALE_PAGE_IDS = ["fashion", "perfumes", "beauty", "skincare", "makeup"];
+
+function positiveNumber(value: unknown): number | undefined {
+  const numeric = Number(value);
+  return Number.isFinite(numeric) && numeric > 0 ? numeric : undefined;
+}
+
+function resolveCategoryCardLogoScale({
+  overrideScale,
+  sharedPageScale,
+  pageRowScale,
+}: {
+  overrideScale?: number;
+  sharedPageScale?: number;
+  pageRowScale?: number;
+}) {
+  if (overrideScale) return overrideScale;
+  if (sharedPageScale) return sharedPageScale;
+  if (pageRowScale && pageRowScale !== PAGE_ROW_DEFAULT_LOGO_SCALE) return pageRowScale;
+  return CATEGORY_CARD_DEFAULT_LOGO_SCALE;
+}
+
 function BrandLogoMark({ brand, variant = "default" }: { brand: any; variant?: "default" | "category-card" }) {
   if (brand.logoUrl) {
     const sizeMultiplier = variant === "category-card" ? 1 : brand.logoSize === "large" ? 1.15 : brand.logoSize === "small" ? 0.82 : 1;
     const rawScale = variant === "category-card"
-      ? Number(brand.categoryLogoScale || 1)
+      ? Number(brand.categoryLogoScale || CATEGORY_CARD_DEFAULT_LOGO_SCALE)
       : Number(brand.logoScale || 1) * sizeMultiplier;
     const maxScale = variant === "category-card" ? 8 : 3;
     const scale = Math.max(0.25, Math.min(rawScale, maxScale));
@@ -258,6 +282,7 @@ export default function CategoryDetailClient({ categoryId, initialLang, initialP
   const processedBrands = useMemo(() => {
     let rawList: any[] = [];
     const scaleOverrides = new Map<string, number>();
+    const sharedPageScales = new Map<string, number>();
 
     (categoryCmsData?.brandLogoScaleOverrides || []).forEach((override: any) => {
       const id = override?.brand?.slug?.current || override?.brand?._id;
@@ -266,6 +291,26 @@ export default function CategoryDetailClient({ categoryId, initialLang, initialP
         scaleOverrides.set(id, scale);
       }
     });
+
+    if (CATEGORY_SCALE_PAGE_IDS.includes(categoryId)) {
+      (categoryCmsData?.sharedCategoryLogoScaleSources || []).forEach((sourcePage: any) => {
+        (sourcePage?.allowedBrands || []).forEach((row: any) => {
+          const id = row?.brand?.slug?.current || row?.brand?._id;
+          const scale = positiveNumber(row?.categoryLogoScale);
+          if (id && scale && scale !== PAGE_ROW_DEFAULT_LOGO_SCALE && !sharedPageScales.has(id)) {
+            sharedPageScales.set(id, scale);
+          }
+        });
+
+        (sourcePage?.brandLogoScaleOverrides || []).forEach((override: any) => {
+          const id = override?.brand?.slug?.current || override?.brand?._id;
+          const scale = positiveNumber(override?.scale);
+          if (id && scale && !sharedPageScales.has(id)) {
+            sharedPageScales.set(id, scale);
+          }
+        });
+      });
+    }
 
     if (categoryCmsData?.allowedBrands && categoryCmsData.allowedBrands.length > 0) {
       rawList = categoryCmsData.allowedBrands;
@@ -333,8 +378,7 @@ export default function CategoryDetailClient({ categoryId, initialLang, initialP
       return Boolean(sb) && (entry?._type === "reference" || entry?.isVisible !== false);
     }).map((entry: any) => {
       const sb = entry?.brand || entry;
-      const pageCategoryLogoScale = entry?.brand ? Number(entry.categoryLogoScale) : NaN;
-      const brandCategoryLogoScale = Number(sb.categoryLogoScale);
+      const pageCategoryLogoScale = entry?.brand ? positiveNumber(entry.categoryLogoScale) : undefined;
       const brandId = sb.slug?.current || sb._id || sb.id;
       const fb = fallbackBrands.find((b) => b.id === (sb.slug?.current || sb.id || sb._id));
       const name = sb.title || fb?.name || "";
@@ -355,9 +399,11 @@ export default function CategoryDetailClient({ categoryId, initialLang, initialP
         description: lang === "ar" ? descriptionAr : description,
         logoUrl,
         logoScale: typeof sb.scale === "number" ? sb.scale : 1,
-        categoryLogoScale: scaleOverrides.get(brandId)
-          || (Number.isFinite(pageCategoryLogoScale) && pageCategoryLogoScale > 0 ? pageCategoryLogoScale : undefined)
-          || (Number.isFinite(brandCategoryLogoScale) && brandCategoryLogoScale > 0 ? brandCategoryLogoScale : 2),
+        categoryLogoScale: resolveCategoryCardLogoScale({
+          overrideScale: scaleOverrides.get(brandId),
+          sharedPageScale: sharedPageScales.get(brandId),
+          pageRowScale: pageCategoryLogoScale,
+        }),
         logoSize: sb.size || "medium",
         bgImage: sb.bgImage?.asset?.url || sb.bgImage || fb?.backdropUrl || "/brand-pages/page_01.jpg"
       };

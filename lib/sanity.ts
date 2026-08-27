@@ -1181,6 +1181,30 @@ export async function getCategoryPageData(categoryId: string): Promise<any> {
           slug
         }
       },
+      "sharedCategoryLogoScaleSources": select(
+        $categoryId in ["fashion", "perfumes", "beauty", "skincare", "makeup"] => *[
+          _type in ["fashionPage", "perfumePage", "beautyPage", "skincarePage", "makeupPage"] &&
+          !(_id in path("drafts.**"))
+        ] | order(_type asc) {
+          _id,
+          _type,
+          allowedBrands[] {
+            categoryLogoScale,
+            brand-> {
+              _id,
+              slug
+            }
+          },
+          brandLogoScaleOverrides[] {
+            scale,
+            brand-> {
+              _id,
+              slug
+            }
+          }
+        },
+        []
+      ),
       seo { metaTitle, metaDescription, keywords, ogImage { asset->{ url } }, canonicalUrl, noIndex }
     }`, { docType, categoryId });
   } catch (err) {

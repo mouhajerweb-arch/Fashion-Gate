@@ -811,6 +811,24 @@ export default function SiteHeader({ settings, onLangToggleStart }: SiteHeaderPr
     return pathname.includes(`/${pathSegment}/`) || pathname.endsWith(`/${pathSegment}`) || pathname.includes(`/${pathSegment}?`) || pathname.includes(`/${pathSegment}#`);
   };
 
+  const isMenuItemActive = (item: any, isDesigners: boolean, isBeauty: boolean) => {
+    if (!activeSectionPath) return false;
+    if (isDesigners && isDesignersPage) return true;
+
+    const cleanPath = activeSectionPath;
+    const cleanHref = item.href ? item.href.replace(/\/(en|ar)(\/|$)/, "") || "/" : "/";
+
+    if (isBeauty && ["/category/beauty", "/category/skincare", "/category/makeup"].some((path) => cleanPath === path || cleanPath.startsWith(`${path}/`))) {
+      return true;
+    }
+
+    if (cleanHref === "/") return cleanPath === "/";
+    if (cleanHref.startsWith("/category/")) return cleanPath.startsWith(cleanHref);
+    if (cleanHref.startsWith("/brand/")) return cleanPath.startsWith("/brand/");
+    if (isDesigners) return cleanPath === "/designers" || cleanPath.startsWith("/designers/");
+    return cleanPath === cleanHref || cleanPath.startsWith(cleanHref);
+  };
+
   useEffect(() => {
     import("@/lib/productData").then((mod) => {
       setHeaderProducts(mod.products);
@@ -1176,22 +1194,12 @@ export default function SiteHeader({ settings, onLangToggleStart }: SiteHeaderPr
               const labelStr = lang === "ar" ? item.label?.ar || item.label?.en : item.label?.en || item.label?.ar;
               const normalizedLabel = `${item.label?.en || ""} ${item.label?.ar || ""} ${labelStr || ""}`.toLowerCase();
               const isDesigners = item.href?.includes("/designers") || item.href?.includes("designers") || normalizedLabel.includes("designer") || normalizedLabel.includes("مصمم");
-              const isCategoryDropdown = isFashion || isPerfumes || isBeauty || isDining;
-              const hasDropdown = isCategoryDropdown || (item.designerCategories && item.designerCategories.length > 0);
+              const isCategoryDropdown = isBeauty || isDining;
+              const hasDropdown = isCategoryDropdown || (isDesigners && item.designerCategories && item.designerCategories.length > 0);
               
               const finalHref = isDesigners ? `/designers/${lang}` : resolvePath(item.href, lang);
 
-              const isCurrentActive = (() => {
-                if (!activeSectionPath) return false;
-                if (isDesigners && isDesignersPage) return true;
-                const cleanPath = activeSectionPath;
-                const cleanHref = item.href ? item.href.replace(/\/(en|ar)(\/|$)/, "") || "/" : "/";
-                if (cleanHref === "/") return cleanPath === "/";
-                if (cleanHref.startsWith("/category/")) return cleanPath.startsWith(cleanHref);
-                if (cleanHref.startsWith("/brand/")) return cleanPath.startsWith("/brand/");
-                if (isDesigners) return cleanPath === "/designers" || cleanPath.startsWith("/designers/");
-                return cleanPath === cleanHref || cleanPath.startsWith(cleanHref);
-              })();
+              const isCurrentActive = isMenuItemActive(item, isDesigners, isBeauty);
 
               return (
                 <Box
@@ -1265,7 +1273,7 @@ export default function SiteHeader({ settings, onLangToggleStart }: SiteHeaderPr
                                   top: "100%",
                                   left: lang === "ar" ? "auto" : 0,
                                   right: lang === "ar" ? 0 : "auto",
-                                  width: beautyHoveredSub === "skincare" ? "300px" : "165px",
+                                  width: "165px",
                                   bgcolor: "#ffffff",
                                   border: "1px solid rgba(0,0,0,0.1)",
                                   borderTop: "3px solid #CB6116",
@@ -1332,8 +1340,8 @@ export default function SiteHeader({ settings, onLangToggleStart }: SiteHeaderPr
                                     sx={{
                                       width: "165px",
                                       bgcolor: "#ffffff",
-                                      borderRight: (lang !== "ar" && beautyHoveredSub === "skincare") ? "1px solid rgba(0,0,0,0.06)" : "none",
-                                      borderLeft: (lang === "ar" && beautyHoveredSub === "skincare") ? "1px solid rgba(0,0,0,0.06)" : "none",
+                                      borderRight: "none",
+                                      borderLeft: "none",
                                       py: 1.5
                                     }}
                                   >
@@ -1398,7 +1406,8 @@ export default function SiteHeader({ settings, onLangToggleStart }: SiteHeaderPr
                                     </Box>
                                   </Box>
 
-                                  {/* Right Sub-Panel - ONLY when hovering Skincare */}
+                                  {/* Right Sub-Panel - ONLY when hovering Skincare.
+                                      Men/Women submenu is commented for now; uncomment this block later if needed.
                                   {beautyHoveredSub === "skincare" && (
                                     <Box sx={{ width: "135px", p: 1.2, bgcolor: "#ffffff", display: "flex", flexDirection: "column", justifyContent: "center" }}>
                                       <AnimatePresence mode="wait">
@@ -1445,6 +1454,7 @@ export default function SiteHeader({ settings, onLangToggleStart }: SiteHeaderPr
                                       </AnimatePresence>
                                     </Box>
                                   )}
+                                  */}
                                 </Box>
                               ) : (isFashion || isSkincare) ? (
                                 [
@@ -1669,12 +1679,13 @@ export default function SiteHeader({ settings, onLangToggleStart }: SiteHeaderPr
                 const labelStr = lang === "ar" ? item.label?.ar || item.label?.en : item.label?.en || item.label?.ar;
                 const normalizedLabel = `${item.label?.en || ""} ${item.label?.ar || ""} ${labelStr || ""}`.toLowerCase();
                 const isDesigners = item.href?.includes("/designers") || item.href?.includes("designers") || normalizedLabel.includes("designer") || normalizedLabel.includes("مصمم");
-                const isCategoryDropdown = isFashion || isPerfumes || isBeauty;
-                const hasDropdown = isCategoryDropdown || (item.designerCategories && item.designerCategories.length > 0);
+                const isCategoryDropdown = isBeauty;
+                const hasDropdown = isCategoryDropdown || (isDesigners && item.designerCategories && item.designerCategories.length > 0);
                 
                 const finalHref = isDesigners ? `/designers/${lang}` : resolvePath(item.href, lang);
 
                 const isExpanded = expandedMobileItem === idx;
+                const isCurrentActive = isMenuItemActive(item, isDesigners, isBeauty);
 
                 return (
                   <Stack key={idx} spacing={1.5} sx={{ width: "100%", alignItems: "center" }}>
@@ -1690,7 +1701,7 @@ export default function SiteHeader({ settings, onLangToggleStart }: SiteHeaderPr
                         }
                       }}
                       sx={{
-                        color: (isExpanded || activeDropdown === idx) ? "#CB6116" : "rgba(255,255,255,0.85)",
+                        color: (isCurrentActive || isExpanded || activeDropdown === idx) ? "#CB6116" : "rgba(255,255,255,0.85)",
                         fontSize: 15,
                         fontWeight: 600,
                         textTransform: "uppercase",
@@ -1763,6 +1774,7 @@ export default function SiteHeader({ settings, onLangToggleStart }: SiteHeaderPr
                                         >
                                           {lang === "ar" ? "العناية بالبشرة" : "SKINCARE"}
                                         </MuiLink>
+                                        {/* Skincare Men/Women links are commented for now; uncomment this stack later if needed.
                                         <Stack spacing={0.8} sx={{ alignItems: "center" }}>
                                           {[
                                             { label: lang === "ar" ? "النساء" : "WOMEN", href: `/category/skincare/${lang}?sub=women` },
@@ -1785,6 +1797,7 @@ export default function SiteHeader({ settings, onLangToggleStart }: SiteHeaderPr
                                             </MuiLink>
                                           ))}
                                         </Stack>
+                                        */}
                                       </Box>
 
                                       <Box sx={{ textAlign: "center" }}>
