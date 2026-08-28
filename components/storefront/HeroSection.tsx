@@ -42,16 +42,16 @@ export default function HeroSection({
   // Resolve background video or image URL dynamically
   const isVideoBg = section.bgType === "video" && (section.bgVideo?.asset?.url || section.video?.asset?.url);
 
-  let bgImageUrl = "/brand-pages/page_01.jpg";
+  let bgImageUrl = "";
   if (section.bgImage?.asset) {
     try {
-      bgImageUrl = imageUrl(section.bgImage).url() || bgImageUrl;
+      bgImageUrl = imageUrl(section.bgImage).url() || "";
     } catch (e) {
       console.error("Failed to parse section.bgImage url", e);
     }
   } else if (section.image?.asset) {
     try {
-      bgImageUrl = imageUrl(section.image).url() || bgImageUrl;
+      bgImageUrl = imageUrl(section.image).url() || "";
     } catch (e) {
       console.error("Failed to parse section.image url", e);
     }
@@ -154,8 +154,8 @@ export default function HeroSection({
       id={section.anchor || "arrival"}
       component="section"
       sx={{
-        height: { xs: "calc(100svh - 105px)", md: "calc(100svh - 148px)" },
-        minHeight: { xs: "calc(100svh - 105px)", md: "calc(100svh - 148px)" },
+        height: { xs: "calc(100svh - 115px)", md: "calc(100svh - 148px)" },
+        minHeight: { xs: "calc(100svh - 115px)", md: "calc(100svh - 148px)" },
         position: "relative",
         overflow: "hidden",
         color: "#fff",

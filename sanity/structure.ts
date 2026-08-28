@@ -135,22 +135,37 @@ export const structure: StructureResolver = (S) =>
                 ),
               S.listItem()
                 .title("Beauty")
+                .id("beauty")
                 .child(
                   S.list()
                     .title("Beauty Pages")
                     .items([
                       S.listItem()
-                        .title("Skincare Page")
+                        .title("Beauty Page")
+                        .id("beautyPage")
                         .child(
-                          S.document()
+                          S.editor()
+                            .id("beauty")
+                            .schemaType("beautyPage")
+                            .documentId("beauty")
+                            .title("Beauty Page")
+                        ),
+                      S.listItem()
+                        .title("Skincare Page")
+                        .id("skincarePage")
+                        .child(
+                          S.editor()
+                            .id("skincare")
                             .schemaType("skincarePage")
                             .documentId("skincare")
                             .title("Skincare Page")
                         ),
                       S.listItem()
                         .title("Makeup Page")
+                        .id("makeupPage")
                         .child(
-                          S.document()
+                          S.editor()
+                            .id("makeup")
                             .schemaType("makeupPage")
                             .documentId("makeup")
                             .title("Makeup Page")
@@ -245,6 +260,7 @@ export const structure: StructureResolver = (S) =>
             "diningPage",
             "restaurantPage",
             "perfumePage",
+            "beautyPage",
             "skincarePage",
             "makeupPage",
             "fashionPage",

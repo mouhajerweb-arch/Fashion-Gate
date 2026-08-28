@@ -7,6 +7,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { brands as fallbackBrands } from "@/lib/brandData";
+import { getLocalizedValue } from "@/lib/sanity";
 
 const brandVectorLogos: Record<string, React.ReactNode> = {
   adidas: (
@@ -16,37 +17,37 @@ const brandVectorLogos: Record<string, React.ReactNode> = {
   ),
   "calvin-klein": (
     <svg width="100%" height="32" viewBox="0 0 140 30" fill="currentColor">
-      <text x="50%" y="22" fontFamily="'Futura', 'Helvetica Neue', 'Arial', sans-serif" fontSize="17" fontWeight="bold" letterSpacing="0.25em" textAnchor="middle">CALVIN KLEIN</text>
+      <text x="50%" y="22" fontFamily="'Futura', 'Helvetica Neue', 'Arial', sans-serif" fontSize="17" fontWeight="bold" letterSpacing="0.12em" textAnchor="middle">Calvin Klein</text>
     </svg>
   ),
   skechers: (
     <svg width="100%" height="32" viewBox="0 0 140 30" fill="currentColor">
-      <text x="50%" y="22" fontFamily="'Arial Black', sans-serif" fontSize="18" fontWeight="900" letterSpacing="0.15em" textAnchor="middle">SKECHERS</text>
+      <text x="50%" y="22" fontFamily="'Arial Black', sans-serif" fontSize="18" fontWeight="900" letterSpacing="0.08em" textAnchor="middle">Skechers</text>
     </svg>
   ),
   "paul-shark": (
     <svg width="100%" height="32" viewBox="0 0 160 30" fill="currentColor">
-      <text x="50%" y="22" fontFamily="'Futura', 'Arial Black', sans-serif" fontSize="16" fontWeight="900" letterSpacing="0.18em" textAnchor="middle">PAUL & SHARK</text>
+      <text x="50%" y="22" fontFamily="'Futura', 'Arial Black', sans-serif" fontSize="16" fontWeight="900" letterSpacing="0.08em" textAnchor="middle">Paul & Shark</text>
     </svg>
   ),
   maxmara: (
     <svg width="100%" height="32" viewBox="0 0 120 30" fill="currentColor">
-      <text x="50%" y="22" fontFamily="'Granjon', 'Garamond', serif" fontSize="21" fontWeight="bold" letterSpacing="0.15em" textAnchor="middle">MaxMara</text>
+      <text x="50%" y="22" fontFamily="'Granjon', 'Garamond', serif" fontSize="21" fontWeight="bold" letterSpacing="0.08em" textAnchor="middle">Max Mara</text>
     </svg>
   ),
   editorial: (
     <svg width="100%" height="32" viewBox="0 0 120 30" fill="currentColor">
-      <text x="50%" y="22" fontFamily='"Apple Garamond", "EB Garamond", "Cormorant Garamond", serif"' fontSize="18" fontWeight="bold" letterSpacing="0.3em" textAnchor="middle">EDITORIAL</text>
+      <text x="50%" y="22" fontFamily='"Apple Garamond", "EB Garamond", "Cormorant Garamond", serif"' fontSize="18" fontWeight="bold" letterSpacing="0.12em" textAnchor="middle">Editorial</text>
     </svg>
   ),
   sandro: (
     <svg width="100%" height="32" viewBox="0 0 120 30" fill="currentColor">
-      <text x="50%" y="22" fontFamily="'Futura', 'Helvetica Neue', 'Arial', sans-serif" fontSize="20" fontWeight="bold" letterSpacing="0.15em" textAnchor="middle">SANDRO</text>
+      <text x="50%" y="22" fontFamily="'Futura', 'Helvetica Neue', 'Arial', sans-serif" fontSize="20" fontWeight="bold" letterSpacing="0.08em" textAnchor="middle">Sandro</text>
     </svg>
   ),
   moje: (
     <svg width="100%" height="32" viewBox="0 0 100 30" fill="currentColor">
-      <text x="50%" y="22" fontFamily="'Didot', 'Times New Roman', serif" fontSize="21" fontStyle="italic" fontWeight="bold" letterSpacing="0.1em" textAnchor="middle">moje</text>
+      <text x="50%" y="22" fontFamily="'Didot', 'Times New Roman', serif" fontSize="21" fontStyle="italic" fontWeight="bold" letterSpacing="0.06em" textAnchor="middle">Moje</text>
     </svg>
   )
  
@@ -111,11 +112,11 @@ export default function BrandListClient({ initialBrands, initialLang }: BrandLis
       const name = sb.title || fb?.name || "";
       const nameAr = sb.titleAr || fb?.nameAr || name;
       
-      const description = sb.description?.en || fb?.description || "";
-      const descriptionAr = sb.description?.ar || fb?.descriptionAr || description;
+      const description = getLocalizedValue(sb.description, "en", fb?.description || "");
+      const descriptionAr = getLocalizedValue(sb.description, "ar", fb?.descriptionAr || description);
 
-      const headline = sb.headline?.en || fb?.headline || "";
-      const headlineAr = sb.headline?.ar || fb?.headlineAr || headline;
+      const headline = getLocalizedValue(sb.headline, "en", fb?.headline || "");
+      const headlineAr = getLocalizedValue(sb.headline, "ar", fb?.headlineAr || headline);
 
       const logoUrl = sb.image?.asset?.url || null;
       const fallbackLogo = logoUrl;
@@ -126,7 +127,7 @@ export default function BrandListClient({ initialBrands, initialLang }: BrandLis
         headline: lang === "ar" ? headlineAr : headline,
         description: lang === "ar" ? descriptionAr : description,
         logoUrl: fallbackLogo,
-        bgImage: sb.bgImage?.asset?.url || fb?.backdropUrl || "/brand-pages/page_01.jpg"
+        bgImage: sb.bgImage?.asset?.url || ""
       };
     });
   }, [brands, lang]);

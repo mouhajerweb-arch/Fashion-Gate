@@ -18,17 +18,86 @@ import { getBrandById } from "@/lib/brandData";
 import { getAnnouncements, getLocalizedValue } from "@/lib/sanity";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import Tooltip from "./Tooltip";
+import { logoutUser } from "@/app/actions/auth";
+
+const brandArabicTranslations: { [key: string]: string } = {
+  "anastasia beverly hills": "أناستازيا بيفرلي هيلز",
+  "elizabeth arden": "إليزابيث أردن",
+  "clarins paris": "كلارنس باريس",
+  "clarins": "كلارنس",
+  "mcm": "إم سي إم",
+  "michael kors": "مايكل كورس",
+  "lacoste": "لاكوست",
+  "trussardi": "تروساردي",
+  "emporio armani ea7": "إمبوريو أرماني EA7",
+  "ea7": "EA7",
+  "versace": "فيرساتشي",
+  "ralph lauren": "رالف لورين",
+  "ferragamo": "فيراغامو",
+  "salvatore ferragamo": "سلفاتوري فيراغامو",
+  "guess": "غيس",
+  "diesel": "ديزل",
+  "kenneth cole": "كينيث كول",
+  "george rech": "جورج ريش",
+  "beverly hills polo club": "بيفرلي هيلز بولو كلوب",
+  "lakmé": "لاكمي",
+  "lakme": "لاكمي",
+  "shiseido": "شيسيدو",
+  "dr. belmeur": "د. بيلمر",
+  "suntique": "سنتيك",
+  "mugler": "موغلر",
+  "azzaro": "أزارو",
+  "oscar": "أوسكار",
+  "narciso rodriguez": "نارسيسو رودريغز",
+  "gemology": "جيمولوجي",
+  "mavala": "مافالا",
+  "alfaparf milano": "ألفابارف ميلانو",
+  "the face shop": "ذا فيس شوب",
+  "beyond": "بيوند",
+  "allione": "أليون",
+  "your vegan": "يور فيغان",
+  "armand basi": "أرمان باسي",
+  "vince camuto": "فينس كاموتو",
+  "jeanne arthes": "جان أرثيس",
+  "dermedic": "ديرميديك",
+  "belif": "بيليف",
+  "fmgt": "إف إم جي تي",
+  "davidoff": "ديفيدوف",
+  "pascal morabito": "باسكال مورابيتو",
+  "signature": "سيجنيتشر"
+};
+
+const resolveBrandTitleAr = (title: string, titleAr?: string) => {
+  if (titleAr && titleAr !== title) return titleAr;
+  const cleanTitle = (title || "").trim().toLowerCase();
+  if (brandArabicTranslations[cleanTitle]) {
+    return brandArabicTranslations[cleanTitle];
+  }
+  return titleAr || title;
+};
 
 export function resolvePath(href: string, lang: "ar" | "en") {
   if (!href || href === "/" || href.trim() === "") return `/${lang}`;
   if (href.startsWith("#")) return `/${lang}${href}`;
   if (href.startsWith("http://") || href.startsWith("https://")) return href;
 
-  let cleanHref = href.replace(/^\/+|\/+$/g, "");
-  if (cleanHref === "") return `/${lang}`;
+  const queryIndex = href.indexOf("?");
+  const hashIndex = href.indexOf("#");
+  let splitIndex = -1;
+  if (queryIndex !== -1 && hashIndex !== -1) {
+    splitIndex = Math.min(queryIndex, hashIndex);
+  } else {
+    splitIndex = queryIndex !== -1 ? queryIndex : hashIndex;
+  }
+
+  let pathname = splitIndex !== -1 ? href.substring(0, splitIndex) : href;
+  const suffix = splitIndex !== -1 ? href.substring(splitIndex) : "";
+
+  let cleanHref = pathname.replace(/^\/+|\/+$/g, "");
+  if (cleanHref === "") return `/${lang}${suffix}`;
 
   if (cleanHref === "designers" || cleanHref === "category/designers" || cleanHref.includes("designers")) {
-    return `/designers/${lang}`;
+    return `/designers/${lang}${suffix}`;
   }
 
   const categories = ["women", "men", "perfumes", "skincare", "beauty", "makeup", "fashion", "designers", "dining"];
@@ -41,10 +110,11 @@ export function resolvePath(href: string, lang: "ar" | "en") {
 
   const partsList = cleanHref.split("/");
   const lastPart = partsList[partsList.length - 1];
-  if (lastPart !== "ar" && lastPart !== "en") {
-    return `/${cleanHref}/${lang}`;
+  if (lastPart === "ar" || lastPart === "en") {
+    partsList[partsList.length - 1] = lang;
+    return `/${partsList.join("/")}${suffix}`;
   }
-  return `/${cleanHref}`;
+  return `/${cleanHref}/${lang}${suffix}`;
 }
 
 // Helper function to dynamically stretch Arabic cursive connections using Tatweel (\u0640)
@@ -128,41 +198,52 @@ const headerTranslations = {
 const brandSuggestions = [
   { id: "elie-saab", label: "Elie Saab" },
   { id: "gucci", label: "Gucci" },
-  { id: "maxmara", label: "MaxMara" },
+  { id: "maxmara", label: "Max Mara" },
   { id: "prada", label: "Prada" },
   { id: "valentino", label: "Valentino" },
   { id: "ysl", label: "Saint Laurent" },
-  { id: "calvin-klein", label: "CALVIN KLEIN" },
+  { id: "calvin-klein", label: "Calvin Klein" },
   { id: "hugo-boss", label: "Hugo Boss" },
   { id: "giorgio-armani", label: "Giorgio Armani" },
-  { id: "paul-shark", label: "PAUL & SHARK" },
-  { id: "sandro", label: "SANDRO" },
-  { id: "editorial", label: "EDITORIAL" },
-  { id: "moje", label: "moje" },
+  { id: "paul-shark", label: "Paul & Shark" },
+  { id: "sandro", label: "Sandro" },
+  { id: "editorial", label: "Editorial" },
+  { id: "moje", label: "Moje" },
   { id: "adidas", label: "adidas" },
-  { id: "skechers", label: "SKECHERS" },
+  { id: "skechers", label: "Skechers" },
   { id: "cartier", label: "Cartier" },
   { id: "lancome", label: "Lancôme" },
   { id: "jimmy-choo", label: "Jimmy Choo" },
-  { id: "coach", label: "Coach" }
+  { id: "coach", label: "Coach" },
+  { id: "loreal", label: "L'Oreal" },
+  { id: "chloe", label: "Chloé" },
+  { id: "atelier-rebul", label: "Atelier Rebul" },
+  { id: "nean-com", label: "Nean.com" },
+  { id: "acler", label: "Acler" },
+  { id: "weekend-maxmara", label: "Weekend Max Mara" },
+  { id: "persona-marina-rinaldi", label: "Persona by Marina Rinaldi" },
+  { id: "max-and-co", label: "Max&Co" },
+  { id: "puma", label: "Puma" },
+  { id: "emporio-armani-ea7", label: "Emporio Armani EA7" },
+  { id: "almais", label: "Almais" }
 ];
 
 const brandLabels: Record<string, { en: string; ar: string }> = {
   "elie-saab": { en: "Elie Saab", ar: "إيلي صعب" },
   "gucci": { en: "Gucci", ar: "غوتشي" },
-  "maxmara": { en: "MaxMara", ar: "ماكس مارا" },
+  "maxmara": { en: "Max Mara", ar: "ماكس مارا" },
   "prada": { en: "Prada", ar: "برادا" },
   "valentino": { en: "Valentino", ar: "فالنتينو" },
   "ysl": { en: "Saint Laurent", ar: "سان لوران" },
-  "calvin-klein": { en: "CALVIN KLEIN", ar: "كالفين كلاين" },
+  "calvin-klein": { en: "Calvin Klein", ar: "كالفين كلاين" },
   "hugo-boss": { en: "Hugo Boss", ar: "هوغو بوس" },
   "giorgio-armani": { en: "Giorgio Armani", ar: "جورجيو أرماني" },
-  "paul-shark": { en: "PAUL & SHARK", ar: "بول آند شارك" },
-  "sandro": { en: "SANDRO", ar: "ساندرو" },
-  "editorial": { en: "EDITORIAL", ar: "إيديتوريال" },
-  "moje": { en: "moje", ar: "موهي" },
+  "paul-shark": { en: "Paul & Shark", ar: "بول آند شارك" },
+  "sandro": { en: "Sandro", ar: "ساندرو" },
+  "editorial": { en: "Editorial", ar: "إيديتوريال" },
+  "moje": { en: "Moje", ar: "موهي" },
   "adidas": { en: "Adidas", ar: "أديداس" },
-  "skechers": { en: "SKECHERS", ar: "سكيتشرز" },
+  "skechers": { en: "Skechers", ar: "سكيتشرز" },
   "cartier": { en: "Cartier", ar: "كارتييه" },
   "lancome": { en: "Lancôme", ar: "لانكوم" },
   "jimmy-choo": { en: "Jimmy Choo", ar: "جيمي تشو" },
@@ -172,19 +253,19 @@ const brandLabels: Record<string, { en: string; ar: string }> = {
 const categoriesConfig = [
   {
     title: { en: "Luxury Fashion & Haute Couture", ar: "الأزياء الفاخرة والراقية" },
-    brandIds: ["elie-saab", "gucci", "maxmara", "prada", "valentino", "ysl"]
+    brandIds: ["elie-saab", "gucci", "maxmara", "prada", "valentino", "ysl", "chloe"]
   },
   {
     title: { en: "Contemporary & Premium Apparel", ar: "الملابس المعاصرة والمميزة" },
-    brandIds: ["calvin-klein", "hugo-boss", "giorgio-armani", "paul-shark", "sandro", "editorial"]
+    brandIds: ["nean-com", "acler", "weekend-maxmara", "persona-marina-rinaldi", "max-and-co", "editorial", "sandro", "giorgio-armani", "hugo-boss", "calvin-klein", "paul-shark", "almais"]
   },
   {
     title: { en: "Independent & Creative Design", ar: "التصميم المستقل والإبداعي" },
-    brandIds: ["moje"]
+    brandIds: ["moje", "almais"]
   },
   {
     title: { en: "Footwear & Athletic Lifestyle", ar: "الأحذية والأنشطة الرياضية" },
-    brandIds: ["adidas", "skechers"]
+    brandIds: ["adidas", "puma", "emporio-armani-ea7", "skechers"]
   },
   {
     title: { en: "Fine Jewelry & Luxury Timepieces", ar: "المجوهرات الراقية والساعات الفاخرة" },
@@ -192,11 +273,11 @@ const categoriesConfig = [
   },
   {
     title: { en: "Premium Beauty & Skincare", ar: "العناية بالبشرة والجمال الفاخر" },
-    brandIds: ["lancome"]
+    brandIds: ["loreal", "gucci", "prada", "ysl", "giorgio-armani", "lancome", "valentino", "elie-saab", "atelier-rebul"]
   },
   {
     title: { en: "Luxury Accessories & Leather Goods", ar: "الإكسسوارات الفاخرة والمنتجات الجلدية" },
-    brandIds: ["jimmy-choo", "coach"]
+    brandIds: ["jimmy-choo", "coach", "cartier", "chloe"]
   }
 ];
 
@@ -709,11 +790,29 @@ export default function SiteHeader({ settings, onLangToggleStart }: SiteHeaderPr
   const [searchPlaceholder, setSearchPlaceholder] = useState<{ en?: string; ar?: string } | null>(null);
   const [showLanguageSwitcher, setShowLanguageSwitcher] = useState<boolean>(true);
   const [showUserProfile, setShowUserProfile] = useState<boolean>(true);
+  const [userName, setUserName] = useState<string | null>(null);
+  const [showUserMenu, setShowUserMenu] = useState<boolean>(false);
   const [searchDepartmentsHeading, setSearchDepartmentsHeading] = useState<{ en?: string; ar?: string } | null>(null);
   const [searchSuggestedBrandsHeading, setSearchSuggestedBrandsHeading] = useState<{ en?: string; ar?: string } | null>(null);
   const [searchMatchingHeading, setSearchMatchingHeading] = useState<{ en?: string; ar?: string } | null>(null);
   const [searchDepartments, setSearchDepartments] = useState<any[] | null>(null);
   const [searchSuggestedBrands, setSearchSuggestedBrands] = useState<any[] | null>(null);
+
+  useEffect(() => {
+    const cookiesList = document.cookie.split(";");
+    const sessionCookie = cookiesList.find((c) => c.trim().startsWith("fg_session_user="));
+    if (sessionCookie) {
+      const nameVal = decodeURIComponent(sessionCookie.split("=")[1]);
+      setUserName(nameVal);
+    }
+  }, []);
+
+  const handleLogout = async () => {
+    await logoutUser();
+    setUserName(null);
+    setShowUserMenu(false);
+    window.location.reload();
+  };
 
   useEffect(() => {
     const fetchHeaderData = async () => {
@@ -800,6 +899,24 @@ export default function SiteHeader({ settings, onLangToggleStart }: SiteHeaderPr
     return pathname.includes(`/${pathSegment}/`) || pathname.endsWith(`/${pathSegment}`) || pathname.includes(`/${pathSegment}?`) || pathname.includes(`/${pathSegment}#`);
   };
 
+  const isMenuItemActive = (item: any, isDesigners: boolean, isBeauty: boolean) => {
+    if (!activeSectionPath) return false;
+    if (isDesigners && isDesignersPage) return true;
+
+    const cleanPath = activeSectionPath;
+    const cleanHref = item.href ? item.href.replace(/\/(en|ar)(\/|$)/, "") || "/" : "/";
+
+    if (isBeauty && ["/category/beauty", "/category/skincare", "/category/makeup"].some((path) => cleanPath === path || cleanPath.startsWith(`${path}/`))) {
+      return true;
+    }
+
+    if (cleanHref === "/") return cleanPath === "/";
+    if (cleanHref.startsWith("/category/")) return cleanPath.startsWith(cleanHref);
+    if (cleanHref.startsWith("/brand/")) return cleanPath.startsWith("/brand/");
+    if (isDesigners) return cleanPath === "/designers" || cleanPath.startsWith("/designers/");
+    return cleanPath === cleanHref || cleanPath.startsWith(cleanHref);
+  };
+
   useEffect(() => {
     import("@/lib/productData").then((mod) => {
       setHeaderProducts(mod.products);
@@ -816,11 +933,10 @@ export default function SiteHeader({ settings, onLangToggleStart }: SiteHeaderPr
     setActiveDropdown(idx);
   };
 
-  const getColumnCategories = (designerCats: any[]) => {
-    const cols: any[][] = [[], [], []];
-    if (!designerCats) return cols;
+  const getDesignerMenuCategories = (designerCats: any[]) => {
+    if (!designerCats) return [];
 
-    const activeCats = designerCats.map(cat => ({
+    return designerCats.map(cat => ({
       title: {
         en: cat.title?.en || "",
         ar: cat.title?.ar || cat.title?.en || ""
@@ -831,9 +947,8 @@ export default function SiteHeader({ settings, onLangToggleStart }: SiteHeaderPr
           const brandId = b.slug?.current || b._id || "";
           let label = b.title;
           if (lang === "ar") {
-            if (b.titleAr) {
-              label = b.titleAr;
-            } else {
+            label = resolveBrandTitleAr(b.title, b.titleAr);
+            if (label === b.title || !label) {
               const local = getBrandById(brandId);
               if (local?.nameAr) {
                 label = local.nameAr;
@@ -846,37 +961,37 @@ export default function SiteHeader({ settings, onLangToggleStart }: SiteHeaderPr
           };
         })
     })).filter(cat => cat.brands.length > 0);
-
-    activeCats.forEach(cat => {
-      let minColIdx = 0;
-      let minWeight = cols[0].reduce((sum, c) => sum + c.brands.length + 3, 0);
-      
-      for (let i = 1; i < 3; i++) {
-        const weight = cols[i].reduce((sum, c) => sum + c.brands.length + 3, 0);
-        if (weight < minWeight) {
-          minWeight = weight;
-          minColIdx = i;
-        }
-      }
-      cols[minColIdx].push(cat);
-    });
-
-    return cols;
   };
 
-  const renderColumnCategories = (cats: any[]) => {
+  const renderDesignerCategoryCards = (cats: any[]) => {
     if (!cats) return [];
-    const activeBlocks: React.ReactNode[] = [];
-    cats.forEach(cat => {
-      const activeBrands = cat.brands;
+    return cats.map(cat => {
+      const activeBrands = cat.brands || [];
       if (activeBrands.length > 0) {
         const catTitle = lang === "ar" ? cat.title.ar : cat.title.en;
-        activeBlocks.push(
-          <Box key={catTitle}>
-            <Typography sx={{ fontSize: 10, fontWeight: 800, color: "#CB6116", textTransform: "uppercase", letterSpacing: lang === "ar" ? 0 : "0.15em", mb: 2, fontFamily: '"Cairo", sans-serif' }}>
+        return (
+          <Box
+            key={catTitle}
+            sx={{
+              border: "1px solid rgba(0,0,0,0.08)",
+              bgcolor: "#fff",
+              p: { xs: 2, lg: 2.25 },
+              minHeight: 0,
+              breakInside: "avoid",
+              mb: { xs: 1.5, lg: 1.75 }
+            }}
+          >
+            <Typography sx={{ fontSize: 10, fontWeight: 800, color: "#CB6116", textTransform: "uppercase", letterSpacing: lang === "ar" ? 0 : "0.14em", mb: 1.6, fontFamily: '"Cairo", sans-serif' }}>
               {catTitle}
             </Typography>
-            <Stack spacing={1.2} alignItems="flex-start">
+            <Box
+              sx={{
+                display: "grid",
+                gridTemplateColumns: activeBrands.length > 20 ? "repeat(3, minmax(0, 1fr))" : activeBrands.length > 7 ? "repeat(2, minmax(0, 1fr))" : "1fr",
+                columnGap: { xs: 1.5, lg: 2.25 },
+                rowGap: 0.9,
+              }}
+            >
               {activeBrands.map((b: any) => (
                 <Typography
                   key={b.id}
@@ -886,9 +1001,11 @@ export default function SiteHeader({ settings, onLangToggleStart }: SiteHeaderPr
                   sx={{
                     color: "#333333",
                     textDecoration: "none",
-                    fontSize: 12.5,
+                    fontSize: 12,
                     fontWeight: 500,
                     fontFamily: '"Cairo", sans-serif',
+                    lineHeight: 1.3,
+                    whiteSpace: "normal",
                     "&:hover": { color: "#CB6116", transform: lang === "ar" ? "translateX(-4px)" : "translateX(4px)" },
                     transition: "all 0.2s ease"
                   }}
@@ -896,19 +1013,12 @@ export default function SiteHeader({ settings, onLangToggleStart }: SiteHeaderPr
                   {b.label}
                 </Typography>
               ))}
-            </Stack>
+            </Box>
           </Box>
         );
       }
+      return null;
     });
-
-    return activeBlocks.reduce((acc: React.ReactNode[], block, i) => {
-      if (i > 0) {
-        acc.push(<Divider key={`div-${i}`} sx={{ borderColor: "rgba(0,0,0,0.06)" }} />);
-      }
-      acc.push(block);
-      return acc;
-    }, []);
   };
 
   return (
@@ -916,7 +1026,7 @@ export default function SiteHeader({ settings, onLangToggleStart }: SiteHeaderPr
       <Box 
         component="header"
         sx={{ 
-          position: "sticky",
+          position: "fixed",
           top: 0,
           left: 0,
           right: 0,
@@ -1013,23 +1123,88 @@ export default function SiteHeader({ settings, onLangToggleStart }: SiteHeaderPr
             )}
 
             {/* Profile Button */}
-            {showUserProfile && (
-              <Tooltip title={t("Sign In / Register")}>
-                <IconButton 
-                  component={Link} 
-                  href={`/login/${lang}`} 
-                  sx={{ 
-                    color: "#CB6116", 
-                    p: 0.5,
-                    display: { xs: "none", sm: "inline-flex" },
-                    transition: "transform 0.2s, color 0.2s",
-                    "&:hover": { color: "#ffffff", transform: "scale(1.08)" }
-                  }}
-                >
-                  <PersonOutlineIcon sx={{ fontSize: 22 }} />
-                </IconButton>
-              </Tooltip>
-            )}
+            {/* {showUserProfile && (
+              <Box 
+                onMouseLeave={() => setShowUserMenu(false)}
+                sx={{ position: "relative" }}
+              >
+                {userName ? (
+                  <>
+                    <IconButton 
+                      onClick={() => setShowUserMenu(!showUserMenu)}
+                      sx={{ 
+                        color: "#CB6116", 
+                        p: 0.5,
+                        width: 32,
+                        height: 32,
+                        borderRadius: "50%",
+                        border: "1px solid #CB6116",
+                        fontSize: 13,
+                        fontWeight: 700,
+                        display: "inline-flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        transition: "transform 0.2s, color 0.2s",
+                        "&:hover": { color: "#ffffff", borderColor: "#ffffff", transform: "scale(1.08)" }
+                      }}
+                    >
+                      {userName.substring(0, 2).toUpperCase()}
+                    </IconButton>
+                    {showUserMenu && (
+                      <Box 
+                        sx={{
+                          position: "absolute",
+                          top: 40,
+                          [lang === "ar" ? "left" : "right"]: 0,
+                          width: 200,
+                          bgcolor: "#111111",
+                          border: "1px solid rgba(255,255,255,0.08)",
+                          p: 2,
+                          zIndex: 100,
+                          boxShadow: "0 10px 30px rgba(0,0,0,0.5)",
+                          textAlign: lang === "ar" ? "right" : "left"
+                        }}
+                      >
+                        <Typography sx={{ fontSize: 13, fontWeight: 700, color: "#ffffff", mb: 1, textOverflow: "ellipsis", overflow: "hidden", whiteSpace: "nowrap" }}>
+                          {userName}
+                        </Typography>
+                        <Divider sx={{ borderColor: "rgba(255,255,255,0.08)", my: 1 }} />
+                        <Button 
+                          fullWidth
+                          size="small"
+                          onClick={handleLogout}
+                          sx={{ 
+                            justifyContent: lang === "ar" ? "flex-start" : "flex-end",
+                            color: "#CB6116", 
+                            fontSize: 12, 
+                            fontWeight: 700,
+                            textTransform: "uppercase"
+                          }}
+                        >
+                          {lang === "ar" ? "تسجيل الخروج" : "Sign Out"}
+                        </Button>
+                      </Box>
+                    )}
+                  </>
+                ) : (
+                  <Tooltip title={t("Sign In / Register")}>
+                    <IconButton 
+                      component={Link} 
+                      href={`/login/${lang}`} 
+                      sx={{ 
+                        color: "#CB6116", 
+                        p: 0.5,
+                        display: { xs: "none", sm: "inline-flex" },
+                        transition: "transform 0.2s, color 0.2s",
+                        "&:hover": { color: "#ffffff", transform: "scale(1.08)" }
+                      }}
+                    >
+                      <PersonOutlineIcon sx={{ fontSize: 22 }} />
+                    </IconButton>
+                  </Tooltip>
+                )}
+              </Box>
+            )} */}
 
             {/* Mobile menu trigger */}
             <IconButton 
@@ -1073,7 +1248,7 @@ export default function SiteHeader({ settings, onLangToggleStart }: SiteHeaderPr
                     brands: [
                       { slug: { current: "elie-saab" }, title: "Elie Saab" },
                       { slug: { current: "gucci" }, title: "Gucci" },
-                      { slug: { current: "maxmara" }, title: "MaxMara" },
+                      { slug: { current: "maxmara" }, title: "Max Mara" },
                       { slug: { current: "prada" }, title: "Prada" },
                       { slug: { current: "valentino" }, title: "Valentino" },
                       { slug: { current: "ysl" }, title: "YSL" }
@@ -1082,23 +1257,23 @@ export default function SiteHeader({ settings, onLangToggleStart }: SiteHeaderPr
                   {
                     title: { en: "Contemporary & Premium Apparel", ar: "الملابس المعاصرة والمميزة" },
                     brands: [
-                      { slug: { current: "calvin-klein" }, title: "CALVIN KLEIN" },
+                      { slug: { current: "calvin-klein" }, title: "Calvin Klein" },
                       { slug: { current: "hugo-boss" }, title: "Hugo Boss" },
                       { slug: { current: "giorgio-armani" }, title: "Giorgio Armani" },
-                      { slug: { current: "paul-shark" }, title: "PAUL & SHARK" },
-                      { slug: { current: "sandro" }, title: "SANDRO" },
-                      { slug: { current: "editorial" }, title: "EDITORIAL" }
+                      { slug: { current: "paul-shark" }, title: "Paul & Shark" },
+                      { slug: { current: "sandro" }, title: "Sandro" },
+                      { slug: { current: "editorial" }, title: "Editorial" }
                     ]
                   },
                   {
                     title: { en: "Independent & Creative Design", ar: "التصميم المستقل والإبداعي" },
-                    brands: [{ slug: { current: "moje" }, title: "moje" }]
+                    brands: [{ slug: { current: "moje" }, title: "Moje" }]
                   },
                   {
                     title: { en: "Footwear & Athletic Lifestyle", ar: "الأحذية والأنشطة الرياضية" },
                     brands: [
                       { slug: { current: "adidas" }, title: "Adidas" },
-                      { slug: { current: "skechers" }, title: "SKECHERS" }
+                      { slug: { current: "skechers" }, title: "Skechers" }
                     ]
                   },
                   {
@@ -1125,12 +1300,12 @@ export default function SiteHeader({ settings, onLangToggleStart }: SiteHeaderPr
                   {
                     title: { en: "Contemporary & Premium Apparel", ar: "الملابس المعاصرة والمميزة" },
                     brands: [
-                      { slug: { current: "calvin-klein" }, title: "CALVIN KLEIN" },
+                      { slug: { current: "calvin-klein" }, title: "Calvin Klein" },
                       { slug: { current: "hugo-boss" }, title: "Hugo Boss" },
                       { slug: { current: "giorgio-armani" }, title: "Giorgio Armani" },
-                      { slug: { current: "paul-shark" }, title: "PAUL & SHARK" },
-                      { slug: { current: "sandro" }, title: "SANDRO" },
-                      { slug: { current: "editorial" }, title: "EDITORIAL" }
+                      { slug: { current: "paul-shark" }, title: "Paul & Shark" },
+                      { slug: { current: "sandro" }, title: "Sandro" },
+                      { slug: { current: "editorial" }, title: "Editorial" }
                     ]
                   }
                 ]
@@ -1171,22 +1346,12 @@ export default function SiteHeader({ settings, onLangToggleStart }: SiteHeaderPr
               const labelStr = lang === "ar" ? item.label?.ar || item.label?.en : item.label?.en || item.label?.ar;
               const normalizedLabel = `${item.label?.en || ""} ${item.label?.ar || ""} ${labelStr || ""}`.toLowerCase();
               const isDesigners = item.href?.includes("/designers") || item.href?.includes("designers") || normalizedLabel.includes("designer") || normalizedLabel.includes("مصمم");
-              const isCategoryDropdown = isFashion || isPerfumes || isBeauty || isDining;
-              const hasDropdown = isCategoryDropdown || (item.designerCategories && item.designerCategories.length > 0);
+              const isCategoryDropdown = isBeauty || isDining || isFashion || isPerfumes || isSkincare;
+              const hasDropdown = isCategoryDropdown || (isDesigners && item.designerCategories && item.designerCategories.length > 0);
               
               const finalHref = isDesigners ? `/designers/${lang}` : resolvePath(item.href, lang);
 
-              const isCurrentActive = (() => {
-                if (!activeSectionPath) return false;
-                if (isDesigners && isDesignersPage) return true;
-                const cleanPath = activeSectionPath;
-                const cleanHref = item.href ? item.href.replace(/\/(en|ar)(\/|$)/, "") || "/" : "/";
-                if (cleanHref === "/") return cleanPath === "/";
-                if (cleanHref.startsWith("/category/")) return cleanPath.startsWith(cleanHref);
-                if (cleanHref.startsWith("/brand/")) return cleanPath.startsWith("/brand/");
-                if (isDesigners) return cleanPath === "/designers" || cleanPath.startsWith("/designers/");
-                return cleanPath === cleanHref || cleanPath.startsWith(cleanHref);
-              })();
+              const isCurrentActive = isMenuItemActive(item, isDesigners, isBeauty);
 
               return (
                 <Box
@@ -1240,17 +1405,16 @@ export default function SiteHeader({ settings, onLangToggleStart }: SiteHeaderPr
                           sx={
                             (!isCategoryDropdown && item.designerCategories.length > 2)
                               ? {
-                                  position: "absolute",
-                                  top: "100%",
-                                  left: lang === "ar" ? "auto" : { xs: 0, md: "-320px" },
-                                  right: lang === "ar" ? { xs: 0, md: "-320px" } : "auto",
-                                  width: { xs: "90vw", sm: "650px", md: "860px" },
-                                  maxWidth: "90vw",
+                                  position: "fixed",
+                                  top: { xs: 118, lg: 154 },
+                                  left: "max(20px, calc((100vw - 1500px) / 2))",
+                                  right: "max(20px, calc((100vw - 1500px) / 2))",
+                                  width: "auto",
                                   bgcolor: "#ffffff",
                                   border: "1px solid rgba(0,0,0,0.08)",
                                   borderTop: "3px solid #CB6116",
                                   boxShadow: "0 25px 50px rgba(0,0,0,0.12)",
-                                  p: 4,
+                                  p: { xs: 2, lg: 2.5 },
                                   zIndex: 99,
                                   textAlign: lang === "ar" ? "right" : "left",
                                   color: "#111111"
@@ -1328,8 +1492,8 @@ export default function SiteHeader({ settings, onLangToggleStart }: SiteHeaderPr
                                     sx={{
                                       width: "165px",
                                       bgcolor: "#ffffff",
-                                      borderRight: (lang !== "ar" && beautyHoveredSub === "skincare") ? "1px solid rgba(0,0,0,0.06)" : "none",
-                                      borderLeft: (lang === "ar" && beautyHoveredSub === "skincare") ? "1px solid rgba(0,0,0,0.06)" : "none",
+                                      borderRight: "none",
+                                      borderLeft: "none",
                                       py: 1.5
                                     }}
                                   >
@@ -1394,9 +1558,8 @@ export default function SiteHeader({ settings, onLangToggleStart }: SiteHeaderPr
                                     </Box>
                                   </Box>
 
-                                  {/* Right Sub-Panel - ONLY when hovering Skincare */}
                                   {beautyHoveredSub === "skincare" && (
-                                    <Box sx={{ width: "135px", p: 1.2, bgcolor: "#ffffff", display: "flex", flexDirection: "column", justifyContent: "center" }}>
+                                    <Box sx={{ width: "135px", flexShrink: 0, p: 1.2, bgcolor: "#ffffff", display: "flex", flexDirection: "column", justifyContent: "center" }}>
                                       <AnimatePresence mode="wait">
                                         <MotionBox
                                           key="skincare-sub-bold"
@@ -1493,57 +1656,21 @@ export default function SiteHeader({ settings, onLangToggleStart }: SiteHeaderPr
                             </Stack>
                           ) : item.designerCategories.length > 2 ? (
                             (() => {
-                              const cols = getColumnCategories(item.designerCategories);
+                              const categories = getDesignerMenuCategories(item.designerCategories);
                               return (
                                 <Box
                                   sx={{
-                                    display: "grid",
-                                    gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr 1fr" },
-                                    gap: 4
+                                    columnCount: { xs: 1, sm: 2, lg: 3, xl: 4 },
+                                    columnGap: { xs: 1.5, lg: 1.75 }
                                   }}
                                 >
-                                  <Stack spacing={3}>
-                                    {renderColumnCategories(cols[0])}
-                                  </Stack>
-                                  <Stack spacing={3}>
-                                    {renderColumnCategories(cols[1])}
-                                  </Stack>
-                                  <Stack spacing={3}>
-                                    {renderColumnCategories(cols[2])}
-                                  </Stack>
+                                  {renderDesignerCategoryCards(categories)}
                                 </Box>
                               );
                             })()
                           ) : (
                             <Stack spacing={2.5} sx={{ width: "100%" }}>
-                              {renderColumnCategories(
-                                item.designerCategories.map((cat: any) => ({
-                                  title: {
-                                    en: cat.title?.en || "",
-                                    ar: cat.title?.ar || cat.title?.en || ""
-                                  },
-                                  brands: (cat.brands || [])
-                                    .filter((b: any) => b.isActive !== false)
-                                    .map((b: any) => {
-                                      const brandId = b.slug?.current || b._id || "";
-                                      let label = b.title;
-                                      if (lang === "ar") {
-                                        if (b.titleAr) {
-                                          label = b.titleAr;
-                                        } else {
-                                          const local = getBrandById(brandId);
-                                          if (local?.nameAr) {
-                                            label = local.nameAr;
-                                          }
-                                        }
-                                      }
-                                      return {
-                                        id: brandId,
-                                        label: label
-                                      };
-                                    })
-                                }))
-                              )}
+                              {renderDesignerCategoryCards(getDesignerMenuCategories(item.designerCategories))}
                             </Stack>
                           )}
                         </MotionBox>
@@ -1565,7 +1692,7 @@ export default function SiteHeader({ settings, onLangToggleStart }: SiteHeaderPr
         PaperProps={{
           sx: {
             width: "100%",
-            maxWidth: 320,
+            maxWidth: 420,
             bgcolor: "#050505", // Luxury dark theme background (no grey!)
             boxShadow: "none",
             p: 4,
@@ -1604,7 +1731,7 @@ export default function SiteHeader({ settings, onLangToggleStart }: SiteHeaderPr
                       brands: [
                         { slug: { current: "elie-saab" }, title: "Elie Saab" },
                         { slug: { current: "gucci" }, title: "Gucci" },
-                        { slug: { current: "maxmara" }, title: "MaxMara" },
+                        { slug: { current: "maxmara" }, title: "Max Mara" },
                         { slug: { current: "prada" }, title: "Prada" },
                         { slug: { current: "valentino" }, title: "Valentino" },
                         { slug: { current: "ysl" }, title: "YSL" }
@@ -1613,23 +1740,23 @@ export default function SiteHeader({ settings, onLangToggleStart }: SiteHeaderPr
                     {
                       title: { en: "Contemporary & Premium Apparel", ar: "الملابس المعاصرة والمميزة" },
                       brands: [
-                        { slug: { current: "calvin-klein" }, title: "CALVIN KLEIN" },
+                        { slug: { current: "calvin-klein" }, title: "Calvin Klein" },
                         { slug: { current: "hugo-boss" }, title: "Hugo Boss" },
                         { slug: { current: "giorgio-armani" }, title: "Giorgio Armani" },
-                        { slug: { current: "paul-shark" }, title: "PAUL & SHARK" },
-                        { slug: { current: "sandro" }, title: "SANDRO" },
-                        { slug: { current: "editorial" }, title: "EDITORIAL" }
+                        { slug: { current: "paul-shark" }, title: "Paul & Shark" },
+                        { slug: { current: "sandro" }, title: "Sandro" },
+                        { slug: { current: "editorial" }, title: "Editorial" }
                       ]
                     },
                     {
                       title: { en: "Independent & Creative Design", ar: "التصميم المستقل والإبداعي" },
-                      brands: [{ slug: { current: "moje" }, title: "moje" }]
+                      brands: [{ slug: { current: "moje" }, title: "Moje" }]
                     },
                     {
                       title: { en: "Footwear & Athletic Lifestyle", ar: "الأحذية والأنشطة الرياضية" },
                       brands: [
                         { slug: { current: "adidas" }, title: "Adidas" },
-                        { slug: { current: "skechers" }, title: "SKECHERS" }
+                        { slug: { current: "skechers" }, title: "Skechers" }
                       ]
                     },
                     {
@@ -1656,12 +1783,12 @@ export default function SiteHeader({ settings, onLangToggleStart }: SiteHeaderPr
                     {
                       title: { en: "Contemporary & Premium Apparel", ar: "الملابس المعاصرة والمميزة" },
                       brands: [
-                        { slug: { current: "calvin-klein" }, title: "CALVIN KLEIN" },
+                        { slug: { current: "calvin-klein" }, title: "Calvin Klein" },
                         { slug: { current: "hugo-boss" }, title: "Hugo Boss" },
                         { slug: { current: "giorgio-armani" }, title: "Giorgio Armani" },
-                        { slug: { current: "paul-shark" }, title: "PAUL & SHARK" },
-                        { slug: { current: "sandro" }, title: "SANDRO" },
-                        { slug: { current: "editorial" }, title: "EDITORIAL" }
+                        { slug: { current: "paul-shark" }, title: "Paul & Shark" },
+                        { slug: { current: "sandro" }, title: "Sandro" },
+                        { slug: { current: "editorial" }, title: "Editorial" }
                       ]
                     }
                   ]
@@ -1701,12 +1828,13 @@ export default function SiteHeader({ settings, onLangToggleStart }: SiteHeaderPr
                 const labelStr = lang === "ar" ? item.label?.ar || item.label?.en : item.label?.en || item.label?.ar;
                 const normalizedLabel = `${item.label?.en || ""} ${item.label?.ar || ""} ${labelStr || ""}`.toLowerCase();
                 const isDesigners = item.href?.includes("/designers") || item.href?.includes("designers") || normalizedLabel.includes("designer") || normalizedLabel.includes("مصمم");
-                const isCategoryDropdown = isFashion || isPerfumes || isBeauty;
-                const hasDropdown = isCategoryDropdown || (item.designerCategories && item.designerCategories.length > 0);
+                const isCategoryDropdown = isBeauty || isDining || isFashion || isPerfumes || isSkincare;
+                const hasDropdown = isCategoryDropdown || (isDesigners && item.designerCategories && item.designerCategories.length > 0);
                 
                 const finalHref = isDesigners ? `/designers/${lang}` : resolvePath(item.href, lang);
 
                 const isExpanded = expandedMobileItem === idx;
+                const isCurrentActive = isMenuItemActive(item, isDesigners, isBeauty);
 
                 return (
                   <Stack key={idx} spacing={1.5} sx={{ width: "100%", alignItems: "center" }}>
@@ -1722,7 +1850,7 @@ export default function SiteHeader({ settings, onLangToggleStart }: SiteHeaderPr
                         }
                       }}
                       sx={{
-                        color: (isExpanded || activeDropdown === idx) ? "#CB6116" : "rgba(255,255,255,0.85)",
+                        color: (isCurrentActive || isExpanded || activeDropdown === idx) ? "#CB6116" : "rgba(255,255,255,0.85)",
                         fontSize: 15,
                         fontWeight: 600,
                         textTransform: "uppercase",
@@ -1795,6 +1923,7 @@ export default function SiteHeader({ settings, onLangToggleStart }: SiteHeaderPr
                                         >
                                           {lang === "ar" ? "العناية بالبشرة" : "SKINCARE"}
                                         </MuiLink>
+                                        {/* Skincare Men/Women links are commented for now; uncomment this stack later if needed.
                                         <Stack spacing={0.8} sx={{ alignItems: "center" }}>
                                           {[
                                             { label: lang === "ar" ? "النساء" : "WOMEN", href: `/category/skincare/${lang}?sub=women` },
@@ -1817,6 +1946,7 @@ export default function SiteHeader({ settings, onLangToggleStart }: SiteHeaderPr
                                             </MuiLink>
                                           ))}
                                         </Stack>
+                                        */}
                                       </Box>
 
                                       <Box sx={{ textAlign: "center" }}>
@@ -1897,7 +2027,7 @@ export default function SiteHeader({ settings, onLangToggleStart }: SiteHeaderPr
                                       </Typography>
                                       <Box sx={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 1 }}>
                                         {cat.brands.map((brand: any, brandIdx: number) => {
-                                          const brandTitle = lang === "ar" ? brand.titleAr || brand.title : brand.title || brand.titleAr;
+                                          const brandTitle = lang === "ar" ? resolveBrandTitleAr(brand.title, brand.titleAr) : brand.title || brand.titleAr;
                                           const brandHref = `/brand/${brand.slug?.current || brand.slug}/${lang}`;
                                           
                                           return (
@@ -1936,7 +2066,7 @@ export default function SiteHeader({ settings, onLangToggleStart }: SiteHeaderPr
 
           {/* Bottom Drawer Section (Sign In & Socials) */}
           <Stack spacing={2.5} sx={{ borderTop: "1px solid rgba(255,255,255,0.08)", pt: 3, mt: "auto" }}>
-            <Button
+            {/* <Button
               component={Link}
               href={`/login/${lang}`}
               onClick={() => setOpen(false)}
@@ -1954,7 +2084,7 @@ export default function SiteHeader({ settings, onLangToggleStart }: SiteHeaderPr
               }}
             >
               {t("Sign In / Register")}
-            </Button>
+            </Button> */}
           </Stack>
         </Stack>
       </Drawer>

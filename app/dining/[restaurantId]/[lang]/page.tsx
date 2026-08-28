@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { buildMetadataFromSeo, buildRestaurantJsonLd, buildBreadcrumbsJsonLd } from "@/lib/seo";
 
-export const revalidate = 0;
+export const revalidate = 60;
 
 interface PageProps {
   params: Promise<{

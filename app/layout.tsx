@@ -8,7 +8,7 @@ import "./globals.css";
 
 import { getHomepageData, imageUrl } from "@/lib/sanity";
 
-export const revalidate = 0;
+export const revalidate = 60;
 
 export async function generateMetadata(): Promise<Metadata> {
   let faviconUrl = "/brand/logo.png";
@@ -47,7 +47,15 @@ export async function generateMetadata(): Promise<Metadata> {
 
 import LayoutWrapper from "@/components/LayoutWrapper";
 
-export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+  let initialSettings = null;
+  try {
+    const data = await getHomepageData();
+    initialSettings = data?.settings || null;
+  } catch (error) {
+    console.error("Failed to fetch settings in RootLayout:", error);
+  }
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body suppressHydrationWarning>
@@ -78,7 +86,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           <CssBaseline />
           <LoaderProvider>
             <SmoothScroll />
-            <LayoutWrapper>
+            <LayoutWrapper initialSettings={initialSettings}>
               {children}
             </LayoutWrapper>
           </LoaderProvider>

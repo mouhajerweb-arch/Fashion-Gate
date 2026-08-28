@@ -46,6 +46,7 @@ import { diningPage } from "./diningPage";
 import { perfumePage } from "./perfumePage";
 import { skincarePage } from "./skincarePage";
 import { makeupPage } from "./makeupPage";
+import { beautyPage } from "./beautyPage";
 import { fashionPage } from "./fashionPage";
 import { designerPage } from "./designerPage";
 
@@ -98,6 +99,7 @@ export const schemaTypes = [
   privacyPage,
   diningPage,
   perfumePage,
+  beautyPage,
   skincarePage,
   makeupPage,
   fashionPage,

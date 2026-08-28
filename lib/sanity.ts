@@ -10,7 +10,7 @@ export const sanityClient = createClient({
   projectId,
   dataset,
   apiVersion,
-  useCdn: false,
+  useCdn: true,
   perspective: "published"
 });
 
@@ -373,7 +373,31 @@ export async function getDesignerPageData() {
       searchPlaceholder { en, ar },
       allCategoriesLabel { en, ar },
       exploreBrandLabel { en, ar },
-      seo { metaTitle, metaDescription, keywords, ogImage { asset->{ url } }, canonicalUrl, noIndex }
+      seo { metaTitle, metaDescription, keywords, ogImage { asset->{ url } }, canonicalUrl, noIndex },
+      categorySections[isVisible != false] {
+        category-> {
+          _id,
+          title { en, ar },
+          order
+        },
+        sectionImage { asset->{ url } },
+        brands[isVisible != false] {
+          cardImage { asset->{ url } },
+          brand-> {
+            _id,
+            title,
+            titleAr,
+            slug,
+            image { asset->{ url } },
+            imageAr { asset->{ url } },
+            size,
+            scale,
+            headline { en, ar },
+            description { en, ar },
+            bgImage { asset->{ url } }
+          }
+        }
+      }
     }`);
   } catch (err) {
     console.error("Error fetching designer page data:", err);
@@ -497,28 +521,47 @@ export async function getDesignerPageCategories() {
     const configuredSections = pageSections
       .filter((section: any) => section?.isVisible !== false && section?.category?._id && navIds.has(section.category._id))
       .map((section: any) => {
-        const configuredBrands = Array.isArray(section.brands)
-          ? section.brands
-              .filter((item: any) => item?.isVisible !== false && item?.brand)
-              .map((item: any) => ({
+        const sectionBrandRows = Array.isArray(section.brands) ? section.brands : [];
+        const hiddenBrandIds = new Set(
+          sectionBrandRows
+            .filter((item: any) => item?.isVisible === false && item?.brand)
+            .map((item: any) => item.brand.slug?.current || item.brand._id)
+            .filter(Boolean)
+        );
+        const visibleOverrides = new Map(
+          sectionBrandRows
+            .filter((item: any) => item?.isVisible !== false && item?.brand)
+            .map((item: any) => [
+              item.brand.slug?.current || item.brand._id,
+              {
                 ...item.brand,
                 cardImage: item.cardImage,
-              }))
-          : [];
+              },
+            ])
+        );
+        const baseBrands = Array.isArray(section.category.brands) ? section.category.brands : [];
+        const mergedBrands = baseBrands
+          .filter((brand: any) => !hiddenBrandIds.has(brand.slug?.current || brand._id))
+          .map((brand: any) => visibleOverrides.get(brand.slug?.current || brand._id) || brand);
+        const mergedIds = new Set(mergedBrands.map((brand: any) => brand.slug?.current || brand._id).filter(Boolean));
+        const extraConfiguredBrands = [...visibleOverrides.entries()]
+          .filter(([id]) => id && !mergedIds.has(id))
+          .map(([, brand]) => brand);
 
         return {
           ...section.category,
           sectionImage: section.sectionImage,
-          brands: configuredBrands.length > 0 ? configuredBrands : section.category.brands,
+          brands: [...mergedBrands, ...extraConfiguredBrands],
         };
       });
 
-    if (configuredSections.length > 0) {
-      return configuredSections;
+    if (Array.isArray(data?.headerCategories) && data.headerCategories.length > 0) {
+      const configuredById = new Map(configuredSections.map((section: any) => [section._id, section]));
+      return data.headerCategories.map((category: any) => configuredById.get(category._id) || category);
     }
 
-    if (Array.isArray(data?.headerCategories) && data.headerCategories.length > 0) {
-      return data.headerCategories;
+    if (configuredSections.length > 0) {
+      return configuredSections;
     }
 
     return [];
@@ -948,11 +991,23 @@ export async function getSanityBlogPost(slug: string): Promise<any> {
 }
 
 export function getLocalizedValue(value: any, lang: "en" | "ar", fallback?: any): any {
-  if (!value) return fallback;
-  if (typeof value === "object") {
-    return value[lang] !== undefined ? value[lang] : (fallback !== undefined ? fallback : value.en);
-  }
-  return value;
+  const extract = (val: any): any => {
+    if (!val) return null;
+    if (typeof val === "object") {
+      const target = val[lang] !== undefined ? val[lang] : val.en;
+      if (target && typeof target === "object") {
+        return extract(target);
+      }
+      return target;
+    }
+    return val;
+  };
+
+  const result = extract(value);
+  if (result !== null && result !== undefined) return result;
+
+  const fallbackResult = extract(fallback);
+  return fallbackResult !== null && fallbackResult !== undefined ? fallbackResult : "";
 }
 
 export async function getHeaderSettings() {
@@ -1089,6 +1144,8 @@ export async function getCategoryPageData(categoryId: string): Promise<any> {
   try {
     const docType = categoryId === "perfumes" 
       ? "perfumePage" 
+      : categoryId === "beauty"
+      ? "beautyPage"
       : categoryId === "skincare" 
       ? "skincarePage" 
       : categoryId === "makeup"
@@ -1160,6 +1217,30 @@ export async function getCategoryPageData(categoryId: string): Promise<any> {
           slug
         }
       },
+      "sharedCategoryLogoScaleSources": select(
+        $categoryId in ["fashion", "perfumes", "beauty", "skincare", "makeup"] => *[
+          _type in ["fashionPage", "perfumePage", "beautyPage", "skincarePage", "makeupPage"] &&
+          !(_id in path("drafts.**"))
+        ] | order(_type asc) {
+          _id,
+          _type,
+          allowedBrands[] {
+            categoryLogoScale,
+            brand-> {
+              _id,
+              slug
+            }
+          },
+          brandLogoScaleOverrides[] {
+            scale,
+            brand-> {
+              _id,
+              slug
+            }
+          }
+        },
+        []
+      ),
       seo { metaTitle, metaDescription, keywords, ogImage { asset->{ url } }, canonicalUrl, noIndex }
     }`, { docType, categoryId });
   } catch (err) {

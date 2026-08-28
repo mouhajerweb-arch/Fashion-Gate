@@ -7,19 +7,23 @@ import CookieConsent from "@/components/CookieConsent";
 import { useEffect, useState, useMemo } from "react";
 import { getHomepageData } from "@/lib/sanity";
 import { fallbackSettings } from "@/lib/fallbackData";
-import { ThemeProvider, createTheme } from "@mui/material";
+import { ThemeProvider, createTheme, Box } from "@mui/material";
 
-export default function LayoutWrapper({ children }: { children: React.ReactNode }) {
+export default function LayoutWrapper({ children, initialSettings }: { children: React.ReactNode; initialSettings?: any }) {
   const pathname = usePathname();
-  const [settings, setSettings] = useState<any>(fallbackSettings);
+  const [settings, setSettings] = useState<any>(() => {
+    return initialSettings ? { ...fallbackSettings, ...initialSettings } : fallbackSettings;
+  });
 
   useEffect(() => {
-    getHomepageData().then(data => {
-      if (data?.settings) {
-        setSettings({ ...fallbackSettings, ...data.settings });
-      }
-    }).catch(err => console.error("Error loading header settings:", err));
-  }, []);
+    if (!initialSettings) {
+      getHomepageData().then(data => {
+        if (data?.settings) {
+          setSettings({ ...fallbackSettings, ...data.settings });
+        }
+      }).catch(err => console.error("Error loading header settings:", err));
+    }
+  }, [initialSettings]);
 
   const theme = useMemo(() => createTheme({
     palette: {
@@ -61,9 +65,15 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
     <ThemeProvider theme={theme}>
       <div dir={lang === "ar" ? "rtl" : "ltr"} style={{ width: "100%" }}>
         <SiteHeader settings={settings} />
-        <main style={{ width: "100%" }}>
+        <Box 
+          component="main" 
+          sx={{ 
+            width: "100%", 
+            pt: { xs: "115px", md: "148px" }
+          }}
+        >
           {children}
-        </main>
+        </Box>
         <SiteFooter />
         <CookieConsent lang={lang} settings={settings.cookieConsent} />
       </div>

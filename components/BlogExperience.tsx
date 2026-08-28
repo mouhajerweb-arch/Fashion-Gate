@@ -10,6 +10,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useState, useEffect } from "react";
+import Image from "next/image";
 
 import { blogPosts, featuredBlogPost, type BlogPost } from "@/lib/blogData";
 import { getSanityBlogPosts } from "@/lib/sanity";
@@ -185,19 +186,23 @@ export default function BlogExperience({
                   height: { xs: 300, sm: 450, md: 560 }, 
                   overflow: "hidden", 
                   position: "relative",
-                  border: "1px solid rgba(0,0,0,0.06)"
+                  border: "1px solid rgba(0,0,0,0.06)",
+                  "& img": {
+                    transition: "transform 0.8s ease"
+                  },
+                  "& img:hover": {
+                    transform: "scale(1.015)"
+                  }
                 }}
               >
-                <Box 
-                  component="img"
-                  src={featured.image}
+                <Image 
+                  src={featured.image || "/brand/logo.png"}
                   alt={featuredTitle}
-                  sx={{ 
-                    width: "100%", 
-                    height: "100%", 
-                    objectFit: "cover",
-                    transition: "transform 0.8s ease",
-                    "&:hover": { transform: "scale(1.015)" }
+                  fill
+                  priority
+                  sizes="(max-width: 600px) 100vw, (max-width: 1200px) 80vw, 1200px"
+                  style={{ 
+                    objectFit: "cover"
                   }}
                 />
               </Box>
@@ -346,18 +351,26 @@ export default function BlogExperience({
                           }
                         }}
                       >
-                        {/* Card Image */}
-                        <Box sx={{ aspectRatio: "16/10", overflow: "hidden", position: "relative" }}>
-                          <Box
-                            component="img"
-                            src={post.image}
+                        <Box 
+                          sx={{ 
+                            aspectRatio: "16/10", 
+                            overflow: "hidden", 
+                            position: "relative",
+                            "& img": {
+                              transition: "transform 0.6s ease"
+                            },
+                            "& img:hover": {
+                              transform: "scale(1.025)"
+                            }
+                          }}
+                        >
+                          <Image
+                            src={post.image || "/brand/logo.png"}
                             alt={postTitle}
-                            sx={{
-                              width: "100%",
-                              height: "100%",
-                              objectFit: "cover",
-                              transition: "transform 0.6s ease",
-                              "&:hover": { transform: "scale(1.025)" }
+                            fill
+                            sizes="(max-width: 600px) 100vw, (max-width: 960px) 50vw, 33vw"
+                            style={{
+                              objectFit: "cover"
                             }}
                           />
                         </Box>

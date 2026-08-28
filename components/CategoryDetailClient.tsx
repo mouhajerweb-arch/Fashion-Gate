@@ -25,37 +25,37 @@ const brandVectorLogos: Record<string, React.ReactNode> = {
   ),
   "calvin-klein": (
     <svg width="100%" height="24" viewBox="0 0 140 30" fill="currentColor">
-      <text x="50%" y="22" fontFamily="'Futura', 'Helvetica Neue', 'Arial', sans-serif" fontSize="17" fontWeight="bold" letterSpacing="0.25em" textAnchor="middle">CALVIN KLEIN</text>
+      <text x="50%" y="22" fontFamily="'Futura', 'Helvetica Neue', 'Arial', sans-serif" fontSize="17" fontWeight="bold" letterSpacing="0.12em" textAnchor="middle">Calvin Klein</text>
     </svg>
   ),
   skechers: (
     <svg width="100%" height="24" viewBox="0 0 140 30" fill="currentColor">
-      <text x="50%" y="22" fontFamily="'Arial Black', sans-serif" fontSize="18" fontWeight="900" letterSpacing="0.15em" textAnchor="middle">SKECHERS</text>
+      <text x="50%" y="22" fontFamily="'Arial Black', sans-serif" fontSize="18" fontWeight="900" letterSpacing="0.08em" textAnchor="middle">Skechers</text>
     </svg>
   ),
   "paul-shark": (
     <svg width="100%" height="24" viewBox="0 0 160 30" fill="currentColor">
-      <text x="50%" y="22" fontFamily="'Futura', 'Arial Black', sans-serif" fontSize="16" fontWeight="900" letterSpacing="0.18em" textAnchor="middle">PAUL & SHARK</text>
+      <text x="50%" y="22" fontFamily="'Futura', 'Arial Black', sans-serif" fontSize="16" fontWeight="900" letterSpacing="0.08em" textAnchor="middle">Paul & Shark</text>
     </svg>
   ),
   maxmara: (
     <svg width="100%" height="24" viewBox="0 0 120 30" fill="currentColor">
-      <text x="50%" y="22" fontFamily="'Granjon', 'Garamond', serif" fontSize="21" fontWeight="bold" letterSpacing="0.15em" textAnchor="middle">MaxMara</text>
+      <text x="50%" y="22" fontFamily="'Granjon', 'Garamond', serif" fontSize="21" fontWeight="bold" letterSpacing="0.08em" textAnchor="middle">Max Mara</text>
     </svg>
   ),
   editorial: (
     <svg width="100%" height="24" viewBox="0 0 120 30" fill="currentColor">
-      <text x="50%" y="22" fontFamily='"Apple Garamond", "EB Garamond", "Cormorant Garamond", serif"' fontSize="18" fontWeight="bold" letterSpacing="0.3em" textAnchor="middle">EDITORIAL</text>
+      <text x="50%" y="22" fontFamily='"Apple Garamond", "EB Garamond", "Cormorant Garamond", serif"' fontSize="18" fontWeight="bold" letterSpacing="0.12em" textAnchor="middle">Editorial</text>
     </svg>
   ),
   sandro: (
     <svg width="100%" height="24" viewBox="0 0 120 30" fill="currentColor">
-      <text x="50%" y="22" fontFamily="'Futura', 'Helvetica Neue', 'Arial', sans-serif" fontSize="20" fontWeight="bold" letterSpacing="0.15em" textAnchor="middle">SANDRO</text>
+      <text x="50%" y="22" fontFamily="'Futura', 'Helvetica Neue', 'Arial', sans-serif" fontSize="20" fontWeight="bold" letterSpacing="0.08em" textAnchor="middle">Sandro</text>
     </svg>
   ),
   moje: (
     <svg width="100%" height="24" viewBox="0 0 100 30" fill="currentColor">
-      <text x="50%" y="22" fontFamily="'Didot', 'Times New Roman', serif" fontSize="21" fontStyle="italic" fontWeight="bold" letterSpacing="0.1em" textAnchor="middle">moje</text>
+      <text x="50%" y="22" fontFamily="'Didot', 'Times New Roman', serif" fontSize="21" fontStyle="italic" fontWeight="bold" letterSpacing="0.06em" textAnchor="middle">Moje</text>
     </svg>
   )
 
@@ -67,11 +67,35 @@ interface CategoryDetailClientProps {
   initialProducts?: Product[];
 }
 
+const CATEGORY_CARD_DEFAULT_LOGO_SCALE = 1.5;
+const PAGE_ROW_DEFAULT_LOGO_SCALE = 1;
+const CATEGORY_SCALE_PAGE_IDS = ["fashion", "perfumes", "beauty", "skincare", "makeup"];
+
+function positiveNumber(value: unknown): number | undefined {
+  const numeric = Number(value);
+  return Number.isFinite(numeric) && numeric > 0 ? numeric : undefined;
+}
+
+function resolveCategoryCardLogoScale({
+  overrideScale,
+  sharedPageScale,
+  pageRowScale,
+}: {
+  overrideScale?: number;
+  sharedPageScale?: number;
+  pageRowScale?: number;
+}) {
+  if (overrideScale) return overrideScale;
+  if (sharedPageScale) return sharedPageScale;
+  if (pageRowScale && pageRowScale !== PAGE_ROW_DEFAULT_LOGO_SCALE) return pageRowScale;
+  return CATEGORY_CARD_DEFAULT_LOGO_SCALE;
+}
+
 function BrandLogoMark({ brand, variant = "default" }: { brand: any; variant?: "default" | "category-card" }) {
   if (brand.logoUrl) {
     const sizeMultiplier = variant === "category-card" ? 1 : brand.logoSize === "large" ? 1.15 : brand.logoSize === "small" ? 0.82 : 1;
     const rawScale = variant === "category-card"
-      ? Number(brand.categoryLogoScale || 1)
+      ? Number(brand.categoryLogoScale || CATEGORY_CARD_DEFAULT_LOGO_SCALE)
       : Number(brand.logoScale || 1) * sizeMultiplier;
     const maxScale = variant === "category-card" ? 8 : 3;
     const scale = Math.max(0.25, Math.min(rawScale, maxScale));
@@ -138,6 +162,7 @@ const categoryTranslations = {
     men: "Men",
     perfumes: "Perfumes",
     skincare: "Skincare",
+    beauty: "Beauty",
     dining: "Dining",
     fashion: "Fashion",
     designers: "Designers & Brands",
@@ -174,6 +199,7 @@ const categoryTranslations = {
     men: "الرجال",
     perfumes: "العطور",
     skincare: "العناية بالبشرة",
+    beauty: "الجمال",
     dining: "المطاعم والمقاهي",
     fashion: "الأزياء والموضة",
     designers: "المصممين والعلامات التجارية",
@@ -212,11 +238,21 @@ export default function CategoryDetailClient({ categoryId, initialLang, initialP
   const router = useRouter();
   const lang = initialLang;
 
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   if (categoryId === "designers") {
     return <BrandListClient initialBrands={[]} initialLang={lang} />;
   }
-  const activeSub = searchParams.get("sub") || "all";
-  const activeBrand = searchParams.get("brand") || "all";
+  const activeSub = mounted ? (searchParams.get("sub") || "all") : "all";
+  const activeBrand = mounted ? (searchParams.get("brand") || "all") : "all";
+  const showWomen = activeSub === "all" || activeSub === "women";
+  const showMen = activeSub === "all" || activeSub === "men";
+  const showUnisex = activeSub === "all" || activeSub === "unisex";
+  const womenGridSize = activeSub === "women" ? 12 : 6;
+  const menGridSize = activeSub === "men" ? 12 : 6;
   const [isLangTransitioning, setIsLangTransitioning] = useState(false);
   const [brands, setBrands] = useState<any[]>([]);
   const [brandSearchQuery, setSidebarSearchQuery] = useState("");
@@ -232,7 +268,7 @@ export default function CategoryDetailClient({ categoryId, initialLang, initialP
           }
         });
       });
-    } else if (["fashion", "perfumes", "skincare", "makeup"].includes(categoryId)) {
+    } else if (["fashion", "perfumes", "beauty", "skincare", "makeup"].includes(categoryId)) {
       import("@/lib/sanity").then(({ getCategoryPageData }) => {
         getCategoryPageData(categoryId).then((data) => {
           if (data) {
@@ -256,6 +292,7 @@ export default function CategoryDetailClient({ categoryId, initialLang, initialP
   const processedBrands = useMemo(() => {
     let rawList: any[] = [];
     const scaleOverrides = new Map<string, number>();
+    const sharedPageScales = new Map<string, number>();
 
     (categoryCmsData?.brandLogoScaleOverrides || []).forEach((override: any) => {
       const id = override?.brand?.slug?.current || override?.brand?._id;
@@ -264,6 +301,26 @@ export default function CategoryDetailClient({ categoryId, initialLang, initialP
         scaleOverrides.set(id, scale);
       }
     });
+
+    if (CATEGORY_SCALE_PAGE_IDS.includes(categoryId)) {
+      (categoryCmsData?.sharedCategoryLogoScaleSources || []).forEach((sourcePage: any) => {
+        (sourcePage?.allowedBrands || []).forEach((row: any) => {
+          const id = row?.brand?.slug?.current || row?.brand?._id;
+          const scale = positiveNumber(row?.categoryLogoScale);
+          if (id && scale && scale !== PAGE_ROW_DEFAULT_LOGO_SCALE && !sharedPageScales.has(id)) {
+            sharedPageScales.set(id, scale);
+          }
+        });
+
+        (sourcePage?.brandLogoScaleOverrides || []).forEach((override: any) => {
+          const id = override?.brand?.slug?.current || override?.brand?._id;
+          const scale = positiveNumber(override?.scale);
+          if (id && scale && !sharedPageScales.has(id)) {
+            sharedPageScales.set(id, scale);
+          }
+        });
+      });
+    }
 
     if (categoryCmsData?.allowedBrands && categoryCmsData.allowedBrands.length > 0) {
       rawList = categoryCmsData.allowedBrands;
@@ -284,7 +341,40 @@ export default function CategoryDetailClient({ categoryId, initialLang, initialP
         }
       });
 
-      if (categoryId === "skincare") {
+      if (categoryId === "beauty") {
+        rawList = list.filter((b) => [
+          "lancome",
+          "loreal",
+          "gucci",
+          "prada",
+          "ysl",
+          "giorgio-armani",
+          "valentino",
+          "jimmy-choo",
+          "cartier",
+          "chloe",
+          "coach",
+          "elie-saab",
+          "atelier-rebul",
+          "clarins-paris",
+          "elizabeth-arden",
+          "anastasia-beverly-hills",
+          "the-face-shop",
+          "belif",
+          "dr-belmeur",
+          "beyond",
+          "fmgt",
+          "suntique",
+          "allione",
+          "your-vegan",
+          "dermedic",
+          "gemology",
+          "lakme",
+          "alfaparf-milano",
+          "mavala",
+          "shiseido"
+        ].includes(b.slug?.current || b._id));
+      } else if (categoryId === "skincare") {
         rawList = list.filter((b) => ["lancome", "moje", "sandro-moje", "maxmara", "adidas"].includes(b.slug?.current || b._id));
       } else if (categoryId === "perfumes") {
         rawList = list.filter((b) => ["elie-saab", "gucci", "prada", "valentino", "ysl", "cartier", "lancome", "calvin-klein", "giorgio-armani", "hugo-boss"].includes(b.slug?.current || b._id));
@@ -298,18 +388,17 @@ export default function CategoryDetailClient({ categoryId, initialLang, initialP
       return Boolean(sb) && (entry?._type === "reference" || entry?.isVisible !== false);
     }).map((entry: any) => {
       const sb = entry?.brand || entry;
-      const pageCategoryLogoScale = entry?.brand ? Number(entry.categoryLogoScale) : NaN;
-      const brandCategoryLogoScale = Number(sb.categoryLogoScale);
+      const pageCategoryLogoScale = entry?.brand ? positiveNumber(entry.categoryLogoScale) : undefined;
       const brandId = sb.slug?.current || sb._id || sb.id;
       const fb = fallbackBrands.find((b) => b.id === (sb.slug?.current || sb.id || sb._id));
       const name = sb.title || fb?.name || "";
       const nameAr = sb.titleAr || fb?.nameAr || name;
 
-      const description = sb.description?.en || sb.description || fb?.description || "";
-      const descriptionAr = sb.description?.ar || sb.description || fb?.descriptionAr || description;
+      const description = getLocalizedValue(sb.description, "en", fb?.description || "");
+      const descriptionAr = getLocalizedValue(sb.description, "ar", fb?.descriptionAr || description);
 
-      const headline = sb.headline?.en || sb.headline || fb?.headline || "";
-      const headlineAr = sb.headline?.ar || sb.headline || fb?.headlineAr || headline;
+      const headline = getLocalizedValue(sb.headline, "en", fb?.headline || "");
+      const headlineAr = getLocalizedValue(sb.headline, "ar", fb?.headlineAr || headline);
 
       const logoUrl = sb.image?.asset?.url || sb.logoUrl || sb.imageAr?.asset?.url || null;
 
@@ -320,9 +409,11 @@ export default function CategoryDetailClient({ categoryId, initialLang, initialP
         description: lang === "ar" ? descriptionAr : description,
         logoUrl,
         logoScale: typeof sb.scale === "number" ? sb.scale : 1,
-        categoryLogoScale: scaleOverrides.get(brandId)
-          || (Number.isFinite(pageCategoryLogoScale) && pageCategoryLogoScale > 0 ? pageCategoryLogoScale : undefined)
-          || (Number.isFinite(brandCategoryLogoScale) && brandCategoryLogoScale > 0 ? brandCategoryLogoScale : 2),
+        categoryLogoScale: resolveCategoryCardLogoScale({
+          overrideScale: scaleOverrides.get(brandId),
+          sharedPageScale: sharedPageScales.get(brandId),
+          pageRowScale: pageCategoryLogoScale,
+        }),
         logoSize: sb.size || "medium",
         bgImage: sb.bgImage?.asset?.url || sb.bgImage || fb?.backdropUrl || "/brand-pages/page_01.jpg"
       };
@@ -452,11 +543,11 @@ export default function CategoryDetailClient({ categoryId, initialLang, initialP
 
     return [
       { id: "adidas", label: getBrandName("adidas", "adidas") },
-      { id: "calvin-klein", label: getBrandName("calvin-klein", "CALVIN KLEIN") },
-      { id: "skechers", label: getBrandName("skechers", "SKECHERS") },
-      { id: "maxmara", label: getBrandName("maxmara", "MaxMara") },
-      { id: "editorial", label: getBrandName("editorial", "EDITORIAL") },
-      { id: "paul-shark", label: getBrandName("paul-shark", "PAUL & SHARK") },
+      { id: "calvin-klein", label: getBrandName("calvin-klein", "Calvin Klein") },
+      { id: "skechers", label: getBrandName("skechers", "Skechers") },
+      { id: "maxmara", label: getBrandName("maxmara", "Max Mara") },
+      { id: "editorial", label: getBrandName("editorial", "Editorial") },
+      { id: "paul-shark", label: getBrandName("paul-shark", "Paul & Shark") },
       { id: "brands-link", label: lang === "ar" ? "العلامات التجارية" : "Brands" }
     ];
   }, [categoryId, lang]);
@@ -708,53 +799,95 @@ export default function CategoryDetailClient({ categoryId, initialLang, initialP
                     {categoryCmsData?.banners && categoryCmsData.banners.length > 0 ? (
                       <Box sx={{ mb: 6 }} dir={lang === "ar" ? "rtl" : "ltr"}>
                         <Grid container spacing={4} sx={{ mb: 8 }}>
-                          {categoryCmsData.banners.map((banner: any, index: number) => {
-                            let gridSize = { xs: 12, sm: 6 };
-                            if (categoryCmsData.banners.length === 3 && index === 2) {
-                              gridSize = { xs: 12, sm: 12 };
-                            } else if (categoryCmsData.banners.length === 1) {
-                              gridSize = { xs: 12, sm: 12 };
-                            }
+                          {(() => {
+                            const isBannerMatchingSub = (banner: any, sub: string) => {
+                              if (sub === "all") return true;
+                              const titleEn = (banner.title?.en || "").toLowerCase();
+                              const subtitleEn = (banner.subtitle?.en || "").toLowerCase();
+                              const link = (banner.link || "").toLowerCase();
+                              let bannerSub = "all";
+                              if (link.includes("sub=women") || link.includes("/women") || titleEn.includes("women") || subtitleEn.includes("women") || titleEn.includes("نسائ") || subtitleEn.includes("نسائ")) {
+                                bannerSub = "women";
+                              } else if (link.includes("sub=unisex") || link.includes("/unisex") || titleEn.includes("unisex") || subtitleEn.includes("unisex") || titleEn.includes("للجنسين") || subtitleEn.includes("للجنسين")) {
+                                bannerSub = "unisex";
+                              } else if (link.includes("sub=men") || link.includes("/men") || titleEn.includes("men") || subtitleEn.includes("men") || titleEn.includes("رجال") || subtitleEn.includes("رجال")) {
+                                bannerSub = "men";
+                              }
+                              return bannerSub === sub;
+                            };
+                            const visibleBanners = categoryCmsData.banners.filter((b: any) => isBannerMatchingSub(b, activeSub));
+                            const finalBanners = visibleBanners.length > 0 ? visibleBanners : categoryCmsData.banners;
 
-                            const bannerTitle = getLocalizedValue(banner.title, lang, "");
-                            const bannerSubtitle = getLocalizedValue(banner.subtitle, lang, "");
-                            const bannerImg = banner.image?.asset?.url || "/brand-pages/page_01.jpg";
-                            const bannerHref = banner.link || "#";
+                            return finalBanners.map((banner: any, index: number) => {
+                              let gridSize = { xs: 12, sm: 6 };
+                              if (activeSub !== "all" || finalBanners.length === 1) {
+                                gridSize = { xs: 12, sm: 12 };
+                              } else if (finalBanners.length === 3 && index === 2) {
+                                gridSize = { xs: 12, sm: 12 };
+                              }
 
-                            return (
-                              <Grid size={gridSize} key={banner._key || index}>
-                                <Link href={bannerHref} style={{ textDecoration: "none", color: "inherit" }}>
-                                  <Box sx={{ display: "flex", flexDirection: "column", gap: 2, cursor: "pointer" }}>
-                                    <Box
-                                      sx={{
-                                        height: {
-                                          xs: "240px",
-                                          sm: gridSize.sm === 12 ? "720px" : "440px"
-                                        },
-                                        backgroundImage: `url(${bannerImg})`,
-                                        backgroundSize: "cover",
-                                        backgroundPosition: "center top",
-                                        border: "1px solid rgb(255 255 255) !important",
+                              const bannerTitle = getLocalizedValue(banner.title, lang, "");
+                              const bannerSubtitle = getLocalizedValue(banner.subtitle, lang, "");
+                              const bannerImg = banner.image?.asset?.url || "/brand-pages/page_01.jpg";
+                              const rawBannerHref = banner.link || "#";
+                              const bannerHref = rawBannerHref !== "#" ? rawBannerHref.replace(/\/(en|ar)(?=\?|#|$|\/)/g, `/${lang}`) : "#";
 
-                                        transition: "transform 0.4s ease",
-                                        "&:hover": {
-                                          transform: "scale(1.01)"
-                                        }
-                                      }}
-                                    />
-                                    <Stack alignItems="center" spacing={0.5} sx={{ py: 1 }}>
-                                      <Typography sx={{ fontFamily: '"Apple Garamond", "EB Garamond", "Cormorant Garamond", serif', fontSize: 20, fontWeight: 500, letterSpacing: "0.15em", textTransform: "uppercase", color: "#111111", textAlign: "center" }}>
-                                        {bannerTitle}
-                                      </Typography>
-                                      <Typography sx={{ fontSize: 9.5, letterSpacing: lang === "ar" ? 0 : "0.25em", textTransform: "uppercase", fontWeight: 700, color: "#CB6116", fontFamily: '"Cairo", sans-serif', textAlign: "center" }}>
-                                        {bannerSubtitle}
-                                      </Typography>
-                                    </Stack>
-                                  </Box>
-                                </Link>
-                              </Grid>
-                            );
-                          })}
+                              const currentPathRoot = `/category/${categoryId}/${lang}`;
+                              const currentPathWithSub = activeSub !== "all" ? `${currentPathRoot}?sub=${activeSub}` : currentPathRoot;
+                              const normalizePathForCompare = (url: string) => {
+                                if (!url) return "";
+                                let path = url.replace(/^(https?:\/\/[^\/]+)?/, "");
+                                return path.replace(/\/+$/, "");
+                              };
+                              const isCurrentPage = normalizePathForCompare(bannerHref) === normalizePathForCompare(currentPathRoot) || 
+                                                    normalizePathForCompare(bannerHref) === normalizePathForCompare(currentPathWithSub) || 
+                                                    bannerHref === "#" || 
+                                                    bannerHref === "";
+
+                              const isAtSubOrLeafCategory = categoryId === "women" || categoryId === "men" || activeSub === "women" || activeSub === "men" || activeSub === "unisex";
+                              const isClickable = !isAtSubOrLeafCategory && !isCurrentPage;
+                              const content = (
+                                <Box sx={{ display: "flex", flexDirection: "column", gap: 2, cursor: isClickable ? "pointer" : "default" }}>
+                                  <Box
+                                    sx={{
+                                      height: {
+                                        xs: "240px",
+                                        sm: gridSize.sm === 12 ? "720px" : "440px"
+                                      },
+                                      backgroundImage: `url(${bannerImg})`,
+                                      backgroundSize: "cover",
+                                      backgroundPosition: "center top",
+                                      border: "1px solid rgb(255 255 255) !important",
+                                      transition: isClickable ? "transform 0.4s ease" : "none",
+                                      "&:hover": isClickable ? {
+                                        transform: "scale(1.01)"
+                                      } : {}
+                                    }}
+                                  />
+                                  <Stack alignItems="center" spacing={0.5} sx={{ py: 1 }}>
+                                    <Typography sx={{ fontFamily: '"Apple Garamond", "EB Garamond", "Cormorant Garamond", serif', fontSize: 20, fontWeight: 500, letterSpacing: "0.15em", textTransform: "uppercase", color: "#111111", textAlign: "center" }}>
+                                      {bannerTitle}
+                                    </Typography>
+                                    <Typography sx={{ fontSize: 9.5, letterSpacing: lang === "ar" ? 0 : "0.25em", textTransform: "uppercase", fontWeight: 700, color: "#CB6116", fontFamily: '"Cairo", sans-serif', textAlign: "center" }}>
+                                      {bannerSubtitle}
+                                    </Typography>
+                                  </Stack>
+                                </Box>
+                              );
+
+                              return (
+                                <Grid size={gridSize} key={banner._key || index}>
+                                  {isClickable ? (
+                                    <Link href={bannerHref} style={{ textDecoration: "none", color: "inherit" }}>
+                                      {content}
+                                    </Link>
+                                  ) : (
+                                    content
+                                  )}
+                                </Grid>
+                              );
+                            });
+                          })()}
                         </Grid>
 
                         {/* Brands Grid Section */}
@@ -797,12 +930,12 @@ export default function CategoryDetailClient({ categoryId, initialLang, initialP
                                     {/* <Typography sx={{ fontSize: 13, fontWeight: 600, color: "#111111", fontFamily: '"Cairo", sans-serif', textTransform: "uppercase" }}>
                                       {brand.name}
                                     </Typography> */}
-                                    <Typography sx={{ fontSize: 11.5, color: "rgba(0,0,0,0.5)", fontWeight: 300, fontFamily: '"Cairo", sans-serif', overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                                    <Typography sx={{ fontSize: 12.5, color: "rgba(0, 0, 0, 0.66)", fontWeight: 500, fontFamily: '"Cairo", sans-serif', overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                                       {brand.headline || brand.description}
                                     </Typography>
                                   </Stack>
 
-                                  <Stack direction="row" alignItems="center" spacing={0.5} className="brand-action-arrow" sx={{ mt: 1.5, color: "rgba(0,0,0,0.3)", transition: "all 0.3s ease" }}>
+                                  <Stack direction="row" alignItems="center" spacing={0.5} className="brand-action-arrow" sx={{ mt: 1.5, color: "rgba(0, 0, 0, 0.56)", transition: "all 0.3s ease" }}>
                                     <Typography sx={{ fontSize: 9.5, fontWeight: 700, textTransform: "uppercase", letterSpacing: lang === "ar" ? 0 : "0.12em", fontFamily: '"Cairo", sans-serif' }}>
                                       {lang === "ar" ? "تصفح المجموعة" : "Explore"}
                                     </Typography>
@@ -818,51 +951,54 @@ export default function CategoryDetailClient({ categoryId, initialLang, initialP
                       <Box sx={{ mb: 6 }} dir={lang === "ar" ? "rtl" : "ltr"}>
                         <Grid container spacing={4} sx={{ mb: 8 }}>
                           {/* Women Banner */}
-                          <Grid size={{ xs: 12, sm: 6 }}>
-                            <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-                              <Box
-                                sx={{
-                                  height: { xs: "280px", sm: "440px" },
-                                  backgroundImage: 'url("/brand/hero-woman.jpg")',
-                                  backgroundSize: "cover",
-                                  backgroundPosition: "center top",
-                                  border: "1px solid rgb(255 255 255) !important"
-                                }}
-                              />
-                              <Stack alignItems="center" spacing={0.5} sx={{ py: 1 }}>
-                                <Typography sx={{ fontFamily: '"Apple Garamond", "EB Garamond", "Cormorant Garamond", serif', fontSize: 22, fontWeight: 500, letterSpacing: "0.15em", textTransform: "uppercase", color: "#111111" }}>
-                                  {lang === "ar" ? "النساء" : "WOMEN"}
-                                </Typography>
-                                <Typography sx={{ fontSize: 9.5, letterSpacing: "0.25em", textTransform: "uppercase", fontWeight: 700, color: "#CB6116", fontFamily: '"Cairo", sans-serif' }}>
-                                  {lang === "ar" ? "تشكيلة النساء" : "WOMEN COLLECTION"}
-                                </Typography>
-                              </Stack>
-                            </Box>
-                          </Grid>
+                          {showWomen && (
+                            <Grid size={{ xs: 12, sm: womenGridSize }}>
+                              <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                                <Box
+                                  sx={{
+                                    height: { xs: "280px", sm: "440px" },
+                                    backgroundImage: 'url("/brand/hero-woman.jpg")',
+                                    backgroundSize: "cover",
+                                    backgroundPosition: "center top",
+                                    border: "1px solid rgb(255 255 255) !important"
+                                  }}
+                                />
+                                <Stack alignItems="center" spacing={0.5} sx={{ py: 1 }}>
+                                  <Typography sx={{ fontFamily: '"Apple Garamond", "EB Garamond", "Cormorant Garamond", serif', fontSize: 22, fontWeight: 500, letterSpacing: "0.15em", textTransform: "uppercase", color: "#111111" }}>
+                                    {lang === "ar" ? "النساء" : "WOMEN"}
+                                  </Typography>
+                                  <Typography sx={{ fontSize: 9.5, letterSpacing: "0.25em", textTransform: "uppercase", fontWeight: 700, color: "#CB6116", fontFamily: '"Cairo", sans-serif' }}>
+                                    {lang === "ar" ? "تشكيلة النساء" : "WOMEN COLLECTION"}
+                                  </Typography>
+                                </Stack>
+                              </Box>
+                            </Grid>
+                          )}
 
                           {/* Men Banner */}
-                          <Grid size={{ xs: 12, sm: 6 }}>
-                            <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-                              <Box
-                                sx={{
-                                  height: { xs: "280px", sm: "440px" },
-                                  backgroundImage: 'url("/brand/hero-look-03.jpg")',
-                                  backgroundSize: "cover",
-                                  backgroundPosition: "center top",
-                                  border: "1px solid rgb(255 255 255) !important"
-
-                                }}
-                              />
-                              <Stack alignItems="center" spacing={0.5} sx={{ py: 1 }}>
-                                <Typography sx={{ fontFamily: '"Apple Garamond", "EB Garamond", "Cormorant Garamond", serif', fontSize: 22, fontWeight: 500, letterSpacing: "0.15em", textTransform: "uppercase", color: "#111111" }}>
-                                  {lang === "ar" ? "الرجال" : "MEN"}
-                                </Typography>
-                                <Typography sx={{ fontSize: 9.5, letterSpacing: "0.25em", textTransform: "uppercase", fontWeight: 700, color: "#CB6116", fontFamily: '"Cairo", sans-serif' }}>
-                                  {lang === "ar" ? "تشكيلة الرجال" : "MEN COLLECTION"}
-                                </Typography>
-                              </Stack>
-                            </Box>
-                          </Grid>
+                          {showMen && (
+                            <Grid size={{ xs: 12, sm: menGridSize }}>
+                              <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                                <Box
+                                  sx={{
+                                    height: { xs: "280px", sm: "440px" },
+                                    backgroundImage: 'url("/brand/hero-look-03.jpg")',
+                                    backgroundSize: "cover",
+                                    backgroundPosition: "center top",
+                                    border: "1px solid rgb(255 255 255) !important"
+                                  }}
+                                />
+                                <Stack alignItems="center" spacing={0.5} sx={{ py: 1 }}>
+                                  <Typography sx={{ fontFamily: '"Apple Garamond", "EB Garamond", "Cormorant Garamond", serif', fontSize: 22, fontWeight: 500, letterSpacing: "0.15em", textTransform: "uppercase", color: "#111111" }}>
+                                    {lang === "ar" ? "الرجال" : "MEN"}
+                                  </Typography>
+                                  <Typography sx={{ fontSize: 9.5, letterSpacing: "0.25em", textTransform: "uppercase", fontWeight: 700, color: "#CB6116", fontFamily: '"Cairo", sans-serif' }}>
+                                    {lang === "ar" ? "تشكيلة الرجال" : "MEN COLLECTION"}
+                                  </Typography>
+                                </Stack>
+                              </Box>
+                            </Grid>
+                          )}
                         </Grid>
 
                         {/* Brands Grid Section */}
@@ -902,15 +1038,15 @@ export default function CategoryDetailClient({ categoryId, initialLang, initialP
                                   </Box>
 
                                   <Stack spacing={0.5} sx={{ mt: 1.5, width: "100%" }}>
-                                    <Typography sx={{ fontSize: 13, fontWeight: 600, color: "#111111", fontFamily: '"Cairo", sans-serif', textTransform: "uppercase" }}>
+                                    <Typography sx={{ fontSize: 13, fontWeight: 600, color: "#111111", fontFamily: '"Cairo", sans-serif' }}>
                                       {brand.name}
                                     </Typography>
-                                    <Typography sx={{ fontSize: 11.5, color: "rgba(0,0,0,0.5)", fontWeight: 300, fontFamily: '"Cairo", sans-serif', overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                                    <Typography sx={{ fontSize: 12.5, color: "rgba(0, 0, 0, 0.66)", fontWeight: 500, fontFamily: '"Cairo", sans-serif', overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                                       {brand.headline || brand.description}
                                     </Typography>
                                   </Stack>
 
-                                  <Stack direction="row" alignItems="center" spacing={0.5} className="brand-action-arrow" sx={{ mt: 1.5, color: "rgba(0,0,0,0.3)", transition: "all 0.3s ease" }}>
+                                  <Stack direction="row" alignItems="center" spacing={0.5} className="brand-action-arrow" sx={{ mt: 1.5, color: "rgba(0, 0, 0, 0.56)", transition: "all 0.3s ease" }}>
                                     <Typography sx={{ fontSize: 9.5, fontWeight: 700, textTransform: "uppercase", letterSpacing: lang === "ar" ? 0 : "0.12em", fontFamily: '"Cairo", sans-serif' }}>
                                       {lang === "ar" ? "تصفح المجموعة" : "Explore"}
                                     </Typography>
@@ -925,76 +1061,82 @@ export default function CategoryDetailClient({ categoryId, initialLang, initialP
                     ) : categoryId === "perfumes" ? (
                       <Box sx={{ mb: 6 }} dir={lang === "ar" ? "rtl" : "ltr"}>
                         {/* Row 1: Men and Women Perfume Banners */}
-                        <Grid container spacing={4} sx={{ mb: 4 }}>
-                          {/* Women Perfumes Banner */}
-                          <Grid size={{ xs: 12, sm: 6 }}>
-                            <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-                              <Box
-                                sx={{
-                                  height: { xs: "240px", sm: "380px" },
-                                  backgroundImage: 'url("/brand/hero-woman.jpg")',
-                                  backgroundSize: "cover",
-                                  backgroundPosition: "center top",
-                                  border: "1px solid rgb(255 255 255) !important"
+                        {(showWomen || showMen) && (
+                          <Grid container spacing={4} sx={{ mb: 4 }}>
+                            {/* Women Perfumes Banner */}
+                            {showWomen && (
+                              <Grid size={{ xs: 12, sm: womenGridSize }}>
+                                <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                                  <Box
+                                    sx={{
+                                      height: { xs: "240px", sm: "380px" },
+                                      backgroundImage: 'url("/brand/hero-woman.jpg")',
+                                      backgroundSize: "cover",
+                                      backgroundPosition: "center top",
+                                      border: "1px solid rgb(255 255 255) !important"
+                                    }}
+                                  />
+                                  <Stack alignItems="center" spacing={0.5} sx={{ py: 1 }}>
+                                    <Typography sx={{ fontFamily: '"Apple Garamond", "EB Garamond", "Cormorant Garamond", serif', fontSize: 20, fontWeight: 500, letterSpacing: "0.15em", textTransform: "uppercase", color: "#111111" }}>
+                                      {lang === "ar" ? "العطور النسائية" : "WOMEN'S FRAGRANCES"}
+                                    </Typography>
+                                    <Typography sx={{ fontSize: 9.5, letterSpacing: "0.25em", textTransform: "uppercase", fontWeight: 700, color: "#CB6116", fontFamily: '"Cairo", sans-serif' }}>
+                                      {lang === "ar" ? "رقة وجمال" : "ELEGANT & FEMININE"}
+                                    </Typography>
+                                  </Stack>
+                                </Box>
+                              </Grid>
+                            )}
 
-                                }}
-                              />
-                              <Stack alignItems="center" spacing={0.5} sx={{ py: 1 }}>
-                                <Typography sx={{ fontFamily: '"Apple Garamond", "EB Garamond", "Cormorant Garamond", serif', fontSize: 20, fontWeight: 500, letterSpacing: "0.15em", textTransform: "uppercase", color: "#111111" }}>
-                                  {lang === "ar" ? "العطور النسائية" : "WOMEN'S FRAGRANCES"}
-                                </Typography>
-                                <Typography sx={{ fontSize: 9.5, letterSpacing: "0.25em", textTransform: "uppercase", fontWeight: 700, color: "#CB6116", fontFamily: '"Cairo", sans-serif' }}>
-                                  {lang === "ar" ? "رقة وجمال" : "ELEGANT & FEMININE"}
-                                </Typography>
-                              </Stack>
-                            </Box>
+                            {/* Men Perfumes Banner */}
+                            {showMen && (
+                              <Grid size={{ xs: 12, sm: menGridSize }}>
+                                <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                                  <Box
+                                    sx={{
+                                      height: { xs: "240px", sm: "380px" },
+                                      backgroundImage: 'url("/brand/hero-look-03.jpg")',
+                                      backgroundSize: "cover",
+                                      backgroundPosition: "center top",
+                                      border: "1px solid rgb(255 255 255) !important"
+                                    }}
+                                  />
+                                  <Stack alignItems="center" spacing={0.5} sx={{ py: 1 }}>
+                                    <Typography sx={{ fontFamily: '"Apple Garamond", "EB Garamond", "Cormorant Garamond", serif', fontSize: 20, fontWeight: 500, letterSpacing: "0.15em", textTransform: "uppercase", color: "#111111" }}>
+                                      {lang === "ar" ? "العطور الرجالية" : "MEN'S FRAGRANCES"}
+                                    </Typography>
+                                    <Typography sx={{ fontSize: 9.5, letterSpacing: "0.25em", textTransform: "uppercase", fontWeight: 700, color: "#CB6116", fontFamily: '"Cairo", sans-serif' }}>
+                                      {lang === "ar" ? "جاذبية وقوة" : "BOLD & SOPHISTICATED"}
+                                    </Typography>
+                                  </Stack>
+                                </Box>
+                              </Grid>
+                            )}
                           </Grid>
-
-                          {/* Men Perfumes Banner */}
-                          <Grid size={{ xs: 12, sm: 6 }}>
-                            <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-                              <Box
-                                sx={{
-                                  height: { xs: "240px", sm: "380px" },
-                                  backgroundImage: 'url("/brand/hero-look-03.jpg")',
-                                  backgroundSize: "cover",
-                                  backgroundPosition: "center top",
-                                  border: "1px solid rgb(255 255 255) !important"
-
-                                }}
-                              />
-                              <Stack alignItems="center" spacing={0.5} sx={{ py: 1 }}>
-                                <Typography sx={{ fontFamily: '"Apple Garamond", "EB Garamond", "Cormorant Garamond", serif', fontSize: 20, fontWeight: 500, letterSpacing: "0.15em", textTransform: "uppercase", color: "#111111" }}>
-                                  {lang === "ar" ? "العطور الرجالية" : "MEN'S FRAGRANCES"}
-                                </Typography>
-                                <Typography sx={{ fontSize: 9.5, letterSpacing: "0.25em", textTransform: "uppercase", fontWeight: 700, color: "#CB6116", fontFamily: '"Cairo", sans-serif' }}>
-                                  {lang === "ar" ? "جاذبية وقوة" : "BOLD & SOPHISTICATED"}
-                                </Typography>
-                              </Stack>
-                            </Box>
-                          </Grid>
-                        </Grid>
+                        )}
 
                         {/* Row 2: Unisex Perfume Banner */}
-                        <Box sx={{ display: "flex", flexDirection: "column", gap: 2, mb: 8 }}>
-                          <Box
-                            sx={{
-                              height: { xs: "260px", sm: "420px" },
-                              backgroundImage: 'url("/brand/hero-unisex-perfume.jpg")',
-                              backgroundSize: "cover",
-                              backgroundPosition: "center center",
-                              border: "1px solid rgb(255 255 255) !important"
-                            }}
-                          />
-                          <Stack alignItems="center" spacing={0.5} sx={{ py: 1 }}>
-                            <Typography sx={{ fontFamily: '"Apple Garamond", "EB Garamond", "Cormorant Garamond", serif', fontSize: 22, fontWeight: 500, letterSpacing: "0.15em", textTransform: "uppercase", color: "#111111" }}>
-                              {lang === "ar" ? "العطور المشتركة (للجنسين)" : "UNISEX FRAGRANCES"}
-                            </Typography>
-                            <Typography sx={{ fontSize: 9.5, letterSpacing: lang === "ar" ? 0 : "0.25em", textTransform: "uppercase", fontWeight: 700, color: "#CB6116", fontFamily: '"Cairo", sans-serif' }}>
-                              {lang === "ar" ? "تناغم وتفرد" : "UNIVERSAL HARMONY"}
-                            </Typography>
-                          </Stack>
-                        </Box>
+                        {showUnisex && (
+                          <Box sx={{ display: "flex", flexDirection: "column", gap: 2, mb: 8 }}>
+                            <Box
+                              sx={{
+                                height: { xs: "260px", sm: "420px" },
+                                backgroundImage: 'url("/brand/hero-unisex-perfume.jpg")',
+                                backgroundSize: "cover",
+                                backgroundPosition: "center center",
+                                border: "1px solid rgb(255 255 255) !important"
+                              }}
+                            />
+                            <Stack alignItems="center" spacing={0.5} sx={{ py: 1 }}>
+                              <Typography sx={{ fontFamily: '"Apple Garamond", "EB Garamond", "Cormorant Garamond", serif', fontSize: 22, fontWeight: 500, letterSpacing: "0.15em", textTransform: "uppercase", color: "#111111" }}>
+                                {lang === "ar" ? "العطور المشتركة (للجنسين)" : "UNISEX FRAGRANCES"}
+                              </Typography>
+                              <Typography sx={{ fontSize: 9.5, letterSpacing: lang === "ar" ? 0 : "0.25em", textTransform: "uppercase", fontWeight: 700, color: "#CB6116", fontFamily: '"Cairo", sans-serif' }}>
+                                {lang === "ar" ? "تناغم وتفرد" : "UNIVERSAL HARMONY"}
+                              </Typography>
+                            </Stack>
+                          </Box>
+                        )}
 
                         {/* Perfumes Brands Grid Section */}
                         <Typography sx={{ fontSize: 20, fontWeight: 600, fontFamily: "var(--heading-font)", mb: 4, textAlign: "center", color: "#111111" }}>
@@ -1034,15 +1176,15 @@ export default function CategoryDetailClient({ categoryId, initialLang, initialP
                                     </Box>
 
                                     <Stack spacing={0.5} sx={{ mt: 1.5, width: "100%" }}>
-                                      <Typography sx={{ fontSize: 13, fontWeight: 600, color: "#111111", fontFamily: '"Cairo", sans-serif', textTransform: "uppercase" }}>
+                                      <Typography sx={{ fontSize: 13, fontWeight: 600, color: "#111111", fontFamily: '"Cairo", sans-serif' }}>
                                         {brand.name}
                                       </Typography>
-                                      <Typography sx={{ fontSize: 11.5, color: "rgba(0,0,0,0.5)", fontWeight: 300, fontFamily: '"Cairo", sans-serif', overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                                      <Typography sx={{ fontSize: 12.5, color: "rgba(0, 0, 0, 0.66)", fontWeight: 500, fontFamily: '"Cairo", sans-serif', overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                                         {brand.headline || brand.description}
                                       </Typography>
                                     </Stack>
 
-                                    <Stack direction="row" alignItems="center" spacing={0.5} className="brand-action-arrow" sx={{ mt: 1.5, color: "rgba(0,0,0,0.3)", transition: "all 0.3s ease" }}>
+                                    <Stack direction="row" alignItems="center" spacing={0.5} className="brand-action-arrow" sx={{ mt: 1.5, color: "rgba(0, 0, 0, 0.56)", transition: "all 0.3s ease" }}>
                                       <Typography sx={{ fontSize: 9.5, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.12em", fontFamily: '"Cairo", sans-serif' }}>
                                         {lang === "ar" ? "تصفح المجموعة" : "Explore"}
                                       </Typography>
@@ -1054,56 +1196,182 @@ export default function CategoryDetailClient({ categoryId, initialLang, initialP
                             ))}
                         </Grid>
                       </Box>
+                    ) : categoryId === "beauty" ? (
+                      <Box sx={{ mb: 6 }} dir={lang === "ar" ? "rtl" : "ltr"}>
+                        <Grid container spacing={4} sx={{ mb: 5 }}>
+                          <Grid size={{ xs: 12, sm: 6 }}>
+                            <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                              <Box
+                                sx={{
+                                  height: { xs: "280px", sm: "440px" },
+                                  backgroundImage: 'url("/brand/luxury-beauty.png")',
+                                  backgroundSize: "cover",
+                                  backgroundPosition: "center center",
+                                  border: "1px solid rgb(255 255 255) !important"
+                                }}
+                              />
+                              <Stack alignItems="center" spacing={0.5} sx={{ py: 1 }}>
+                                <Typography sx={{ fontFamily: '"Apple Garamond", "EB Garamond", "Cormorant Garamond", serif', fontSize: 22, fontWeight: 500, letterSpacing: lang === "ar" ? 0 : "0.15em", textTransform: "uppercase", color: "#111111", textAlign: "center" }}>
+                                  {lang === "ar" ? "Makeup" : "MAKEUP"}
+                                </Typography>
+                                <Typography sx={{ fontSize: 9.5, letterSpacing: lang === "ar" ? 0 : "0.25em", textTransform: "uppercase", fontWeight: 700, color: "#CB6116", fontFamily: '"Cairo", sans-serif', textAlign: "center" }}>
+                                  {lang === "ar" ? "Color, artistry and radiance" : "COLOR, ARTISTRY & RADIANCE"}
+                                </Typography>
+                              </Stack>
+                            </Box>
+                          </Grid>
+
+                          <Grid size={{ xs: 12, sm: 6 }}>
+                            <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                              <Box
+                                sx={{
+                                  height: { xs: "280px", sm: "440px" },
+                                  backgroundImage: 'url("/brand/hero-look-07.jpg")',
+                                  backgroundSize: "cover",
+                                  backgroundPosition: "center top",
+                                  border: "1px solid rgb(255 255 255) !important"
+                                }}
+                              />
+                              <Stack alignItems="center" spacing={0.5} sx={{ py: 1 }}>
+                                <Typography sx={{ fontFamily: '"Apple Garamond", "EB Garamond", "Cormorant Garamond", serif', fontSize: 22, fontWeight: 500, letterSpacing: lang === "ar" ? 0 : "0.15em", textTransform: "uppercase", color: "#111111", textAlign: "center" }}>
+                                  {lang === "ar" ? "Skincare" : "SKINCARE"}
+                                </Typography>
+                                <Typography sx={{ fontSize: 9.5, letterSpacing: lang === "ar" ? 0 : "0.25em", textTransform: "uppercase", fontWeight: 700, color: "#CB6116", fontFamily: '"Cairo", sans-serif', textAlign: "center" }}>
+                                  {lang === "ar" ? "Ritual, care and glow" : "RITUAL, CARE & GLOW"}
+                                </Typography>
+                              </Stack>
+                            </Box>
+                          </Grid>
+                        </Grid>
+
+                        <Box sx={{ display: "flex", flexDirection: "column", gap: 2, mb: 8 }}>
+                          <Box
+                            sx={{
+                              height: { xs: "260px", sm: "420px" },
+                              backgroundImage: 'url("/brand/hero-woman-wide.png")',
+                              backgroundSize: "cover",
+                              backgroundPosition: "center center",
+                              border: "1px solid rgb(255 255 255) !important"
+                            }}
+                          />
+                          <Stack alignItems="center" spacing={0.5} sx={{ py: 1 }}>
+                            <Typography sx={{ fontFamily: '"Apple Garamond", "EB Garamond", "Cormorant Garamond", serif', fontSize: 22, fontWeight: 500, letterSpacing: lang === "ar" ? 0 : "0.15em", textTransform: "uppercase", color: "#111111", textAlign: "center" }}>
+                              {lang === "ar" ? "Beauty Houses" : "BEAUTY HOUSES"}
+                            </Typography>
+                            <Typography sx={{ fontSize: 9.5, letterSpacing: lang === "ar" ? 0 : "0.25em", textTransform: "uppercase", fontWeight: 700, color: "#CB6116", fontFamily: '"Cairo", sans-serif', textAlign: "center" }}>
+                              {lang === "ar" ? "World-renowned beauty, skincare and fragrance brands" : "WORLD-RENOWNED BEAUTY, SKINCARE & FRAGRANCE BRANDS"}
+                            </Typography>
+                          </Stack>
+                        </Box>
+
+                        <Typography sx={{ fontSize: 20, fontWeight: 600, fontFamily: "var(--heading-font)", mb: 4, textAlign: "center", color: "#111111" }}>
+                          {lang === "ar" ? "Luxury Beauty Houses" : "Luxury Beauty Houses"}
+                        </Typography>
+
+                        <Grid container spacing={3} sx={{ justifyContent: "center" }}>
+                          {processedBrands.map((brand) => (
+                            <Grid size={{ xs: 12, sm: 6, md: 3 }} key={brand.id}>
+                              <Link href={`/brand/${brand.id}/${lang}`} style={{ textDecoration: "none", color: "inherit" }}>
+                                <Box
+                                  sx={{
+                                    bgcolor: "#ffffff",
+                                    border: "1px solid rgba(0,0,0,0.06)",
+                                    p: 3,
+                                    height: "190px",
+                                    display: "flex",
+                                    flexDirection: "column",
+                                    justifyContent: "space-between",
+                                    alignItems: "center",
+                                    textAlign: "center",
+                                    transition: "all 0.4s cubic-bezier(0.25, 1, 0.5, 1)",
+                                    "&:hover": {
+                                      borderColor: "#CB6116",
+                                      boxShadow: "0 10px 24px rgba(203, 97, 22, 0.06)",
+                                      transform: "translateY(-4px)",
+                                      "& .brand-action-arrow": {
+                                        color: "#CB6116",
+                                        transform: lang === "ar" ? "translateX(-4px)" : "translateX(4px)"
+                                      }
+                                    }
+                                  }}
+                                >
+                                  <Box sx={{ flexGrow: 1, display: "flex", alignItems: "center", justifyContent: "center", minHeight: 40, width: "100%", color: "#111111" }}>
+                                    <BrandLogoMark brand={brand} variant="category-card" />
+                                  </Box>
+
+                                  <Stack spacing={0.5} sx={{ mt: 1.5, width: "100%" }}>
+                                    <Typography sx={{ fontSize: 13, fontWeight: 600, color: "#111111", fontFamily: '"Cairo", sans-serif' }}>
+                                      {brand.name}
+                                    </Typography>
+                                    <Typography sx={{ fontSize: 12.5, color: "rgba(0, 0, 0, 0.66)", fontWeight: 500, fontFamily: '"Cairo", sans-serif', overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                                      {brand.headline || brand.description}
+                                    </Typography>
+                                  </Stack>
+
+                                  <Stack direction="row" alignItems="center" spacing={0.5} className="brand-action-arrow" sx={{ mt: 1.5, color: "rgba(0, 0, 0, 0.56)", transition: "all 0.3s ease" }}>
+                                    <Typography sx={{ fontSize: 9.5, fontWeight: 700, textTransform: "uppercase", letterSpacing: lang === "ar" ? 0 : "0.12em", fontFamily: '"Cairo", sans-serif' }}>
+                                      {lang === "ar" ? "Explore" : "Explore"}
+                                    </Typography>
+                                    {lang === "ar" ? <ArrowBackIcon sx={{ fontSize: 12 }} /> : <ArrowForwardIcon sx={{ fontSize: 12 }} />}
+                                  </Stack>
+                                </Box>
+                              </Link>
+                            </Grid>
+                          ))}
+                        </Grid>
+                      </Box>
                     ) : categoryId === "skincare" ? (
                       <Box sx={{ mb: 6 }} dir={lang === "ar" ? "rtl" : "ltr"}>
                         <Grid container spacing={4} sx={{ mb: 8 }}>
                           {/* Women Skincare Banner */}
-                          <Grid size={{ xs: 12, sm: 6 }}>
-                            <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-                              <Box
-                                sx={{
-                                  height: { xs: "280px", sm: "440px" },
-                                  backgroundImage: 'url("/brand/hero-woman.jpg")',
-                                  backgroundSize: "cover",
-                                  backgroundPosition: "center top",
-                                  border: "1px solid rgb(255 255 255) !important"
-
-                                }}
-                              />
-                              <Stack alignItems="center" spacing={0.5} sx={{ py: 1 }}>
-                                <Typography sx={{ fontFamily: '"Apple Garamond", "EB Garamond", "Cormorant Garamond", serif', fontSize: 20, fontWeight: 500, letterSpacing: "0.15em", textTransform: "uppercase", color: "#111111" }}>
-                                  {lang === "ar" ? "العناية بالبشرة للنساء" : "WOMEN'S SKINCARE"}
-                                </Typography>
-                                <Typography sx={{ fontSize: 9.5, letterSpacing: "0.25em", textTransform: "uppercase", fontWeight: 700, color: "#CB6116", fontFamily: '"Cairo", sans-serif' }}>
-                                  {lang === "ar" ? "جمال ونضارة" : "GLOW & RADIANCE"}
-                                </Typography>
-                              </Stack>
-                            </Box>
-                          </Grid>
+                          {showWomen && (
+                            <Grid size={{ xs: 12, sm: womenGridSize }}>
+                              <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                                <Box
+                                  sx={{
+                                    height: { xs: "280px", sm: "440px" },
+                                    backgroundImage: 'url("/brand/hero-woman.jpg")',
+                                    backgroundSize: "cover",
+                                    backgroundPosition: "center top",
+                                    border: "1px solid rgb(255 255 255) !important"
+                                  }}
+                                />
+                                <Stack alignItems="center" spacing={0.5} sx={{ py: 1 }}>
+                                  <Typography sx={{ fontFamily: '"Apple Garamond", "EB Garamond", "Cormorant Garamond", serif', fontSize: 20, fontWeight: 500, letterSpacing: "0.15em", textTransform: "uppercase", color: "#111111" }}>
+                                    {lang === "ar" ? "العناية بالبشرة للنساء" : "WOMEN'S SKINCARE"}
+                                  </Typography>
+                                  <Typography sx={{ fontSize: 9.5, letterSpacing: "0.25em", textTransform: "uppercase", fontWeight: 700, color: "#CB6116", fontFamily: '"Cairo", sans-serif' }}>
+                                    {lang === "ar" ? "جمال ونضارة" : "GLOW & RADIANCE"}
+                                  </Typography>
+                                </Stack>
+                              </Box>
+                            </Grid>
+                          )}
 
                           {/* Men Skincare Banner */}
-                          <Grid size={{ xs: 12, sm: 6 }}>
-                            <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-                              <Box
-                                sx={{
-                                  height: { xs: "280px", sm: "440px" },
-                                  backgroundImage: 'url("/brand/hero-look-03.jpg")',
-                                  backgroundSize: "cover",
-                                  backgroundPosition: "center top",
-                                  border: "1px solid rgb(255 255 255) !important"
-
-                                }}
-                              />
-                              <Stack alignItems="center" spacing={0.5} sx={{ py: 1 }}>
-                                <Typography sx={{ fontFamily: '"Apple Garamond", "EB Garamond", "Cormorant Garamond", serif', fontSize: 20, fontWeight: 500, letterSpacing: "0.15em", textTransform: "uppercase", color: "#111111" }}>
-                                  {lang === "ar" ? "العناية بالبشرة للرجال" : "MEN'S SKINCARE"}
-                                </Typography>
-                                <Typography sx={{ fontSize: 9.5, letterSpacing: "0.25em", textTransform: "uppercase", fontWeight: 700, color: "#CB6116", fontFamily: '"Cairo", sans-serif' }}>
-                                  {lang === "ar" ? "عناية يومية" : "DAILY ESSENTIALS"}
-                                </Typography>
-                              </Stack>
-                            </Box>
-                          </Grid>
+                          {showMen && (
+                            <Grid size={{ xs: 12, sm: menGridSize }}>
+                              <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                                <Box
+                                  sx={{
+                                    height: { xs: "280px", sm: "440px" },
+                                    backgroundImage: 'url("/brand/hero-look-03.jpg")',
+                                    backgroundSize: "cover",
+                                    backgroundPosition: "center top",
+                                    border: "1px solid rgb(255 255 255) !important"
+                                  }}
+                                />
+                                <Stack alignItems="center" spacing={0.5} sx={{ py: 1 }}>
+                                  <Typography sx={{ fontFamily: '"Apple Garamond", "EB Garamond", "Cormorant Garamond", serif', fontSize: 20, fontWeight: 500, letterSpacing: "0.15em", textTransform: "uppercase", color: "#111111" }}>
+                                    {lang === "ar" ? "العناية بالبشرة للرجال" : "MEN'S SKINCARE"}
+                                  </Typography>
+                                  <Typography sx={{ fontSize: 9.5, letterSpacing: "0.25em", textTransform: "uppercase", fontWeight: 700, color: "#CB6116", fontFamily: '"Cairo", sans-serif' }}>
+                                    {lang === "ar" ? "عناية يومية" : "DAILY ESSENTIALS"}
+                                  </Typography>
+                                </Stack>
+                              </Box>
+                            </Grid>
+                          )}
                         </Grid>
 
                         {/* Skincare Brands Grid Section */}
@@ -1112,11 +1380,7 @@ export default function CategoryDetailClient({ categoryId, initialLang, initialP
                         </Typography>
 
                         <Grid container spacing={3} sx={{ justifyContent: "center" }}>
-                          {processedBrands
-                            .filter((brand) =>
-                              ["lancome", "moje", "sandro-moje", "maxmara", "adidas"].includes(brand.id)
-                            )
-                            .map((brand) => (
+                          {processedBrands.map((brand) => (
                               <Grid size={{ xs: 12, sm: 6, md: 3 }} key={brand.id}>
                                 <Link href={`/brand/${brand.id}/${lang}`} style={{ textDecoration: "none", color: "inherit" }}>
                                   <Box
@@ -1147,15 +1411,15 @@ export default function CategoryDetailClient({ categoryId, initialLang, initialP
                                     </Box>
 
                                     <Stack spacing={0.5} sx={{ mt: 1.5, width: "100%" }}>
-                                      <Typography sx={{ fontSize: 13, fontWeight: 600, color: "#111111", fontFamily: '"Cairo", sans-serif', textTransform: "uppercase" }}>
+                                      <Typography sx={{ fontSize: 13, fontWeight: 600, color: "#111111", fontFamily: '"Cairo", sans-serif' }}>
                                         {brand.name}
                                       </Typography>
-                                      <Typography sx={{ fontSize: 11.5, color: "rgba(0,0,0,0.5)", fontWeight: 300, fontFamily: '"Cairo", sans-serif', overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                                      <Typography sx={{ fontSize: 12.5, color: "rgba(0, 0, 0, 0.66)", fontWeight: 500, fontFamily: '"Cairo", sans-serif', overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                                         {brand.headline || brand.description}
                                       </Typography>
                                     </Stack>
 
-                                    <Stack direction="row" alignItems="center" spacing={0.5} className="brand-action-arrow" sx={{ mt: 1.5, color: "rgba(0,0,0,0.3)", transition: "all 0.3s ease" }}>
+                                    <Stack direction="row" alignItems="center" spacing={0.5} className="brand-action-arrow" sx={{ mt: 1.5, color: "rgba(0, 0, 0, 0.56)", transition: "all 0.3s ease" }}>
                                       <Typography sx={{ fontSize: 9.5, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.12em", fontFamily: '"Cairo", sans-serif' }}>
                                         {lang === "ar" ? "تصفح المجموعة" : "Explore"}
                                       </Typography>
