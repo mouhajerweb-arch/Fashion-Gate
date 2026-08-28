@@ -18,17 +18,86 @@ import { getBrandById } from "@/lib/brandData";
 import { getAnnouncements, getLocalizedValue } from "@/lib/sanity";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import Tooltip from "./Tooltip";
+import { logoutUser } from "@/app/actions/auth";
+
+const brandArabicTranslations: { [key: string]: string } = {
+  "anastasia beverly hills": "أناستازيا بيفرلي هيلز",
+  "elizabeth arden": "إليزابيث أردن",
+  "clarins paris": "كلارنس باريس",
+  "clarins": "كلارنس",
+  "mcm": "إم سي إم",
+  "michael kors": "مايكل كورس",
+  "lacoste": "لاكوست",
+  "trussardi": "تروساردي",
+  "emporio armani ea7": "إمبوريو أرماني EA7",
+  "ea7": "EA7",
+  "versace": "فيرساتشي",
+  "ralph lauren": "رالف لورين",
+  "ferragamo": "فيراغامو",
+  "salvatore ferragamo": "سلفاتوري فيراغامو",
+  "guess": "غيس",
+  "diesel": "ديزل",
+  "kenneth cole": "كينيث كول",
+  "george rech": "جورج ريش",
+  "beverly hills polo club": "بيفرلي هيلز بولو كلوب",
+  "lakmé": "لاكمي",
+  "lakme": "لاكمي",
+  "shiseido": "شيسيدو",
+  "dr. belmeur": "د. بيلمر",
+  "suntique": "سنتيك",
+  "mugler": "موغلر",
+  "azzaro": "أزارو",
+  "oscar": "أوسكار",
+  "narciso rodriguez": "نارسيسو رودريغز",
+  "gemology": "جيمولوجي",
+  "mavala": "مافالا",
+  "alfaparf milano": "ألفابارف ميلانو",
+  "the face shop": "ذا فيس شوب",
+  "beyond": "بيوند",
+  "allione": "أليون",
+  "your vegan": "يور فيغان",
+  "armand basi": "أرمان باسي",
+  "vince camuto": "فينس كاموتو",
+  "jeanne arthes": "جان أرثيس",
+  "dermedic": "ديرميديك",
+  "belif": "بيليف",
+  "fmgt": "إف إم جي تي",
+  "davidoff": "ديفيدوف",
+  "pascal morabito": "باسكال مورابيتو",
+  "signature": "سيجنيتشر"
+};
+
+const resolveBrandTitleAr = (title: string, titleAr?: string) => {
+  if (titleAr && titleAr !== title) return titleAr;
+  const cleanTitle = (title || "").trim().toLowerCase();
+  if (brandArabicTranslations[cleanTitle]) {
+    return brandArabicTranslations[cleanTitle];
+  }
+  return titleAr || title;
+};
 
 export function resolvePath(href: string, lang: "ar" | "en") {
   if (!href || href === "/" || href.trim() === "") return `/${lang}`;
   if (href.startsWith("#")) return `/${lang}${href}`;
   if (href.startsWith("http://") || href.startsWith("https://")) return href;
 
-  let cleanHref = href.replace(/^\/+|\/+$/g, "");
-  if (cleanHref === "") return `/${lang}`;
+  const queryIndex = href.indexOf("?");
+  const hashIndex = href.indexOf("#");
+  let splitIndex = -1;
+  if (queryIndex !== -1 && hashIndex !== -1) {
+    splitIndex = Math.min(queryIndex, hashIndex);
+  } else {
+    splitIndex = queryIndex !== -1 ? queryIndex : hashIndex;
+  }
+
+  let pathname = splitIndex !== -1 ? href.substring(0, splitIndex) : href;
+  const suffix = splitIndex !== -1 ? href.substring(splitIndex) : "";
+
+  let cleanHref = pathname.replace(/^\/+|\/+$/g, "");
+  if (cleanHref === "") return `/${lang}${suffix}`;
 
   if (cleanHref === "designers" || cleanHref === "category/designers" || cleanHref.includes("designers")) {
-    return `/designers/${lang}`;
+    return `/designers/${lang}${suffix}`;
   }
 
   const categories = ["women", "men", "perfumes", "skincare", "beauty", "makeup", "fashion", "designers", "dining"];
@@ -41,10 +110,11 @@ export function resolvePath(href: string, lang: "ar" | "en") {
 
   const partsList = cleanHref.split("/");
   const lastPart = partsList[partsList.length - 1];
-  if (lastPart !== "ar" && lastPart !== "en") {
-    return `/${cleanHref}/${lang}`;
+  if (lastPart === "ar" || lastPart === "en") {
+    partsList[partsList.length - 1] = lang;
+    return `/${partsList.join("/")}${suffix}`;
   }
-  return `/${cleanHref}`;
+  return `/${cleanHref}/${lang}${suffix}`;
 }
 
 // Helper function to dynamically stretch Arabic cursive connections using Tatweel (\u0640)
@@ -720,11 +790,29 @@ export default function SiteHeader({ settings, onLangToggleStart }: SiteHeaderPr
   const [searchPlaceholder, setSearchPlaceholder] = useState<{ en?: string; ar?: string } | null>(null);
   const [showLanguageSwitcher, setShowLanguageSwitcher] = useState<boolean>(true);
   const [showUserProfile, setShowUserProfile] = useState<boolean>(true);
+  const [userName, setUserName] = useState<string | null>(null);
+  const [showUserMenu, setShowUserMenu] = useState<boolean>(false);
   const [searchDepartmentsHeading, setSearchDepartmentsHeading] = useState<{ en?: string; ar?: string } | null>(null);
   const [searchSuggestedBrandsHeading, setSearchSuggestedBrandsHeading] = useState<{ en?: string; ar?: string } | null>(null);
   const [searchMatchingHeading, setSearchMatchingHeading] = useState<{ en?: string; ar?: string } | null>(null);
   const [searchDepartments, setSearchDepartments] = useState<any[] | null>(null);
   const [searchSuggestedBrands, setSearchSuggestedBrands] = useState<any[] | null>(null);
+
+  useEffect(() => {
+    const cookiesList = document.cookie.split(";");
+    const sessionCookie = cookiesList.find((c) => c.trim().startsWith("fg_session_user="));
+    if (sessionCookie) {
+      const nameVal = decodeURIComponent(sessionCookie.split("=")[1]);
+      setUserName(nameVal);
+    }
+  }, []);
+
+  const handleLogout = async () => {
+    await logoutUser();
+    setUserName(null);
+    setShowUserMenu(false);
+    window.location.reload();
+  };
 
   useEffect(() => {
     const fetchHeaderData = async () => {
@@ -859,9 +947,8 @@ export default function SiteHeader({ settings, onLangToggleStart }: SiteHeaderPr
           const brandId = b.slug?.current || b._id || "";
           let label = b.title;
           if (lang === "ar") {
-            if (b.titleAr) {
-              label = b.titleAr;
-            } else {
+            label = resolveBrandTitleAr(b.title, b.titleAr);
+            if (label === b.title || !label) {
               const local = getBrandById(brandId);
               if (local?.nameAr) {
                 label = local.nameAr;
@@ -939,7 +1026,7 @@ export default function SiteHeader({ settings, onLangToggleStart }: SiteHeaderPr
       <Box 
         component="header"
         sx={{ 
-          position: "sticky",
+          position: "fixed",
           top: 0,
           left: 0,
           right: 0,
@@ -1036,23 +1123,88 @@ export default function SiteHeader({ settings, onLangToggleStart }: SiteHeaderPr
             )}
 
             {/* Profile Button */}
-            {showUserProfile && (
-              <Tooltip title={t("Sign In / Register")}>
-                <IconButton 
-                  component={Link} 
-                  href={`/login/${lang}`} 
-                  sx={{ 
-                    color: "#CB6116", 
-                    p: 0.5,
-                    display: { xs: "none", sm: "inline-flex" },
-                    transition: "transform 0.2s, color 0.2s",
-                    "&:hover": { color: "#ffffff", transform: "scale(1.08)" }
-                  }}
-                >
-                  <PersonOutlineIcon sx={{ fontSize: 22 }} />
-                </IconButton>
-              </Tooltip>
-            )}
+            {/* {showUserProfile && (
+              <Box 
+                onMouseLeave={() => setShowUserMenu(false)}
+                sx={{ position: "relative" }}
+              >
+                {userName ? (
+                  <>
+                    <IconButton 
+                      onClick={() => setShowUserMenu(!showUserMenu)}
+                      sx={{ 
+                        color: "#CB6116", 
+                        p: 0.5,
+                        width: 32,
+                        height: 32,
+                        borderRadius: "50%",
+                        border: "1px solid #CB6116",
+                        fontSize: 13,
+                        fontWeight: 700,
+                        display: "inline-flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        transition: "transform 0.2s, color 0.2s",
+                        "&:hover": { color: "#ffffff", borderColor: "#ffffff", transform: "scale(1.08)" }
+                      }}
+                    >
+                      {userName.substring(0, 2).toUpperCase()}
+                    </IconButton>
+                    {showUserMenu && (
+                      <Box 
+                        sx={{
+                          position: "absolute",
+                          top: 40,
+                          [lang === "ar" ? "left" : "right"]: 0,
+                          width: 200,
+                          bgcolor: "#111111",
+                          border: "1px solid rgba(255,255,255,0.08)",
+                          p: 2,
+                          zIndex: 100,
+                          boxShadow: "0 10px 30px rgba(0,0,0,0.5)",
+                          textAlign: lang === "ar" ? "right" : "left"
+                        }}
+                      >
+                        <Typography sx={{ fontSize: 13, fontWeight: 700, color: "#ffffff", mb: 1, textOverflow: "ellipsis", overflow: "hidden", whiteSpace: "nowrap" }}>
+                          {userName}
+                        </Typography>
+                        <Divider sx={{ borderColor: "rgba(255,255,255,0.08)", my: 1 }} />
+                        <Button 
+                          fullWidth
+                          size="small"
+                          onClick={handleLogout}
+                          sx={{ 
+                            justifyContent: lang === "ar" ? "flex-start" : "flex-end",
+                            color: "#CB6116", 
+                            fontSize: 12, 
+                            fontWeight: 700,
+                            textTransform: "uppercase"
+                          }}
+                        >
+                          {lang === "ar" ? "تسجيل الخروج" : "Sign Out"}
+                        </Button>
+                      </Box>
+                    )}
+                  </>
+                ) : (
+                  <Tooltip title={t("Sign In / Register")}>
+                    <IconButton 
+                      component={Link} 
+                      href={`/login/${lang}`} 
+                      sx={{ 
+                        color: "#CB6116", 
+                        p: 0.5,
+                        display: { xs: "none", sm: "inline-flex" },
+                        transition: "transform 0.2s, color 0.2s",
+                        "&:hover": { color: "#ffffff", transform: "scale(1.08)" }
+                      }}
+                    >
+                      <PersonOutlineIcon sx={{ fontSize: 22 }} />
+                    </IconButton>
+                  </Tooltip>
+                )}
+              </Box>
+            )} */}
 
             {/* Mobile menu trigger */}
             <IconButton 
@@ -1194,7 +1346,7 @@ export default function SiteHeader({ settings, onLangToggleStart }: SiteHeaderPr
               const labelStr = lang === "ar" ? item.label?.ar || item.label?.en : item.label?.en || item.label?.ar;
               const normalizedLabel = `${item.label?.en || ""} ${item.label?.ar || ""} ${labelStr || ""}`.toLowerCase();
               const isDesigners = item.href?.includes("/designers") || item.href?.includes("designers") || normalizedLabel.includes("designer") || normalizedLabel.includes("مصمم");
-              const isCategoryDropdown = isBeauty || isDining;
+              const isCategoryDropdown = isBeauty || isDining || isFashion || isPerfumes || isSkincare;
               const hasDropdown = isCategoryDropdown || (isDesigners && item.designerCategories && item.designerCategories.length > 0);
               
               const finalHref = isDesigners ? `/designers/${lang}` : resolvePath(item.href, lang);
@@ -1273,7 +1425,7 @@ export default function SiteHeader({ settings, onLangToggleStart }: SiteHeaderPr
                                   top: "100%",
                                   left: lang === "ar" ? "auto" : 0,
                                   right: lang === "ar" ? 0 : "auto",
-                                  width: "165px",
+                                  width: beautyHoveredSub === "skincare" ? "300px" : "165px",
                                   bgcolor: "#ffffff",
                                   border: "1px solid rgba(0,0,0,0.1)",
                                   borderTop: "3px solid #CB6116",
@@ -1406,10 +1558,8 @@ export default function SiteHeader({ settings, onLangToggleStart }: SiteHeaderPr
                                     </Box>
                                   </Box>
 
-                                  {/* Right Sub-Panel - ONLY when hovering Skincare.
-                                      Men/Women submenu is commented for now; uncomment this block later if needed.
                                   {beautyHoveredSub === "skincare" && (
-                                    <Box sx={{ width: "135px", p: 1.2, bgcolor: "#ffffff", display: "flex", flexDirection: "column", justifyContent: "center" }}>
+                                    <Box sx={{ width: "135px", flexShrink: 0, p: 1.2, bgcolor: "#ffffff", display: "flex", flexDirection: "column", justifyContent: "center" }}>
                                       <AnimatePresence mode="wait">
                                         <MotionBox
                                           key="skincare-sub-bold"
@@ -1454,7 +1604,6 @@ export default function SiteHeader({ settings, onLangToggleStart }: SiteHeaderPr
                                       </AnimatePresence>
                                     </Box>
                                   )}
-                                  */}
                                 </Box>
                               ) : (isFashion || isSkincare) ? (
                                 [
@@ -1543,7 +1692,7 @@ export default function SiteHeader({ settings, onLangToggleStart }: SiteHeaderPr
         PaperProps={{
           sx: {
             width: "100%",
-            maxWidth: 320,
+            maxWidth: 420,
             bgcolor: "#050505", // Luxury dark theme background (no grey!)
             boxShadow: "none",
             p: 4,
@@ -1679,7 +1828,7 @@ export default function SiteHeader({ settings, onLangToggleStart }: SiteHeaderPr
                 const labelStr = lang === "ar" ? item.label?.ar || item.label?.en : item.label?.en || item.label?.ar;
                 const normalizedLabel = `${item.label?.en || ""} ${item.label?.ar || ""} ${labelStr || ""}`.toLowerCase();
                 const isDesigners = item.href?.includes("/designers") || item.href?.includes("designers") || normalizedLabel.includes("designer") || normalizedLabel.includes("مصمم");
-                const isCategoryDropdown = isBeauty;
+                const isCategoryDropdown = isBeauty || isDining || isFashion || isPerfumes || isSkincare;
                 const hasDropdown = isCategoryDropdown || (isDesigners && item.designerCategories && item.designerCategories.length > 0);
                 
                 const finalHref = isDesigners ? `/designers/${lang}` : resolvePath(item.href, lang);
@@ -1878,7 +2027,7 @@ export default function SiteHeader({ settings, onLangToggleStart }: SiteHeaderPr
                                       </Typography>
                                       <Box sx={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 1 }}>
                                         {cat.brands.map((brand: any, brandIdx: number) => {
-                                          const brandTitle = lang === "ar" ? brand.titleAr || brand.title : brand.title || brand.titleAr;
+                                          const brandTitle = lang === "ar" ? resolveBrandTitleAr(brand.title, brand.titleAr) : brand.title || brand.titleAr;
                                           const brandHref = `/brand/${brand.slug?.current || brand.slug}/${lang}`;
                                           
                                           return (
@@ -1917,7 +2066,7 @@ export default function SiteHeader({ settings, onLangToggleStart }: SiteHeaderPr
 
           {/* Bottom Drawer Section (Sign In & Socials) */}
           <Stack spacing={2.5} sx={{ borderTop: "1px solid rgba(255,255,255,0.08)", pt: 3, mt: "auto" }}>
-            <Button
+            {/* <Button
               component={Link}
               href={`/login/${lang}`}
               onClick={() => setOpen(false)}
@@ -1935,7 +2084,7 @@ export default function SiteHeader({ settings, onLangToggleStart }: SiteHeaderPr
               }}
             >
               {t("Sign In / Register")}
-            </Button>
+            </Button> */}
           </Stack>
         </Stack>
       </Drawer>

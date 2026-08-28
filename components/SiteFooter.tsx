@@ -23,11 +23,23 @@ export function resolvePath(href: string, lang: "ar" | "en") {
   if (href.startsWith("#")) return `/${lang}${href}`;
   if (href.startsWith("http://") || href.startsWith("https://")) return href;
 
-  let cleanHref = href.replace(/^\/+|\/+$/g, "");
-  if (cleanHref === "") return `/${lang}`;
+  const queryIndex = href.indexOf("?");
+  const hashIndex = href.indexOf("#");
+  let splitIndex = -1;
+  if (queryIndex !== -1 && hashIndex !== -1) {
+    splitIndex = Math.min(queryIndex, hashIndex);
+  } else {
+    splitIndex = queryIndex !== -1 ? queryIndex : hashIndex;
+  }
+
+  let pathname = splitIndex !== -1 ? href.substring(0, splitIndex) : href;
+  const suffix = splitIndex !== -1 ? href.substring(splitIndex) : "";
+
+  let cleanHref = pathname.replace(/^\/+|\/+$/g, "");
+  if (cleanHref === "") return `/${lang}${suffix}`;
 
   if (cleanHref === "designers" || cleanHref === "category/designers" || cleanHref.includes("designers")) {
-    return `/brand/${lang}`;
+    return `/designers/${lang}${suffix}`;
   }
 
   const categories = ["women", "men", "perfumes", "skincare", "dining", "fashion", "designers"];
@@ -40,10 +52,11 @@ export function resolvePath(href: string, lang: "ar" | "en") {
 
   const partsList = cleanHref.split("/");
   const lastPart = partsList[partsList.length - 1];
-  if (lastPart !== "ar" && lastPart !== "en") {
-    return `/${cleanHref}/${lang}`;
+  if (lastPart === "ar" || lastPart === "en") {
+    partsList[partsList.length - 1] = lang;
+    return `/${partsList.join("/")}${suffix}`;
   }
-  return `/${cleanHref}`;
+  return `/${cleanHref}/${lang}${suffix}`;
 }
 
 // Helper function to dynamically stretch Arabic cursive connections using Tatweel (\u0640)

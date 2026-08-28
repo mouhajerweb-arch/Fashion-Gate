@@ -94,10 +94,10 @@ export default function BrandDetailClient({
   };
 
   const bgUrl = brand.bgImage?.asset?.url || brand.backdropUrl || "/assets/headerbg.png";
-  const headlineText = brand.headline?.[lang] || brand.headline || "";
-  const descriptionText = brand.description?.[lang] || brand.description || "";
+  const headlineText = (typeof brand.headline === "object" ? brand.headline?.[lang] : brand.headline) || "";
+  const descriptionText = (typeof brand.description === "object" ? brand.description?.[lang] : brand.description) || "";
   const logoUrl = brand.image?.asset?.url;
-  const buttonText = brand.buttonText?.[lang] || brand.buttonText || "";
+  const buttonText = (typeof brand.buttonText === "object" ? brand.buttonText?.[lang] : brand.buttonText) || "";
   const buttonLink = brand.buttonLink || "";
 
   return (

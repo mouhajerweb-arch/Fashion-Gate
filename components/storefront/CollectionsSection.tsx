@@ -61,19 +61,7 @@ export default function CollectionsSection({
           
           <Stack spacing={{ xs: 8, md: 14 }}>
             {collections.map((item: CollectionItem, index) => {
-              let image = resolveImage(item.coverImage, item.imageUrl);
-              if (image === "/brand-pages/page_01.jpg") {
-                const titleLower = (getLocalizedValue(item.title, "en", "") || "").toLowerCase();
-                if (titleLower.includes("designer") || index === 0) {
-                  image = "/brand/designer-collections.png";
-                } else if (titleLower.includes("beauty") || titleLower.includes("accessories") || index === 1) {
-                  image = "/brand/luxury-beauty.png";
-                } else if (titleLower.includes("gourmet") || titleLower.includes("food")) {
-                  image = "/brand/luxury-gourmet-epicerie.png";
-                } else if (titleLower.includes("make up") || index === 2) {
-                  image = "/brand/luxury-beauty.png";
-                }
-              }
+              const image = resolveImage(item.coverImage, item.imageUrl);
               const isEven = index % 2 === 0;
               const isRtl = lang === "ar";
               const showReverse = isRtl ? isEven : !isEven;

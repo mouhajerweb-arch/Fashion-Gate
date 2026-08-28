@@ -64,7 +64,9 @@ export default function LanguageSwitcher({
       } else {
         nextPath = pathname.replace(/\/(ar|en)$/, `/${nextLang}`);
       }
-      router.push(nextPath);
+      const searchParamsString = window.location.search || "";
+      const hashString = window.location.hash || "";
+      router.push(nextPath + searchParamsString + hashString);
     }, 180);
   };
 

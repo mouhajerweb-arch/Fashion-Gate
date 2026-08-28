@@ -10,7 +10,7 @@ export const sanityClient = createClient({
   projectId,
   dataset,
   apiVersion,
-  useCdn: false,
+  useCdn: true,
   perspective: "published"
 });
 
@@ -373,7 +373,31 @@ export async function getDesignerPageData() {
       searchPlaceholder { en, ar },
       allCategoriesLabel { en, ar },
       exploreBrandLabel { en, ar },
-      seo { metaTitle, metaDescription, keywords, ogImage { asset->{ url } }, canonicalUrl, noIndex }
+      seo { metaTitle, metaDescription, keywords, ogImage { asset->{ url } }, canonicalUrl, noIndex },
+      categorySections[isVisible != false] {
+        category-> {
+          _id,
+          title { en, ar },
+          order
+        },
+        sectionImage { asset->{ url } },
+        brands[isVisible != false] {
+          cardImage { asset->{ url } },
+          brand-> {
+            _id,
+            title,
+            titleAr,
+            slug,
+            image { asset->{ url } },
+            imageAr { asset->{ url } },
+            size,
+            scale,
+            headline { en, ar },
+            description { en, ar },
+            bgImage { asset->{ url } }
+          }
+        }
+      }
     }`);
   } catch (err) {
     console.error("Error fetching designer page data:", err);
@@ -967,11 +991,23 @@ export async function getSanityBlogPost(slug: string): Promise<any> {
 }
 
 export function getLocalizedValue(value: any, lang: "en" | "ar", fallback?: any): any {
-  if (!value) return fallback;
-  if (typeof value === "object") {
-    return value[lang] !== undefined ? value[lang] : (fallback !== undefined ? fallback : value.en);
-  }
-  return value;
+  const extract = (val: any): any => {
+    if (!val) return null;
+    if (typeof val === "object") {
+      const target = val[lang] !== undefined ? val[lang] : val.en;
+      if (target && typeof target === "object") {
+        return extract(target);
+      }
+      return target;
+    }
+    return val;
+  };
+
+  const result = extract(value);
+  if (result !== null && result !== undefined) return result;
+
+  const fallbackResult = extract(fallback);
+  return fallbackResult !== null && fallbackResult !== undefined ? fallbackResult : "";
 }
 
 export async function getHeaderSettings() {

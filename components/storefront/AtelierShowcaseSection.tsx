@@ -3,6 +3,7 @@
 import { Box, Container, Stack, Typography } from "@mui/material";
 import { getLocalizedValue } from "@/lib/sanity";
 import { resolveImage } from "../Storefront";
+import Image from "next/image";
 
 export default function AtelierShowcaseSection({ 
   section,
@@ -34,7 +35,7 @@ export default function AtelierShowcaseSection({
   );
 
   // Left card fields
-  const leftImage = resolveImage(section?.leftCard?.image, "/brand-pages/page_08.jpg");
+  const leftImage = resolveImage(section?.leftCard?.image, "");
   const leftEyebrow = getLocalizedValue(
     section?.leftCard?.eyebrow,
     lang,
@@ -54,7 +55,7 @@ export default function AtelierShowcaseSection({
   );
 
   // Right card fields
-  const rightImage = resolveImage(section?.rightCard?.image, "/brand-pages/page_18.jpg");
+  const rightImage = resolveImage(section?.rightCard?.image, "");
   const rightEyebrow = getLocalizedValue(
     section?.rightCard?.eyebrow,
     lang,
@@ -103,17 +104,26 @@ export default function AtelierShowcaseSection({
                 overflow: "hidden"
               }}
             >
-              <Box sx={{ aspectRatio: "16 / 11", overflow: "hidden" }}>
-                <Box 
-                  component="img"
-                  src={leftImage}
+              <Box 
+                sx={{ 
+                  aspectRatio: "16 / 11", 
+                  overflow: "hidden", 
+                  position: "relative",
+                  "& img": {
+                    transition: "transform 0.8s cubic-bezier(0.25, 1, 0.5, 1)"
+                  },
+                  "& img:hover": {
+                    transform: "scale(1.03)"
+                  }
+                }}
+              >
+                <Image 
+                  src={leftImage || "/brand/logo.png"}
                   alt={leftTitle}
-                  sx={{ 
-                    width: "100%", 
-                    height: "100%", 
-                    objectFit: "cover",
-                    transition: "transform 0.8s cubic-bezier(0.25, 1, 0.5, 1)",
-                    "&:hover": { transform: "scale(1.03)" }
+                  fill
+                  sizes="(max-width: 600px) 100vw, 50vw"
+                  style={{ 
+                    objectFit: "cover"
                   }}
                 />
               </Box>
@@ -140,17 +150,26 @@ export default function AtelierShowcaseSection({
                 overflow: "hidden"
               }}
             >
-              <Box sx={{ aspectRatio: "16 / 11", overflow: "hidden" }}>
-                <Box 
-                  component="img"
-                  src={rightImage}
+              <Box 
+                sx={{ 
+                  aspectRatio: "16 / 11", 
+                  overflow: "hidden", 
+                  position: "relative",
+                  "& img": {
+                    transition: "transform 0.8s cubic-bezier(0.25, 1, 0.5, 1)"
+                  },
+                  "& img:hover": {
+                    transform: "scale(1.03)"
+                  }
+                }}
+              >
+                <Image 
+                  src={rightImage || "/brand/logo.png"}
                   alt={rightTitle}
-                  sx={{ 
-                    width: "100%", 
-                    height: "100%", 
-                    objectFit: "cover",
-                    transition: "transform 0.8s cubic-bezier(0.25, 1, 0.5, 1)",
-                    "&:hover": { transform: "scale(1.03)" }
+                  fill
+                  sizes="(max-width: 600px) 100vw, 50vw"
+                  style={{ 
+                    objectFit: "cover"
                   }}
                 />
               </Box>

@@ -21,12 +21,6 @@ export default function AboutClient({ initialLang, initialData }: { initialLang:
 
   // Fetch live CMS data on client mount and scroll to top
   useEffect(() => {
-    getAboutPageData()
-      .then((res) => {
-        if (res) setPageData(res);
-      })
-      .catch(console.error);
-
     const timer = setTimeout(() => {
       window.scrollTo(0, 0);
       document.documentElement.scrollTop = 0;
@@ -119,10 +113,17 @@ export default function AboutClient({ initialLang, initialData }: { initialLang:
   const videoTitle = getLocalizedValue(data?.videoTitle, lang, fallbackData.videoTitle);
   const videoSubtitle = getLocalizedValue(data?.videoSubtitle, lang, fallbackData.videoSubtitle);
 
-  const heroImage = data?.heroImage?.asset?.url || "/brand/luxury_about_bg.jpg";
-  const collageImage1 = data?.collageImage1?.asset?.url || "/brand-pages/page_08.jpg";
-  const collageImage2 = data?.collageImage2?.asset?.url || "/brand-pages/page_32.jpg";
-  const videoBgImage = data?.videoBgImage?.asset?.url || "/brand-pages/page_18.jpg";
+  const heroImage = data?.heroImage?.asset?.url || "";
+  const collageImage1 = data?.collageImage1?.asset?.url || "";
+  const collageImage2 = data?.collageImage2?.asset?.url || "";
+  console.log("About Page Images Debug:", { 
+    collageImage1, 
+    collageImage2, 
+    rawImage1: data?.collageImage1, 
+    rawImage2: data?.collageImage2,
+    allDataKeys: data ? Object.keys(data) : null
+  });
+  const videoBgImage = data?.videoBgImage?.asset?.url || "";
   const videoSourceType = data?.videoSourceType || (data?.videoFile?.asset?.url ? "file" : "url");
   const videoFileUrl = data?.videoFile?.asset?.url;
   const videoUrl = data?.videoUrl || "https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1&mute=1";
@@ -225,38 +226,60 @@ export default function AboutClient({ initialLang, initialData }: { initialLang:
               <Box sx={{ position: "relative", width: "100%", height: { xs: "360px", sm: "480px", md: "600px" } }}>
                 {/* Main Vertical Image */}
                 <Box 
-                  component="img"
-                  src={collageImage1}
-                  alt="Luxury showroom display"
                   sx={{
                     position: "absolute",
                     top: 0,
                     [lang === "ar" ? "right" : "left"]: 0,
                     width: "75%",
                     height: "85%",
-                    objectFit: "cover",
+                    bgcolor: "#eae5df",
                     boxShadow: "0 20px 45px rgba(0,0,0,0.08)",
-                    border: "1px solid rgba(0,0,0,0.04)"
+                    border: "1px solid rgba(0,0,0,0.04)",
+                    overflow: "hidden"
                   }}
-                />
+                >
+                  {collageImage1 && collageImage1 !== "" ? (
+                    <Box 
+                      component="img"
+                      src={collageImage1}
+                      alt="Luxury showroom display"
+                      sx={{
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "cover"
+                      }}
+                    />
+                  ) : null}
+                </Box>
                 
                 {/* Overlapping Floating Image */}
                 <Box 
-                  component="img"
-                  src={collageImage2}
-                  alt="Atelier detail display"
                   sx={{
                     position: "absolute",
                     bottom: 0,
                     [lang === "ar" ? "left" : "right"]: 0,
                     width: "55%",
                     height: "55%",
-                    objectFit: "cover",
+                    bgcolor: "#f2ece4",
                     boxShadow: "0 30px 60px rgba(0,0,0,0.15)",
-                    border: "3px solid #FAF8F5",
-                    zIndex: 2
+                    // border: "3px solid #FAF8F5",
+                    zIndex: 2,
+                    overflow: "hidden"
                   }}
-                />
+                >
+                  {collageImage2 && collageImage2 !== "" ? (
+                    <Box 
+                      component="img"
+                      src={collageImage2}
+                      alt="Atelier detail display"
+                      sx={{
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "cover"
+                      }}
+                    />
+                  ) : null}
+                </Box>
               </Box>
             </Grid>
 

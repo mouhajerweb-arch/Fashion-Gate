@@ -138,10 +138,19 @@ export default function LoaderProvider({ children }: { children: React.ReactNode
         return;
       }
 
+      // Check if it is a secondary click or has modifier keys (e.g. Command, Ctrl, Shift, Alt)
+      if (e.button !== 0 || e.ctrlKey || e.shiftKey || e.altKey || e.metaKey) {
+        return;
+      }
+
       let target = e.target as HTMLElement | null;
       while (target && target !== document.body) {
         const anchor = target.tagName === "A" ? (target as HTMLAnchorElement) : target.closest("a");
         if (anchor) {
+          // If the link is set to open in a new tab, do not intercept
+          if (anchor.getAttribute("target") === "_blank") {
+            break;
+          }
           const href = anchor.getAttribute("href");
           if (
             href && 

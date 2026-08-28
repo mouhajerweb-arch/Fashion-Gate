@@ -23,6 +23,7 @@ import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
 import { useLoader } from "@/components/LoaderProvider";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
+import { loginUser } from "@/app/actions/auth";
 
 const MotionBox = motion.create(Box);
 
@@ -92,9 +93,23 @@ export default function AuthClient({ initialLang, sanityData }: AuthClientProps)
     successMsg: getLabel("successMsg", "Authenticating...", "جاري التحقق...")
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    alert(t.successMsg);
+    if (mode === "signup" && password !== confirmPassword) {
+      alert(lang === "ar" ? "كلمتا المرور غير متطابقتين" : "Passwords do not match");
+      return;
+    }
+    
+    setLoading(true);
+    try {
+      await loginUser(mode === "signup" ? name : "", email);
+      router.push(`/${lang}`);
+    } catch (err) {
+      console.error("Auth error", err);
+      alert(lang === "ar" ? "فشل التحقق، يرجى المحاولة مرة أخرى" : "Authentication failed, please try again");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (

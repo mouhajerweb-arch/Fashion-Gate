@@ -18,7 +18,8 @@ export default function SmoothScroll() {
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       smoothWheel: true,
       wheelMultiplier: 0.9,
-      touchMultiplier: 1.2
+      touchMultiplier: 1.2,
+      syncTouch: true,
     });
 
     let frame = 0;

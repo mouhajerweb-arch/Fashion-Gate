@@ -173,60 +173,16 @@ export default function RestaurantDetailClient({ restaurantId, lang, initialSani
       narrativeSubtitle: "THE TRADITION OF TASTE",
 
       menus: {
-        breakfast: [
-          { name: "Fatteh Hammas", desc: "Local boiled chickpeas layered with toasted flatbread, garlic-infused yogurt, finished with sizzling ghee and pine nuts.", image: "/brand/hero-woman.jpg", tag: "Signature", price: "TBC", note: "Traditional Damascus recipe" },
-          { name: "Shakshuka Shamiyeh", desc: "Organic eggs poached in a rich, spiced tomato sauce with sweet bell peppers, onions, and Syrian herbs.", image: "/brand/vilamore-bg.jpg", tag: "Hot Pan", price: "TBC", note: "Served in hot clay pan" },
-          { name: "Manakeesh Za'atar & Olive Oil", desc: "Freshly baked clay-oven flatbread topped with wild thyme, sumac, toasted sesame seeds, and extra virgin olive oil.", image: "/brand/hero-unisex-perfume.jpg", tag: "Vegan", price: "TBC", note: "Baked on volcanic stones" },
-          { name: "Manakeesh Jebneh Akawi", desc: "Traditional soft flatbread layered with premium melted Akawi cheese, baked to golden perfection.", image: "/brand/hero-woman.jpg", tag: "Warm", price: "TBC", note: "Wood-fired clay oven" },
-          { name: "Fatteh Makdous", desc: "Sautéed eggplants stuffed with minced meat, served over crispy bread, garlic yogurt, and sweet pomegranate molasses.", image: "/brand/vilamore-kebab.jpg", tag: "Must Try", price: "TBC", note: "A Damascene luxury special" },
-          { name: "Syrian Mamounia", desc: "Warm sweet semolina pudding cooked with butter, topped with fresh thick clotted cream (Kaymak) and cinnamon.", image: "/brand/vilamore-bg.jpg", tag: "Sweet", price: "TBC", note: "Traditional Aleppo breakfast staple" }
-        ],
-        coldMezza: [
-          { name: "Traditional Syrian Hummus", desc: "Smooth pureed local chickpeas whipped with sesame tahini, garlic, fresh lemon juice, finished with cumin and green mint.", image: "/brand/vilamore-bg.jpg", tag: "Vegan", price: "TBC", note: "Whipped to velvet consistency" },
-          { name: "Pomegranate Baba Ghanoush", desc: "Smoky fire-roasted eggplant crushed with garlic, walnuts, lemon juice, topped with sweet pomegranate rubies.", image: "/brand/hero-unisex-perfume.jpg", tag: "Light", price: "TBC", note: "Wood-fire roasted eggplant" },
-          { name: "Damascene Mutabbal", desc: "Charcoal-grilled eggplant blended with tahini paste, Greek yogurt, garlic, lemon, topped with olive oil.", image: "/brand/hero-woman.jpg", tag: "Popular", price: "TBC", note: "Creamy eggplant dip" },
-          { name: "Authentic Syrian Tabbouleh", desc: "Finely chopped parsley, mint, vine tomatoes, bulgur wheat, and onions, dressed with fresh lemon and olive oil.", image: "/brand/vilamore-kebab.jpg", tag: "Fresh", price: "TBC", note: "Hand-chopped daily" },
-          { name: "Fattoush Salad", desc: "Crisp garden greens, radish, cucumber, and tomatoes tossed in pomegranate vinaigrette, topped with sumac croutons.", image: "/brand/vilamore-bg.jpg", tag: "Healthy", price: "TBC", note: "Drizzled with house sumac oil" },
-          { name: "Stuffed Vine Leaves (Yalanji)", desc: "Tender vine leaves rolled with rice, tomatoes, fresh herbs, cooked slowly in olive oil and lemon juice.", image: "/brand/hero-unisex-perfume.jpg", tag: "Cold Plate", price: "TBC", note: "Served chilled with lemon slices" }
-        ],
-        hotMezza: [
-          { name: "Crispy Fried Kibbeh", desc: "Golden-fried bulgur wheat shells filled with spiced minced lamb, roasted onions, toasted pine nuts, and Levant spices.", image: "/brand/vilamore-kebab.jpg", tag: "Bestseller", price: "TBC", note: "Hand-shaped crispy outer shell" },
-          { name: "Grilled Kibbeh on Charcoal", desc: "Disc-shaped bulgur shells filled with lamb fat, walnuts, pomegranate seeds, and spices, grilled over wood embers.", image: "/brand/hero-woman.jpg", tag: "Chef Special", price: "TBC", note: "Smoky wood-fire grilled" },
-          { name: "Sambousek Jebneh", desc: "Crispy fried pastry triangles stuffed with local Akawi, Halloumi, and white cheese with black caraway seeds.", image: "/brand/vilamore-bg.jpg", tag: "Cheesy", price: "TBC", note: "Served piping hot" },
-          { name: "Sambousek Lahmeh", desc: "Delicate pastry pockets stuffed with seasoned minced lamb, toasted pine nuts, onion, and pomegranate syrup.", image: "/brand/hero-unisex-perfume.jpg", tag: "Popular", price: "TBC", note: "Crispy Levant pastry" },
-          { name: "Spicy Batata Harra", desc: "Golden potato cubes sautéed with garlic, fresh coriander, chili flakes, sumac, and olive oil.", image: "/brand/hero-woman.jpg", tag: "Spicy", price: "TBC", note: "Finished with lemon juice" },
-          { name: "Grilled Halloumi Skewers", desc: "Thick cuts of halloumi cheese grilled on charcoal, served with fresh mint pesto and wild sumac.", image: "/brand/vilamore-kebab.jpg", tag: "Hot Cheese", price: "TBC", note: "Grilled to order" }
-        ],
-        grills: [
-          { name: "Halabi Kebab Skewers", desc: "Charcoal-grilled minced lamb skewers seasoned with fresh mint, onion, and Aleppo pepper, served on fire-cooked flatbread.", image: "/brand/vilamore-kebab.jpg", tag: "Signature", price: "TBC", note: "Aleppo-style wood fire grill" },
-          { name: "Shish Tawook Chicken", desc: "Tender cubes of milk-fed chicken breast marinated in yogurt, garlic, lemon juice, and traditional tawook spices.", image: "/brand/vilamore-bg.jpg", tag: "Classic", price: "TBC", note: "Served with garlic cream dip" },
-          { name: "Wood-fired Lamb Chops", desc: "Premium lamb chops marinated in rosemary, garlic, olive oil, and sumac, grilled over cherry wood embers.", image: "/brand/hero-unisex-perfume.jpg", tag: "Premium", price: "TBC", note: "Juicy and tender grill" },
-          { name: "Cherry Kebab Shami", desc: "Minced lamb meatballs grilled on charcoal, simmered in a sweet and sour wild black cherry sauce, topped with pine nuts.", image: "/brand/hero-woman.jpg", tag: "House Favorite", price: "TBC", note: "Traditional Syrian delicacy" },
-          { name: "Grilled Toshka / Arayes", desc: "Spiced minced lamb with melted Kashkaval cheese stuffed in flatbread, toasted over wood embers.", image: "/brand/vilamore-bg.jpg", tag: "Must Try", price: "TBC", note: "Crispy bread and melted cheese" },
-          { name: "Levantine Mixed Grill Platter", desc: "Grand selection of Shish Tawook, Kebab Halabi, Lamb Chops, and grilled vegetables, served on custom wood board.", image: "/brand/vilamore-kebab.jpg", tag: "Grand Feast", price: "TBC", note: "Perfect for sharing" }
-        ],
-        desserts: [
-          { name: "Nabulsi Kunafa on Charcoal", desc: "Crisp golden-brown shredded wheat pastry layered with sweet melted cheese, soaked in orange-blossom syrup.", image: "/brand/hero-unisex-perfume.jpg", tag: "Warm", price: "TBC", note: "Cooked slowly on hot embers" },
-          { name: "Syrian Pistachio Baklava", desc: "Delicate layers of flaky phyllo pastry filled with premium ground green Aleppo pistachios and scented syrup.", image: "/brand/vilamore-bg.jpg", tag: "Classic", price: "TBC", note: "Freshly baked daily" },
-          { name: "Halawet El-Jibn", desc: "Sweet cheese dough rolls filled with fresh clotted cream (Ashta), drizzled with rose water syrup, topped with pistachios.", image: "/brand/hero-woman.jpg", tag: "Levant Special", price: "TBC", note: "Traditional Homs recipe" },
-          { name: "Warm Um Ali Pudding", desc: "Baked puff pastry soaked in warm sweetened milk, cream, coconut flakes, raisins, topped with roasted pistachios.", image: "/brand/hero-unisex-perfume.jpg", tag: "Comfort Food", price: "TBC", note: "Rich bread pudding style" },
-          { name: "Ghazal Al-Banat Ice Cream", desc: "Syrian cotton candy wrapped around authentic arabic mastic ice cream, heavily coated with ground pistachios.", image: "/brand/the-espresso-lab-bg.jpg", tag: "Signature", price: "TBC", note: "A cold Damascene masterpiece" },
-          { name: "Damascus Muhallabia", desc: "Creamy cold milk pudding flavored with orange blossom water and mastic, garnished with sliced almonds and pistachios.", image: "/brand/hero-woman.jpg", tag: "Light Sweet", price: "TBC", note: "Delicate and refreshing" }
-        ]
+        breakfast: [],
+        coldMezza: [],
+        hotMezza: [],
+        grills: [],
+        desserts: []
       },
       espressoMenus: {
-        coffee: [
-          { name: "Specialty Flat White", desc: "Double shot of espresso extracted from single-origin Brazilian beans, mixed with steamed velvety microfoam milk.", image: "/brand/the-espresso-lab-flatwhite.jpg", sub: "Single Origin Brazil", tag: "Popular", price: "TBC" },
-          { name: "V60 Drip Over Ice", desc: "Artisanal filter pour-over capturing the bright citrus, honey, and cocoa flavor notes of our specialty roasted beans.", image: "/brand/the-espresso-lab-bg.jpg", sub: "Hand-Crafted Drip", tag: "Specialty", price: "TBC" }
-        ],
-        beverages: [
-          { name: "Signature Saffron Latte", desc: "Premium espresso combined with warm milk infused with wild organic saffron strands and honey.", image: "/brand/the-espresso-lab-bg.jpg", sub: "House Favorite", tag: "Aromatic", price: "TBC" },
-          { name: "Iced Pistachio Mocha", desc: "Cold espresso blended with roasted green pistachio paste, chocolate sauce, and milk, topped with whipped cream.", image: "/brand/hero-unisex-perfume.jpg", sub: "Sweet Brew", price: "TBC" }
-        ],
-        espressoDesserts: [
-          { name: "San Sebastian Cheesecake", desc: "Rich and creamy crustless cheesecake with a caramelized burnt top, served with a pour of warm premium Belgian chocolate sauce.", image: "/brand/the-espresso-lab-bg.jpg", sub: "Baked Fresh Daily", tag: "Bestseller", price: "TBC" },
-          { name: "Layered Pistachio Honey Cake", desc: "Layered sponge cake soaked in organic forest honey, filled with a rich roasted green pistachio cream.", image: "/brand/hero-unisex-perfume.jpg", sub: "Signature Recipe", tag: "Sweet", price: "TBC" }
-        ]
+        coffee: [],
+        beverages: [],
+        espressoDesserts: []
       }
     },
     ar: {
@@ -293,60 +249,16 @@ export default function RestaurantDetailClient({ restaurantId, lang, initialSani
       narrativeSubtitle: "أصالة المذاق الشامي",
 
       menus: {
-        breakfast: [
-          { name: "فتة حمص بالزيت والسمن", desc: "حمص مسلوق مع خبز مقرمش، لبن بالثوم، مغطى بالسمن البلدي الساخن والصنوبر المحمص.", image: "/brand/hero-woman.jpg", tag: "توقيع المطعم", price: "TBC", note: "على الطريقة الدمشقية الأصلية" },
-          { name: "شكشوكة شامية بالبيض", desc: "بيض مطهو ببطء في صلصة طماطم غنية ومتبلة مع فلفل حلو، بصل، وأعشاب برية شامية.", image: "/brand/vilamore-bg.jpg", tag: "مقلاة ساخنة", price: "TBC", note: "تقدم في مقلاة فخارية ساخنة" },
-          { name: "مناقيش زعتر بلدي وزيت", desc: "فطيرة مخبوزة في فرن الطين مغطاة بالزعتر البري الشامي، السماق، السمسم المحمص وزيت الزيتون البكر.", image: "/brand/hero-unisex-perfume.jpg", tag: "نباتي", price: "TBC", note: "مخبوزة على أحجار بركانية" },
-          { name: "مناقيش جبنة عكاوي", desc: "عجينة مناقيش شامية تقليدية مغطاة بجبنة العكاوي الفاخرة المذابة.", image: "/brand/hero-woman.jpg", tag: "دافئ", price: "TBC", note: "مخبوزة في فرن الحطب الطيني" },
-          { name: "فتة مقدوس بالباذنجان", desc: "باذنجان مقلي محشو باللحم المفروم المتبل، يقدم فوق خبز مقرمش، لبن بالثوم ودبس الرمان.", image: "/brand/vilamore-kebab.jpg", tag: "لا تفوتها", price: "TBC", note: "طبق دمشقي فاخر للمناسبات" },
-          { name: "المأمونية الحلبية بالقشطة", desc: "سميد ناعم مطبوخ بالسمن والقطر، يقدم ساخناً مع القشطة البلدية الطازجة والقرفة والجبن.", image: "/brand/vilamore-bg.jpg", tag: "حلوى فطور", price: "TBC", note: "فطور حلبي تقليدي عريق" }
-        ],
-        coldMezza: [
-          { name: "حمص شامي بالكمون والنعناع", desc: "حمص بلدي مهروس ناعم ومخفوق مع طحينة السمسم، الثوم، وعصير الليمون، مزين بالكمون والنعناع وزيت الزيتون.", image: "/brand/vilamore-bg.jpg", tag: "نباتي", price: "TBC", note: "مخفوق لقوام مخملي ناعم" },
-          { name: "بابا غنوج بالرمان والجوز", desc: "باذنجان مشوي على اللهب ومهروس مع الجوز والليمون وزيت الزيتون، مزين بحبات الرمان ودبس الرمان.", image: "/brand/hero-unisex-perfume.jpg", tag: "خفيف", price: "TBC", note: "مشوي على حطب السنديان" },
-          { name: "متبل باذنجان مشوي باللبن", desc: "باذنجان مشوي على الفحم ممزوج بطحينة السمسم، لبن زبادي، ثوم، ليمون، وزيت زيتون بكر ممتاز.", image: "/brand/hero-woman.jpg", tag: "شعبي", price: "TBC", note: "صلصة باذنجان غنية وكريمية" },
-          { name: "تبولة شامية بالبقدونس والرمان", desc: "بقدونس مفروم ناعم جداً، نعناع، طماطم، برغل ناعم، بصل، متبل بعصير الليمون وزيت الزيتون البكر.", image: "/brand/vilamore-kebab.jpg", tag: "طازج", price: "TBC", note: "تُفرم يدوياً يومياً" },
-          { name: "فتوش بدبس الرمان الشامي", desc: "خضار موسمية طازجة، فجل، خيار، طماطم مخلوطة بدبس الرمان والليمون وزيت الزيتون، مغطاة بخبز محمص بالسماق.", image: "/brand/vilamore-bg.jpg", tag: "صحي", price: "TBC", note: "مزين بخبز الفحم المقرمش" },
-          { name: "يالنجي ورق عنب بالزيت", desc: "ورق عنب طري محشو بالأرز، الطماطم، والأعشاب الطازجة، مطهو ببطء بزيت الزيتون وعصير الليمون.", image: "/brand/hero-unisex-perfume.jpg", tag: "مزة باردة", price: "TBC", note: "يقدم بارداً مع شرائح الليمون" }
-        ],
-        hotMezza: [
-          { name: "كبة مقلية مقرمشة بالصنوبر", desc: "أقراص البرغل المقرمشة والمحشوة باللحم المفروم والمبهر، البصل المحمص، والصنوبر الفاخر مع توابل الشام.", image: "/brand/vilamore-kebab.jpg", tag: "الأكثر مبيعاً", price: "TBC", note: "عجينة رقيقة ومقرمشة يدوية الصنع" },
-          { name: "كبة مشوية على جمر السنديان", desc: "أقراص برغل كبيرة محشوة بدهن الغنم البلدي، الجوز، حبات الرمان والبهارات، مشوية على الفحم.", image: "/brand/hero-woman.jpg", tag: "توصية الشيف", price: "TBC", note: "شواء على الفحم ذو نكهة مدخنة" },
-          { name: "سمبوسك جبنة بلدية وهيل", desc: "رقائق عجين مقرمشة مقلية محشوة بجبنة الحلوم والعكاوي والجبنة البيضاء مع الحبة السوداء.", image: "/brand/vilamore-bg.jpg", tag: "جبنة ذائبة", price: "TBC", note: "تقدم ساخنة ومقرمشة" },
-          { name: "سمبوسك لحم مفروم وجوز بالصنوبر", desc: "عجين مقرمش محشو باللحم البلدي المفروم المتبل، البصل، الصنوبر ودبس الرمان.", image: "/brand/hero-unisex-perfume.jpg", tag: "شعبية", price: "TBC", note: "معجنات شامية مقرمشة" },
-          { name: "بطاطا حرة بالثوم والكزبرة", desc: "مكعبات بطاطا ذهبية مقلية مقرمشة، مطفأة بالثوم والكزبرة الطازجة، فلفل حار وزيت زيتون.", image: "/brand/hero-woman.jpg", tag: "حار", price: "TBC", note: "مع عصير الليمون الطازج" },
-          { name: "حلوم مشوي بالزعتر البري والشمر", desc: "قطع سميكة من جبنة الحلوم المشوية على الجمر، تقدم مع بيستو النعناع الشامي والسماق.", image: "/brand/vilamore-kebab.jpg", tag: "جبن ساخن", price: "TBC", note: "تشوى مباشرة عند الطلب" }
-        ],
-        grills: [
-          { name: "كباب حلبي مشوي على السيخ", desc: "لحم غنم مفروم متبل بالنعناع، البصل، والفلفل الحلبي المشوي، يشوى على الجمر ببطء.", image: "/brand/vilamore-kebab.jpg", tag: "توقيع المطعم", price: "TBC", note: "شواء على طريقة حلب الشهيرة" },
-          { name: "شيش طاووق الدجاج المتبل بالثوم", desc: "مكعبات صدور دجاج طرية متبلة بالزبادي، الثوم، الليمون، وبهارات الطاووق الشامية المميزة.", image: "/brand/vilamore-bg.jpg", tag: "كلاسيك", price: "TBC", note: "تقدم مع كريم الثوم الشامي" },
-          { name: "كستليتا ريش غنم مشوية على الجمر", desc: "قطع ريش غنم فاخرة متبلة بإكليل الجبل والثوم والسماق وزيت الزيتون، مشوية على جمر الكرز.", image: "/brand/hero-unisex-perfume.jpg", tag: "طبق فاخر", price: "TBC", note: "لحم طري وغني بالنكهة" },
-          { name: "كباب بالكرز الحلبي الفاخر", desc: "كرات لحم غنم مشوية على الفحم مطبوخة بصلصة الكرز الأسود البري الحامض والحلو، مغطاة بالصنوبر.", image: "/brand/hero-woman.jpg", tag: "المفضل في البيت", price: "TBC", note: "من أعرق أطباق المطبخ السوري" },
-          { name: "توشكا لحم قشقوان على الفحم الشامي", desc: "لحم غنم متبل مع جبنة القشقوان داخل خبز التنور، محمص ببطء على جمر السنديان.", image: "/brand/vilamore-bg.jpg", tag: "لا تفوتها", price: "TBC", note: "خبز مقرمش وجبن قشقوان ذائب" },
-          { name: "مشاوي مشكلة فيلامور الفاخرة الشامية", desc: "تشكيلة فاخرة تشمل الشيش طاووق، الكباب الحلبي، ريش الغنم، والخضار المشوية، تقدم على لوح خشبي.", image: "/brand/vilamore-kebab.jpg", tag: "وليمة فاخرة", price: "TBC", note: "مثالية للمشاركة والمجموعات" }
-        ],
-        desserts: [
-          { name: "كنافة نابلسية بالجبن على الجمر", desc: "كنافة مقرمشة مغطاة بجبن عكاوي محلى ذائب، مسقية بقطر ماء الزهر والفستق الحلبي.", image: "/brand/hero-unisex-perfume.jpg", tag: "دافئ", price: "TBC", note: "تطهى ببطء على رماد الجمر" },
-          { name: "صحن بقلاوة مشكلة بالفستق الحلبي", desc: "رقائق عجين البقلاوة الهشة والفاخرة محشوة بالفستق الحلبي الأخضر الممتاز والقطر المعطر.", image: "/brand/vilamore-bg.jpg", tag: "كلاسيك", price: "TBC", note: "تُخبز طازجة يومياً في مطبخنا" },
-          { name: "حلاوة الجبن الحمصية بالقشطة البلدية", desc: "عجينة حلوى الجبن الطرية محشوة بالقشطة البلدية الطازجة، ترش بماء الورد وزهر الليمون والفستق.", image: "/brand/hero-woman.jpg", tag: "طبق شام عريق", price: "TBC", note: "على الطريقة الحمصية الأصلية" },
-          { name: "أم علي دافئة بالمكسرات والقشطة", desc: "عجينة بف باستري مخبوزة مغمورة بحليب محلى دافئ، مكسرات مشكلة، زبيب، جوز هند وقشطة مخفوقة.", image: "/brand/hero-unisex-perfume.jpg", tag: "طبق دافئ", price: "TBC", note: "حلوى شتوية دافئة وغنية" },
-          { name: "بوظة غزل البنات بماء الزهر والمستكة", desc: "بوظة عربية تقليدية بالمسكة والمستكة مغطاة بغزل البنات الشامي الكثيف والفستق المطحون.", image: "/brand/the-espresso-lab-bg.jpg", tag: "توقيع المطعم", price: "TBC", note: "تحفة فنية باردة تجمع القشطة والفستق" },
-          { name: "مهلبية دمشقية بماء الزهر واللوز", desc: "بودينغ حليب بارد معطر بماء الزهر والمستكة الطبيعية، مزين بشرائح اللوز والفستق الحلبي.", image: "/brand/hero-woman.jpg", tag: "حلوى خفيفة", price: "TBC", note: "باردة ومنعشة بعد المشاوي" }
-        ]
+        breakfast: [],
+        coldMezza: [],
+        hotMezza: [],
+        grills: [],
+        desserts: []
       },
       espressoMenus: {
-        coffee: [
-          { name: "فلات وايت إسبريسو مختص", desc: "جرعة مزدوجة من الإسبريسو المستخلص من بن برازيلي أحادي المنشأ يمتزج مع حليب مخملي برغوة دقيقة.", image: "/brand/the-espresso-lab-flatwhite.jpg", sub: "بن برازيلي أحادي المنشأ", tag: "مفضل البيت", price: "قريباً" },
-          { name: "قهوة V60 المقطرة باردة", desc: "تقطير بارد للبن الفاخر يبرز نكهات الحمضيات والأزهار المنعشة لحبوب البن الخاصة بنا.", image: "/brand/the-espresso-lab-bg.jpg", sub: "حضر يدوياً", tag: "قهوة مختصة", price: "قريباً" }
-        ],
-        beverages: [
-          { name: "لاتيه الزعفران المميز بالهيل", desc: "إسبريسو فاخر يمتزج مع الحليب الدافئ المنقوع بخيوط الزعفران البري وعسل الجبال الطبيعي.", image: "/brand/the-espresso-lab-bg.jpg", sub: "مشروب مميز", tag: "عطري", price: "قريباً" },
-          { name: "فرابيه الفستق الحلبي المثلج", desc: "إسبريسو بارد مخفوق مع كريمة الفستق الحلبي المحمصة، صلصة الكاكاو والحليب، مغطى بالكريمة.", image: "/brand/hero-unisex-perfume.jpg", sub: "فرابيه بارد", price: "قريباً" }
-        ],
-        espressoDesserts: [
-          { name: "تشيز كيك سان سيباستيان", desc: "تشيز كيك كريمية مخبوزة بدون أطراف مع سطح مكرمل داكن، تقدم مع صبّة من الشوكولاتة البلجيكية الساخنة.", image: "/brand/the-espresso-lab-bg.jpg", sub: "تخبز طازجة يومياً", tag: "الأكثر مبيعاً", price: "قريباً" },
-          { name: "كعكة العسل بالفستق الحلبي", desc: "كعكة إسفنجية خفيفة مشبعة بعسل الغابات الطبيعي، ومحشوة بكريمة الفستق الحلبي الأخضر الغنية.", image: "/brand/hero-unisex-perfume.jpg", sub: "كعكة التوقيع", tag: "حلويات فاخرة", price: "قريباً" }
-        ]
+        coffee: [],
+        beverages: [],
+        espressoDesserts: []
       }
     }
   };

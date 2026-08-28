@@ -61,19 +61,20 @@ function localize(value: any, lang: "en" | "ar", fallback = "") {
 }
 
 function normalizeBrand(raw: any, lang: "en" | "ar") {
-  const id = raw?.slug?.current || raw?.id || raw?._id || "";
+  const brandDoc = raw?.brand || raw;
+  const id = brandDoc?.slug?.current || brandDoc?.id || brandDoc?._id || "";
   const fallback = fallbackBrands.find((brand) => brand.id === id);
-  const nameEn = raw?.title || fallback?.name || id;
-  const nameAr = raw?.titleAr || fallback?.nameAr || nameEn;
+  const nameEn = brandDoc?.title || fallback?.name || id;
+  const nameAr = brandDoc?.titleAr || fallback?.nameAr || nameEn;
 
   return {
     id,
     name: lang === "ar" ? nameAr : nameEn,
     nameEn,
-    headline: localize(raw?.headline, lang, lang === "ar" ? fallback?.headlineAr || "" : fallback?.headline || ""),
-    description: localize(raw?.description, lang, lang === "ar" ? fallback?.descriptionAr || "" : fallback?.description || ""),
-    logoUrl: raw?.image?.asset?.url || raw?.imageAr?.asset?.url || null,
-    imageUrl: raw?.cardImage?.asset?.url || raw?.bgImage?.asset?.url || fallback?.backdropUrl || "/brand-pages/page_01.jpg",
+    headline: localize(brandDoc?.headline, lang, lang === "ar" ? fallback?.headlineAr || "" : fallback?.headline || ""),
+    description: localize(brandDoc?.description, lang, lang === "ar" ? fallback?.descriptionAr || "" : fallback?.description || ""),
+    logoUrl: brandDoc?.image?.asset?.url || brandDoc?.imageAr?.asset?.url || null,
+    imageUrl: raw?.cardImage?.asset?.url || brandDoc?.bgImage?.asset?.url || "",
   };
 }
 
@@ -86,13 +87,23 @@ export default function DesignersClient({ pageData, categories, initialLang }: D
   const preparedCategories = useMemo(() => {
     const cmsCategories = Array.isArray(categories) && categories.length > 0
       ? categories
-          .filter((category) => Array.isArray(category.brands) && category.brands.length > 0)
-          .map((category, index) => ({
-            id: category._id || `category-${index}`,
-            title: category.title,
-            image: category.sectionImage?.asset?.url || category.brands?.[0]?.cardImage?.asset?.url || category.brands?.[0]?.bgImage?.asset?.url || fallbackCategoryConfig[index % fallbackCategoryConfig.length].image,
-            brands: category.brands.map((brand: any) => normalizeBrand(brand, lang)),
-          }))
+          .filter((category) => {
+            const brandsList = category.brands || [];
+            return Array.isArray(brandsList) && brandsList.length > 0;
+          })
+          .map((category, index) => {
+            const categoryDoc = category.category || category;
+            const brandsList = category.brands || [];
+            const firstBrandCard = brandsList[0];
+            const firstBrandDoc = firstBrandCard?.brand || firstBrandCard;
+            
+            return {
+              id: categoryDoc._id || `category-${index}`,
+              title: categoryDoc.title,
+              image: category.sectionImage?.asset?.url || categoryDoc.sectionImage?.asset?.url || firstBrandCard?.cardImage?.asset?.url || firstBrandDoc?.bgImage?.asset?.url || fallbackCategoryConfig[index % fallbackCategoryConfig.length].image,
+              brands: brandsList.map((brand: any) => normalizeBrand(brand, lang)),
+            };
+          })
       : fallbackCategoryConfig.map((category, index) => ({
           id: `fallback-${index}`,
           title: category.title,
@@ -432,10 +443,28 @@ export default function DesignersClient({ pageData, categories, initialLang }: D
                       "&:hover": { transform: "translateY(-4px)", borderColor: "#CB6116" },
                     }}
                   >
-                    <Box sx={{ position: "relative", aspectRatio: "16 / 10", bgcolor: "#111", overflow: "hidden" }}>
-                      <Box component="img" src={brand.imageUrl} alt="" sx={{ width: "100%", height: "100%", objectFit: "cover", opacity: 0.68 }} />
+                    <Box 
+                      sx={{ 
+                        position: "relative", 
+                        aspectRatio: "16 / 10", 
+                        overflow: "hidden",
+                        bgcolor: "#f2ece4",
+                        ...(brand.imageUrl ? {
+                          background: "rgb(17, 17, 17)",
+                          backgroundSize: "200% 100%",
+                          animation: "shimmer 1.5s infinite linear",
+                          "@keyframes shimmer": {
+                            "0%": { backgroundPosition: "200% 0" },
+                            "100%": { backgroundPosition: "-200% 0" }
+                          }
+                        } : {})
+                      }}
+                    >
+                      {brand.imageUrl && brand.imageUrl !== "" ? (
+                        <Box component="img" src={brand.imageUrl} alt="" sx={{ width: "100%", height: "100%", objectFit: "cover", opacity: 0.68 }} />
+                      ) : null}
                       <Box sx={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", px: 3 }}>
-                        {brand.logoUrl ? (
+                        {brand.logoUrl && brand.logoUrl !== "" ? (
                           <Box component="img" src={brand.logoUrl} alt={brand.name} sx={{ maxWidth: 180, maxHeight: 150, objectFit: "contain", filter: "brightness(0) invert(1)" }} />
                         ) : (
                           <Typography sx={{ color: "#fff", fontSize: 18, fontWeight: 800, textAlign: "center", letterSpacing: "0.04em" }}>{brand.name}</Typography>
@@ -488,16 +517,34 @@ export default function DesignersClient({ pageData, categories, initialLang }: D
                               "&:hover": { transform: "translateY(-4px)", borderColor: "#CB6116" },
                             }}
                           >
-                            <Box sx={{ position: "relative", aspectRatio: "16 / 10", bgcolor: "#111", overflow: "hidden" }}>
-                              <Box component="img" src={brand.imageUrl} alt="" sx={{ width: "100%", height: "100%", objectFit: "cover", opacity: 0.68 }} />
-                              <Box sx={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", px: 3 }}>
-                                {brand.logoUrl ? (
-                                  <Box component="img" src={brand.logoUrl} alt={brand.name} sx={{ maxWidth: 180, maxHeight: 180, objectFit: "contain", filter: "brightness(0) invert(1)" }} />
-                                ) : (
-                                  <Typography sx={{ color: "#fff", fontSize: 18, fontWeight: 800, textAlign: "center", letterSpacing: "0.04em" }}>{brand.name}</Typography>
-                                )}
-                              </Box>
-                            </Box>
+                             <Box 
+                               sx={{ 
+                                 position: "relative", 
+                                 aspectRatio: "16 / 10", 
+                                 overflow: "hidden",
+                                 bgcolor: "#f2ece4",
+                                 ...(brand.imageUrl ? {
+                                   background: "rgb(17, 17, 17)",
+                                   backgroundSize: "200% 100%",
+                                   animation: "shimmer 1.5s infinite linear",
+                                   "@keyframes shimmer": {
+                                     "0%": { backgroundPosition: "200% 0" },
+                                     "100%": { backgroundPosition: "-200% 0" }
+                                   }
+                                 } : {})
+                               }}
+                             >
+                               {brand.imageUrl && brand.imageUrl !== "" ? (
+                                 <Box component="img" src={brand.imageUrl} alt="" sx={{ width: "100%", height: "100%", objectFit: "cover", opacity: 0.68 }} />
+                               ) : null}
+                               <Box sx={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", px: 3 }}>
+                                 {brand.logoUrl && brand.logoUrl !== "" ? (
+                                   <Box component="img" src={brand.logoUrl} alt={brand.name} sx={{ maxWidth: 180, maxHeight: 180, objectFit: "contain", filter: "brightness(0) invert(1)" }} />
+                                 ) : (
+                                   <Typography sx={{ color: "#fff", fontSize: 18, fontWeight: 800, textAlign: "center", letterSpacing: "0.04em" }}>{brand.name}</Typography>
+                                 )}
+                               </Box>
+                             </Box>
                             <Stack spacing={1.4} sx={{ p: 3, flex: 1 }}>
                               <Typography sx={{ fontSize: 18, fontWeight: 800, fontFamily: '"Cairo", sans-serif' }}>{brand.name}</Typography>
                               <Typography sx={{ color: "rgba(0,0,0,0.58)", fontSize: 13.5, lineHeight: 1.7, fontFamily: '"Cairo", sans-serif', display: "-webkit-box", WebkitLineClamp: 3, WebkitBoxOrient: "vertical", overflow: "hidden" }}>
