@@ -5,6 +5,8 @@ import { Box, Button, Container, Stack, Typography } from "@mui/material";
 import type { Section } from "@/lib/types";
 import { imageUrl, getLocalizedValue } from "@/lib/sanity";
 import Link from "next/link";
+import Image from "next/image";
+
 
 // Helper function to dynamically stretch Arabic cursive connections using Tatweel (\u0640)
 function stretchArabicText(text: string, count: number = 2): string {
@@ -187,14 +189,23 @@ export default function HeroSection({
               sx={{
                 position: "absolute",
                 inset: 0,
-                backgroundImage: `url(${bgImageUrlMobile})`,
-                backgroundSize: "cover",
-                backgroundPosition: section.mobileBgPosition || "63% center",
                 filter: "brightness(0.86)",
                 zIndex: 1,
                 display: { xs: "block", md: "none" }
               }}
-            />
+            >
+              <Image
+                src={bgImageUrlMobile}
+                alt={headlineText || "Hero Background Mobile"}
+                fill
+                priority
+                sizes="100vw"
+                style={{
+                  objectFit: "cover",
+                  objectPosition: section.mobileBgPosition || "63% center"
+                }}
+              />
+            </Box>
           )}
         </>
       ) : (
@@ -202,20 +213,53 @@ export default function HeroSection({
           sx={{
             position: "absolute",
             inset: 0,
-            backgroundImage: {
-              xs: `url(${bgImageUrlMobile})`,
-              md: `url(${bgImageUrl})`
-            },
-            backgroundSize: "cover",
-            backgroundPosition: {
-              xs: section.mobileBgPosition || "63% center",
-              md: "center"
-            },
             filter: "brightness(0.86)",
             zIndex: 1,
           }}
-        />
+        >
+          {/* Desktop Background Image */}
+          <Box
+            sx={{
+              display: { xs: "none", md: "block" },
+              position: "absolute",
+              inset: 0
+            }}
+          >
+            <Image
+              src={bgImageUrl}
+              alt={headlineText || "Hero Background"}
+              fill
+              priority
+              sizes="100vw"
+              style={{
+                objectFit: "cover",
+                objectPosition: "center"
+              }}
+            />
+          </Box>
+          {/* Mobile Background Image */}
+          <Box
+            sx={{
+              display: { xs: "block", md: "none" },
+              position: "absolute",
+              inset: 0
+            }}
+          >
+            <Image
+              src={bgImageUrlMobile}
+              alt={headlineText || "Hero Background Mobile"}
+              fill
+              priority
+              sizes="100vw"
+              style={{
+                objectFit: "cover",
+                objectPosition: section.mobileBgPosition || "63% center"
+              }}
+            />
+          </Box>
+        </Box>
       )}
+
 
       {/* Dark Overlay */}
       <Box
