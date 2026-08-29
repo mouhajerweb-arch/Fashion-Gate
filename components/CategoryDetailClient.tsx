@@ -6,7 +6,9 @@ import { getBrandById, brands as fallbackBrands } from "@/lib/brandData";
 import BrandListClient from "@/components/BrandListClient";
 import { Box, Container, Stack, Typography, Grid, Button, Divider, Link as MuiLink, ThemeProvider, createTheme, InputBase, IconButton } from "@mui/material";
 import Link from "next/link";
+import Image from "next/image";
 import { useState, useEffect, useMemo } from "react";
+
 
 import NorthEastIcon from "@mui/icons-material/NorthEast";
 import SearchIcon from "@mui/icons-material/Search";
@@ -65,7 +67,10 @@ interface CategoryDetailClientProps {
   categoryId: string;
   initialLang: "en" | "ar";
   initialProducts?: Product[];
+  initialSub?: string;
+  initialBrand?: string;
 }
+
 
 const CATEGORY_CARD_DEFAULT_LOGO_SCALE = 1.5;
 const PAGE_ROW_DEFAULT_LOGO_SCALE = 1;
@@ -233,26 +238,41 @@ const categoryTranslations = {
   }
 };
 
-export default function CategoryDetailClient({ categoryId, initialLang, initialProducts }: CategoryDetailClientProps) {
+export default function CategoryDetailClient({ 
+  categoryId, 
+  initialLang, 
+  initialProducts,
+  initialSub = "all",
+  initialBrand = "all"
+}: CategoryDetailClientProps) {
   const searchParams = useSearchParams();
   const router = useRouter();
   const lang = initialLang;
 
-  const [mounted, setMounted] = useState(false);
+  const [activeSub, setActiveSub] = useState(initialSub);
+  const [activeBrand, setActiveBrand] = useState(initialBrand);
+
+  const querySub = searchParams.get("sub") || "all";
+  const queryBrand = searchParams.get("brand") || "all";
+
   useEffect(() => {
-    setMounted(true);
-  }, []);
+    setActiveSub(querySub);
+  }, [querySub]);
+
+  useEffect(() => {
+    setActiveBrand(queryBrand);
+  }, [queryBrand]);
 
   if (categoryId === "designers") {
     return <BrandListClient initialBrands={[]} initialLang={lang} />;
   }
-  const activeSub = mounted ? (searchParams.get("sub") || "all") : "all";
-  const activeBrand = mounted ? (searchParams.get("brand") || "all") : "all";
+
   const showWomen = activeSub === "all" || activeSub === "women";
   const showMen = activeSub === "all" || activeSub === "men";
   const showUnisex = activeSub === "all" || activeSub === "unisex";
   const womenGridSize = activeSub === "women" ? 12 : 6;
   const menGridSize = activeSub === "men" ? 12 : 6;
+
   const [isLangTransitioning, setIsLangTransitioning] = useState(false);
   const [brands, setBrands] = useState<any[]>([]);
   const [brandSearchQuery, setSidebarSearchQuery] = useState("");
@@ -850,20 +870,32 @@ export default function CategoryDetailClient({ categoryId, initialLang, initialP
                                 <Box sx={{ display: "flex", flexDirection: "column", gap: 2, cursor: isClickable ? "pointer" : "default" }}>
                                   <Box
                                     sx={{
+                                      position: "relative",
+                                      overflow: "hidden",
                                       height: {
                                         xs: "240px",
                                         sm: gridSize.sm === 12 ? "720px" : "440px"
                                       },
-                                      backgroundImage: `url(${bannerImg})`,
-                                      backgroundSize: "cover",
-                                      backgroundPosition: "center top",
                                       border: "1px solid rgb(255 255 255) !important",
                                       transition: isClickable ? "transform 0.4s ease" : "none",
                                       "&:hover": isClickable ? {
                                         transform: "scale(1.01)"
                                       } : {}
                                     }}
-                                  />
+                                  >
+                                    <Image
+                                      src={bannerImg}
+                                      alt={bannerTitle || "Category Banner"}
+                                      fill
+                                      priority={index === 0}
+                                      sizes="(max-width: 600px) 100vw, (max-width: 960px) 50vw, 33vw"
+                                      style={{
+                                        objectFit: "cover",
+                                        objectPosition: "center top"
+                                      }}
+                                    />
+                                  </Box>
+
                                   <Stack alignItems="center" spacing={0.5} sx={{ py: 1 }}>
                                     <Typography sx={{ fontFamily: '"Apple Garamond", "EB Garamond", "Cormorant Garamond", serif', fontSize: 20, fontWeight: 500, letterSpacing: "0.15em", textTransform: "uppercase", color: "#111111", textAlign: "center" }}>
                                       {bannerTitle}

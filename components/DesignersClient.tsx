@@ -490,7 +490,7 @@ export default function DesignersClient({ pageData, categories, initialLang }: D
               <Box key={category.id}>
                 <Grid container spacing={3}>
                   <Grid size={{ xs: 12, md: 4 }}>
-                    <Box sx={{ position: "sticky", top: 110 }}>
+                    <Box sx={{ position: "sticky", top: 155 }}>
                       <Box component="img" src={category.image} alt="" sx={{ width: "100%", aspectRatio: "4 / 5", objectFit: "cover", display: "block" }} />
                       <Typography sx={{ mt: 2, fontFamily: "var(--heading-font)", fontSize: { xs: "1.8rem", md: "2.4rem" }, lineHeight: 1.05 }}>
                         {localize(category.title, lang)}
