@@ -47,13 +47,13 @@ export default function HeroSection({
   let bgImageUrl = "";
   if (section.bgImage?.asset) {
     try {
-      bgImageUrl = imageUrl(section.bgImage).url() || "";
+      bgImageUrl = imageUrl(section.bgImage).width(1920).auto("format").quality(85).url() || "";
     } catch (e) {
       console.error("Failed to parse section.bgImage url", e);
     }
   } else if (section.image?.asset) {
     try {
-      bgImageUrl = imageUrl(section.image).url() || "";
+      bgImageUrl = imageUrl(section.image).width(1920).auto("format").quality(85).url() || "";
     } catch (e) {
       console.error("Failed to parse section.image url", e);
     }
@@ -64,11 +64,12 @@ export default function HeroSection({
   let bgImageUrlMobile = bgImageUrl;
   if (section.bgImageMobile?.asset) {
     try {
-      bgImageUrlMobile = imageUrl(section.bgImageMobile).url() || bgImageUrlMobile;
+      bgImageUrlMobile = imageUrl(section.bgImageMobile).width(1000).auto("format").quality(85).url() || bgImageUrlMobile;
     } catch (e) {
       console.error("Failed to parse section.bgImageMobile url", e);
     }
   }
+
 
   // Resolve Headline dynamically
   const headlineRaw = getLocalizedValue(
@@ -199,12 +200,13 @@ export default function HeroSection({
                 alt={headlineText || "Hero Background Mobile"}
                 fill
                 priority
-                sizes="100vw"
+                unoptimized
                 style={{
                   objectFit: "cover",
                   objectPosition: section.mobileBgPosition || "63% center"
                 }}
               />
+
             </Box>
           )}
         </>
@@ -230,7 +232,7 @@ export default function HeroSection({
               alt={headlineText || "Hero Background"}
               fill
               priority
-              sizes="100vw"
+              unoptimized
               style={{
                 objectFit: "cover",
                 objectPosition: "center"
@@ -250,12 +252,13 @@ export default function HeroSection({
               alt={headlineText || "Hero Background Mobile"}
               fill
               priority
-              sizes="100vw"
+              unoptimized
               style={{
                 objectFit: "cover",
                 objectPosition: section.mobileBgPosition || "63% center"
               }}
             />
+
           </Box>
         </Box>
       )}

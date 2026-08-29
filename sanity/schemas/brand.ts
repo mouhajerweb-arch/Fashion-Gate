@@ -89,6 +89,33 @@ export default defineType({
       options: { hotspot: true },
     }),
     defineField({
+      name: "buttonText",
+      title: "Button Text",
+      type: "localizedString",
+    }),
+    defineField({
+      name: "buttonLink",
+      title: "Button Redirect Link",
+      type: "string",
+    }),
+    defineField({
+      name: "quote",
+      title: "Quote / Statement",
+      type: "localizedText",
+    }),
+    defineField({
+      name: "showcasePortrait",
+      title: "Showcase Portrait Image (Left)",
+      type: "image",
+      options: { hotspot: true },
+    }),
+    defineField({
+      name: "showcaseLandscape",
+      title: "Showcase Landscape Images (Right - Up to 6)",
+      type: "array",
+      of: [{ type: "image", options: { hotspot: true } }],
+    }),
+    defineField({
       name: "seo",
       title: "SEO Settings",
       type: "seo",

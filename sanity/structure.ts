@@ -111,12 +111,7 @@ export const structure: StructureResolver = (S) =>
                     .documentId("privacyPage")
                     .title("Privacy Policy")
                 ),
-              S.listItem()
-                .title("Brand Pages")
-                .child(
-                  S.documentTypeList("brandPage")
-                    .title("Brand Pages")
-                ),
+
               S.listItem()
                 .title("Fashion Page")
                 .child(

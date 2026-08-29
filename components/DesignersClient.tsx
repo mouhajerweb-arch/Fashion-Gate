@@ -7,6 +7,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { brands as fallbackBrands } from "@/lib/brandData";
+import { imageUrl } from "@/lib/sanity";
 
 interface DesignersClientProps {
   pageData: any;
@@ -73,8 +74,29 @@ function normalizeBrand(raw: any, lang: "en" | "ar") {
     nameEn,
     headline: localize(brandDoc?.headline, lang, lang === "ar" ? fallback?.headlineAr || "" : fallback?.headline || ""),
     description: localize(brandDoc?.description, lang, lang === "ar" ? fallback?.descriptionAr || "" : fallback?.description || ""),
-    logoUrl: brandDoc?.image?.asset?.url || brandDoc?.imageAr?.asset?.url || null,
-    imageUrl: raw?.cardImage?.asset?.url || brandDoc?.bgImage?.asset?.url || "",
+    logoUrl: (() => {
+      const img = brandDoc?.image || brandDoc?.imageAr;
+      if (img?.asset) {
+        try {
+          return imageUrl(img).width(300).auto("format").quality(85).url() || null;
+        } catch (e) {
+          return img.asset.url || null;
+        }
+      }
+      return null;
+    })(),
+    imageUrl: (() => {
+      const img = raw?.cardImage || brandDoc?.bgImage;
+      if (img?.asset) {
+        try {
+          return imageUrl(img).width(800).auto("format").quality(85).url() || "";
+        } catch (e) {
+          return img.asset.url || "";
+        }
+      }
+      return "";
+    })(),
+
   };
 }
 

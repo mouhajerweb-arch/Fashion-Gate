@@ -1,9 +1,10 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { Box, Button, Typography, ThemeProvider, createTheme } from "@mui/material";
+import { Box, Button, Typography, ThemeProvider, createTheme, Grid, Container, Stack } from "@mui/material";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 import { Brand } from "@/lib/brandData";
@@ -63,6 +64,7 @@ export default function BrandDetailClient({
 }) {
   const router = useRouter();
   const [lang, setLang] = useState<"en" | "ar">(initialLang);
+  const [fullscreenImg, setFullscreenImg] = useState<string | null>(null);
 
   const theme = useMemo(() => createTheme({
     palette: {
@@ -99,6 +101,83 @@ export default function BrandDetailClient({
   const logoUrl = brand.image?.asset?.url;
   const buttonText = (typeof brand.buttonText === "object" ? brand.buttonText?.[lang] : brand.buttonText) || "";
   const buttonLink = brand.buttonLink || "";
+
+  const brandName = lang === "ar" ? (brand.titleAr || brand.title || brand.nameAr || brand.title) : (brand.title || brand.name || brand.titleAr);
+  
+  // Resolve Quote dynamically with custom brand fallbacks
+  const quoteText = useMemo(() => {
+    const cmsQuote = typeof brand.quote === "object" ? brand.quote?.[lang] : brand.quote;
+    if (cmsQuote) return cmsQuote;
+    
+    const defaultQuotes: Record<string, { en: string; ar: string }> = {
+      puma: {
+        en: "Forever Faster is our mantra. More than fast, we are brave, confident, determined, and joyful.",
+        ar: "الأسرع دائماً هو شعارنا. أكثر من مجرد سرعة، نحن شجعان، واثقون، مصممون، ومبتهجون."
+      },
+      gucci: {
+        en: "Gucci is redefining a wholly modern approach to fashion, celebrating creativity, Italian craftsmanship, and innovation.",
+        ar: "تُعيد غوتشي تعريف النهج الحديث كلياً للموضة، محتفيةً بالإبداع، والحرفية الإيطالية، والابتكار."
+      },
+      adidas: {
+        en: "Through sport, we have the power to change lives. We push boundaries and shape the future of athletic culture.",
+        ar: "من خلال الرياضة، نمتلك القوة لتغيير الحياة. نحن نتخطى الحدود ونشكل مستقبل الثقافة الرياضية."
+      },
+      "elie-saab": {
+        en: "Magnifying femininity with beautiful craftsmanship, Elie Saab creates dreams of luxury, elegance, and sublime grace.",
+        ar: "يعمل إيلي صعب على تعزيز الأنوثة بحرفية رائعة، مبتكراً أحلاماً من الفخامة والأناقة والنعومة السامية."
+      },
+      "calvin-klein": {
+        en: "Calvin Klein is a global lifestyle brand that exemplifies bold, progressive ideals and a seductive, often minimal aesthetic.",
+        ar: "كالفن كلاين هي علامة تجارية عالمية لأسلوب الحياة تجسد مُثلاً جريئة وتقدمية وجاذبية جمالية بسيطة."
+      }
+    };
+    
+    return defaultQuotes[brand.id]?.[lang] || (
+      lang === "ar" 
+        ? "احتضان التراث والحرفية لتقديم رقي خالد وفخامة معاصرة."
+        : "Embracing heritage and craftsmanship to deliver timeless sophistication and modern luxury."
+    );
+  }, [brand.id, brand.quote, lang]);
+
+  // Resolve Showcase Portrait (Left) and Landscape (Right, up to 6) Images
+  const { portraitImgUrl, landscapeUrls, hasShowcaseImages } = useMemo(() => {
+    const sanityPortrait = brand.showcasePortrait?.asset?.url;
+    const sanityLandscapes = Array.isArray(brand.showcaseLandscape)
+      ? brand.showcaseLandscape.map((img: any) => img?.asset?.url).filter(Boolean)
+      : [];
+      
+    // Use CMS showcase images if either portrait or landscapes exist!
+    if (sanityPortrait || sanityLandscapes.length > 0) {
+      return {
+        portraitImgUrl: sanityPortrait || "",
+        landscapeUrls: sanityLandscapes.slice(0, 6),
+        hasShowcaseImages: true
+      };
+    }
+    
+    // Fallback showcase dataset only for PUMA when no images are uploaded
+    if (brand.id === "puma") {
+      return {
+        portraitImgUrl: "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?w=800&auto=format&fit=crop&q=80",
+        landscapeUrls: [
+          "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&auto=format&fit=crop&q=80",
+          "https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?w=600&auto=format&fit=crop&q=80",
+          "https://images.unsplash.com/photo-1552674605-db6ffd4facb5?w=600&auto=format&fit=crop&q=80",
+          "https://images.unsplash.com/photo-1517649763962-0c623066013b?w=600&auto=format&fit=crop&q=80",
+          "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=600&auto=format&fit=crop&q=80",
+          "https://images.unsplash.com/photo-1486218119243-13883505764c?w=600&auto=format&fit=crop&q=80"
+        ],
+        hasShowcaseImages: true
+      };
+    }
+    
+    return {
+      portraitImgUrl: "",
+      landscapeUrls: [],
+      hasShowcaseImages: false
+    };
+  }, [brand.id, brand.showcasePortrait, brand.showcaseLandscape]);
+
 
   return (
     <ThemeProvider theme={theme}>
@@ -353,6 +432,338 @@ export default function BrandDetailClient({
             )} */}
           </Box>
         </Box>
+
+        {/* --- BRAND QUOTE SECTION --- */}
+        <Box 
+          sx={{ 
+            bgcolor: "#090909", 
+            py: { xs: 8, md: 12 }, 
+            px: 4, 
+            borderTop: "1px solid rgba(255, 255, 255, 0.05)",
+            borderBottom: "1px solid rgba(255, 255, 255, 0.05)",
+            textAlign: "center" 
+          }}
+        >
+          <Container maxWidth="md">
+            <Typography 
+              sx={{ 
+                color: "primary.main", 
+                fontSize: { xs: "3rem", md: "4.5rem" }, 
+                fontFamily: "var(--heading-font)", 
+                lineHeight: 0.1,
+                mb: 2 
+              }}
+            >
+              “
+            </Typography>
+            <Typography 
+              sx={{ 
+                fontFamily: "var(--heading-font)", 
+                fontSize: { xs: "1.45rem", md: "2.1rem" }, 
+                fontWeight: 300, 
+                fontStyle: "italic", 
+                lineHeight: 1.6, 
+                color: "rgba(255,255,255,0.9)",
+                mb: 4
+              }}
+            >
+              {quoteText}
+            </Typography>
+            <Typography 
+              sx={{ 
+                fontSize: 12, 
+                fontWeight: 700, 
+                letterSpacing: "0.2em", 
+                textTransform: "uppercase", 
+                color: "primary.main",
+                fontFamily: '"Cairo", sans-serif'
+              }}
+            >
+              — {brandName}
+            </Typography>
+          </Container>
+        </Box>
+
+        {/* --- BRAND SHOWCASE GALLERY SECTION (Light Mode) --- */}
+        {hasShowcaseImages && (
+          <Box sx={{ bgcolor: "#ffffff", py: { xs: 10, md: 14 }, px: { xs: 2, sm: 4, md: 8 } }}>
+            <Container maxWidth="xl">
+              <Stack alignItems="center" spacing={1.5} sx={{ mb: { xs: 6, md: 10 }, textAlign: "center" }}>
+                <Typography 
+                  sx={{ 
+                    color: "primary.main", 
+                    fontSize: 10.5, 
+                    fontWeight: 800, 
+                    letterSpacing: "0.3em", 
+                    textTransform: "uppercase",
+                    fontFamily: '"Cairo", sans-serif'
+                  }}
+                >
+                  {lang === "ar" ? "معرض المجموعة" : "COLLECTION GALLERY"}
+                </Typography>
+                <Typography 
+                  sx={{ 
+                    fontFamily: "var(--heading-font)", 
+                    fontSize: { xs: "2rem", md: "3rem" }, 
+                    fontWeight: 400, 
+                    color: "#050505" 
+                  }}
+                >
+                  {lang === "ar" ? "إبداع وتصميم" : "Craftsmanship & Design"}
+                </Typography>
+                <Box sx={{ width: 40, height: 1.5, bgcolor: "primary.main", mt: 2 }} />
+              </Stack>
+
+              <Grid container spacing={4} alignItems="stretch">
+                {/* Left Side: 1 Portrait Image */}
+                {portraitImgUrl && (
+                  <Grid size={{ xs: 12, md: landscapeUrls.length > 0 ? 4.5 : 12 }}>
+                    <Box 
+                      sx={{ 
+                        position: "relative", 
+                        width: "100%", 
+                        height: { xs: "450px", sm: "600px", md: "100%" }, 
+                        minHeight: { md: "650px" },
+                        overflow: "hidden",
+                        border: "1px solid rgba(0, 0, 0, 0.08)",
+                        cursor: "pointer",
+                        "& .hover-overlay": {
+                          opacity: 0,
+                          transform: "scale(0.85)"
+                        },
+                        "&:hover .hover-overlay": {
+                          opacity: 1,
+                          transform: "scale(1)"
+                        },
+                        "& .gallery-img": {
+                          transition: "transform 0.5s ease"
+                        },
+                        "&:hover .gallery-img": {
+                          transform: "scale(1.025)"
+                        }
+                      }}
+                      onClick={() => setFullscreenImg(portraitImgUrl)}
+                    >
+                      <Image 
+                        className="gallery-img"
+                        src={portraitImgUrl} 
+                        alt={`${brandName} Portrait`}
+                        fill
+                        unoptimized
+                        style={{ objectFit: "cover" }}
+                      />
+                      {/* Hover Fullscreen Icon in Top-Right */}
+                      <Box
+                        className="hover-overlay"
+                        sx={{
+                          position: "absolute",
+                          top: 16,
+                          right: 16,
+                          bgcolor: "rgba(0, 0, 0, 0.65)",
+                          color: "#ffffff",
+                          borderRadius: "50%",
+                          width: 44,
+                          height: 44,
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          transition: "all 0.3s cubic-bezier(0.16, 1, 0.3, 1)",
+                          zIndex: 2,
+                          "&:hover": {
+                            bgcolor: "primary.main"
+                          }
+                        }}
+                      >
+                        <Box
+                          component="svg"
+                          viewBox="0 0 24 24"
+                          sx={{
+                            width: 20,
+                            height: 20,
+                            color: "#ffffff",
+                            fill: "none",
+                            stroke: "currentColor",
+                            strokeWidth: 2,
+                            strokeLinecap: "round",
+                            strokeLinejoin: "round"
+                          }}
+                        >
+                          <path d="M3 8V5a2 2 0 0 1 2-2h3" />
+                          <path d="M16 3h3a2 2 0 0 1 2 2v3" />
+                          <path d="M3 16v3a2 2 0 0 1 2 2h3" />
+                          <path d="M16 21h3a2 2 0 0 1 2-2v-3" />
+                        </Box>
+                      </Box>
+                    </Box>
+                  </Grid>
+                )}
+
+                {/* Right Side: Up to 6 Landscape Images Grid */}
+                {landscapeUrls.length > 0 && (
+                  <Grid size={{ xs: 12, md: portraitImgUrl ? 7.5 : 12 }}>
+                    <Grid container spacing={3}>
+                      {landscapeUrls.map((imgUrl: string, i: number) => (
+                        <Grid size={{ xs: 12, sm: portraitImgUrl ? 6 : 4 }} key={i}>
+                          <Box 
+                            sx={{ 
+                              position: "relative", 
+                              width: "100%", 
+                              aspectRatio: "3/2",
+                              overflow: "hidden",
+                              border: "1px solid rgba(0, 0, 0, 0.08)",
+                              cursor: "pointer",
+                              "& .hover-overlay": {
+                                opacity: 0,
+                                transform: "scale(0.85)"
+                              },
+                              "&:hover .hover-overlay": {
+                                opacity: 1,
+                                transform: "scale(1)"
+                              },
+                              "& .gallery-img": {
+                                transition: "transform 0.5s ease"
+                              },
+                              "&:hover .gallery-img": {
+                                transform: "scale(1.025)"
+                              }
+                            }}
+                            onClick={() => setFullscreenImg(imgUrl)}
+                          >
+                            <Image 
+                              className="gallery-img"
+                              src={imgUrl} 
+                              alt={`${brandName} Showcase ${i + 1}`}
+                              fill
+                              unoptimized
+                              style={{ objectFit: "cover" }}
+                            />
+                            {/* Hover Fullscreen Icon in Top-Right */}
+                            <Box
+                              className="hover-overlay"
+                              sx={{
+                                position: "absolute",
+                                top: 14,
+                                right: 14,
+                                bgcolor: "rgba(0, 0, 0, 0.65)",
+                                color: "#ffffff",
+                                borderRadius: "50%",
+                                width: 38,
+                                height: 38,
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                transition: "all 0.3s cubic-bezier(0.16, 1, 0.3, 1)",
+                                zIndex: 2,
+                                "&:hover": {
+                                  bgcolor: "primary.main"
+                                }
+                              }}
+                            >
+                              <Box
+                                component="svg"
+                                viewBox="0 0 24 24"
+                                sx={{
+                                  width: 18,
+                                  height: 18,
+                                  color: "#ffffff",
+                                  fill: "none",
+                                  stroke: "currentColor",
+                                  strokeWidth: 2,
+                                  strokeLinecap: "round",
+                                  strokeLinejoin: "round"
+                                }}
+                              >
+                                <path d="M3 8V5a2 2 0 0 1 2-2h3" />
+                                <path d="M16 3h3a2 2 0 0 1 2 2v3" />
+                                <path d="M3 16v3a2 2 0 0 1 2 2h3" />
+                                <path d="M16 21h3a2 2 0 0 1 2-2v-3" />
+                              </Box>
+                            </Box>
+                          </Box>
+                        </Grid>
+                      ))}
+                    </Grid>
+                  </Grid>
+                )}
+              </Grid>
+            </Container>
+          </Box>
+        )}
+
+        {/* --- FULLSCREEN LIGHTBOX MODAL --- */}
+        {fullscreenImg && (
+          <Box
+            onClick={() => setFullscreenImg(null)}
+            sx={{
+              position: "fixed",
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              bgcolor: "rgba(5, 5, 5, 0.95)",
+              zIndex: 10000,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              cursor: "zoom-out",
+            }}
+          >
+            {/* Close Button */}
+            <Box
+              onClick={() => setFullscreenImg(null)}
+              sx={{
+                position: "absolute",
+                top: 24,
+                right: 24,
+                color: "#ffffff",
+                bgcolor: "rgba(255, 255, 255, 0.1)",
+                borderRadius: "50%",
+                width: 44,
+                height: 44,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                cursor: "pointer",
+                transition: "background-color 0.3s",
+                "&:hover": { bgcolor: "rgba(255, 255, 255, 0.2)" }
+              }}
+            >
+              <Box
+                component="svg"
+                viewBox="0 0 24 24"
+                sx={{
+                  width: 20,
+                  height: 20,
+                  color: "#ffffff",
+                  fill: "none",
+                  stroke: "currentColor",
+                  strokeWidth: 2,
+                  strokeLinecap: "round",
+                  strokeLinejoin: "round"
+                }}
+              >
+                <line x1="18" y1="6" x2="6" y2="18" />
+                <line x1="6" y1="6" x2="18" y2="18" />
+              </Box>
+            </Box>
+
+            {/* Main Preview Image */}
+            <Box
+              component="img"
+              src={fullscreenImg}
+              alt="Fullscreen Preview"
+              sx={{
+                maxWidth: "90vw",
+                maxHeight: "90vh",
+                objectFit: "contain",
+                boxShadow: "0 20px 50px rgba(0,0,0,0.6)",
+                userSelect: "none"
+              }}
+              onClick={(e) => e.stopPropagation()} // Prevent modal from closing when clicking image
+            />
+          </Box>
+        )}
+
 
       </Box>
     </ThemeProvider>

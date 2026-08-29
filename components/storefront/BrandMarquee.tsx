@@ -313,7 +313,7 @@ export default function BrandMarquee({
         const logoImage = b.image;
         if (logoImage) {
           try {
-            const url = logoImage.asset?.url || imageUrl(logoImage).width(600).quality(100).url();
+            const url = imageUrl(logoImage).width(300).auto("format").quality(85).url();
 
             if (url) {
               brandLogoNode = (

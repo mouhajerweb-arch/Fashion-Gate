@@ -31,11 +31,11 @@ export default function LayoutWrapper({ children, initialSettings }: { children:
       secondary: { main: settings.accentColor || "#D06010" }
     },
     typography: {
-      fontFamily: `"Cairo", sans-serif`,
-      button: { fontWeight: 800 }
-    },
-    shape: { borderRadius: 0 }
-  }), [settings.accentColor, settings.primaryColor]);
+       fontFamily: `"Cairo", sans-serif`,
+       button: { fontWeight: 800 }
+     },
+     shape: { borderRadius: 0 }
+   }), [settings.accentColor, settings.primaryColor]);
 
   const isAuthOrStudio = pathname?.includes("/login") || pathname?.includes("/studio");
   const isVilamore = pathname?.includes("/dining/vilamore");
