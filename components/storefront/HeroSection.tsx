@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { Box, Button, Container, Stack, Typography } from "@mui/material";
 import type { Section } from "@/lib/types";
@@ -41,6 +42,18 @@ export default function HeroSection({
   lang: "ar" | "en";
 }) {
   console.log("HERO SECTION PROP IN COMPONENT:", JSON.stringify(section, null, 2));
+  
+  const [isMounted, setIsMounted] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+    const checkMobile = () => setIsMobile(window.innerWidth < 900);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
   // Resolve background video or image URL dynamically
   const isVideoBg = section.bgType === "video" && (section.bgVideo?.asset?.url || section.video?.asset?.url);
 
@@ -167,24 +180,26 @@ export default function HeroSection({
       {/* Background Media Render */}
       {isVideoBg ? (
         <>
-          <Box
-            component="video"
-            autoPlay
-            loop
-            muted
-            playsInline
-            src={section.bgVideo?.asset?.url || section.video?.asset?.url}
-            sx={{
-              position: "absolute",
-              inset: 0,
-              width: "100%",
-              height: "100%",
-              objectFit: "cover",
-              filter: "brightness(0.86)",
-              zIndex: 1,
-              display: section.bgImageMobile?.asset ? { xs: "none", md: "block" } : "block"
-            }}
-          />
+          {(!isMounted || !isMobile) && (
+            <Box
+              component="video"
+              autoPlay
+              loop
+              muted
+              playsInline
+              src={section.bgVideo?.asset?.url || section.video?.asset?.url}
+              sx={{
+                position: "absolute",
+                inset: 0,
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+                filter: "brightness(0.86)",
+                zIndex: 1,
+                display: section.bgImageMobile?.asset ? { xs: "none", md: "block" } : "block"
+              }}
+            />
+          )}
           {section.bgImageMobile?.asset && (
             <Box
               sx={{
@@ -200,7 +215,7 @@ export default function HeroSection({
                 alt={headlineText || "Hero Background Mobile"}
                 fill
                 priority
-                unoptimized
+                sizes="(max-width: 900px) 100vw, 1px"
                 style={{
                   objectFit: "cover",
                   objectPosition: section.mobileBgPosition || "63% center"
@@ -232,7 +247,7 @@ export default function HeroSection({
               alt={headlineText || "Hero Background"}
               fill
               priority
-              unoptimized
+              sizes="(min-width: 900px) 100vw, 1px"
               style={{
                 objectFit: "cover",
                 objectPosition: "center"
@@ -252,7 +267,7 @@ export default function HeroSection({
               alt={headlineText || "Hero Background Mobile"}
               fill
               priority
-              unoptimized
+              sizes="(max-width: 900px) 100vw, 1px"
               style={{
                 objectFit: "cover",
                 objectPosition: section.mobileBgPosition || "63% center"

@@ -897,7 +897,7 @@ export default function CategoryDetailClient({
                                       alt={bannerTitle || "Category Banner"}
                                       fill
                                       priority={index === 0}
-                                      unoptimized
+                                      sizes="(max-width: 600px) 100vw, (max-width: 960px) 50vw, 33vw"
                                       style={{
                                         objectFit: "cover",
                                         objectPosition: "center top"

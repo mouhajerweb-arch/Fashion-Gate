@@ -13,18 +13,20 @@ import Link from "next/link";
 import { useParams, useRouter, usePathname } from "next/navigation";
 import { products, type Product } from "@/lib/productData";
 import { useLoader } from "@/components/LoaderProvider";
-import FaqSection from "./storefront/FaqSection";
+import dynamic from "next/dynamic";
 import HeroSection from "./storefront/HeroSection";
-import ManifestoSection from "./storefront/ManifestoSection";
-import CarouselSection from "./storefront/CarouselSection";
-import CollectionsSection from "./storefront/CollectionsSection";
-import CategoryProductSections from "./storefront/CategoryProductSections";
-import LookbookSection from "./storefront/LookbookSection";
-import BoulevardSelectionSection from "./storefront/BoulevardSelectionSection";
-import EditorialSection from "./storefront/EditorialSection";
-import AtelierShowcaseSection from "./storefront/AtelierShowcaseSection";
-import BrandMarquee from "./storefront/BrandMarquee";
-import ContactDetailsFormSection from "./storefront/ContactDetailsFormSection";
+
+const FaqSection = dynamic(() => import("./storefront/FaqSection"), { ssr: true });
+const ManifestoSection = dynamic(() => import("./storefront/ManifestoSection"), { ssr: true });
+const CarouselSection = dynamic(() => import("./storefront/CarouselSection"), { ssr: true });
+const CollectionsSection = dynamic(() => import("./storefront/CollectionsSection"), { ssr: true });
+const CategoryProductSections = dynamic(() => import("./storefront/CategoryProductSections"), { ssr: true });
+const LookbookSection = dynamic(() => import("./storefront/LookbookSection"), { ssr: true });
+const BoulevardSelectionSection = dynamic(() => import("./storefront/BoulevardSelectionSection"), { ssr: true });
+const EditorialSection = dynamic(() => import("./storefront/EditorialSection"), { ssr: true });
+const AtelierShowcaseSection = dynamic(() => import("./storefront/AtelierShowcaseSection"), { ssr: true });
+const BrandMarquee = dynamic(() => import("./storefront/BrandMarquee"), { ssr: true });
+const ContactDetailsFormSection = dynamic(() => import("./storefront/ContactDetailsFormSection"), { ssr: true });
 
 
 const MotionBox = motion.create(Box);
@@ -780,7 +782,7 @@ export default function Storefront({
       secondary: { main: settings.accentColor || "#D06010" }
     },
     typography: {
-      fontFamily: `"Cairo", sans-serif`, // Strictly Cairo for body and UI layout as mentioned in PDF settings
+      fontFamily: `var(--font-cairo), "Cairo", sans-serif`, // Strictly Cairo for body and UI layout as mentioned in PDF settings
       button: { fontWeight: 800 }
     },
     shape: { borderRadius: 0 }

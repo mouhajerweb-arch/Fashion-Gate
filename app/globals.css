@@ -25,7 +25,7 @@
   --fg-stone: #B8AEA4;
   --fg-white: #fbfaf8;
   
-  --heading-font: "Apple Garamond", "EB Garamond", "Cormorant Garamond", serif;
+  --heading-font: var(--font-cormorant), var(--font-eb-garamond), "Apple Garamond", serif;
 }
 
 
@@ -42,7 +42,7 @@ body {
   margin: 0;
   color: #111111;
   background: var(--fg-white);
-  font-family: Cairo, sans-serif;
+  font-family: var(--font-cairo), Cairo, sans-serif;
   overflow-x: clip;
   width: 100%;
 }
