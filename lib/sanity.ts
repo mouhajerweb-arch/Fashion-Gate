@@ -139,8 +139,8 @@ export async function getHomepageData() {
       "headline": coalesce(*[_type == "brandPage" && brand._ref == ^._id][0].headline, headline) { en, ar },
       "description": coalesce(*[_type == "brandPage" && brand._ref == ^._id][0].description, description) { en, ar },
       "bgImage": coalesce(*[_type == "brandPage" && brand._ref == ^._id][0].bgImage, bgImage) { asset->{ url } },
-      "buttonText": *[_type == "brandPage" && brand._ref == ^._id][0].buttonText { en, ar },
-      "buttonLink": *[_type == "brandPage" && brand._ref == ^._id][0].buttonLink
+      "buttonText": coalesce(*[_type == "brandPage" && brand._ref == ^._id][0].buttonText, buttonText) { en, ar },
+      "buttonLink": coalesce(*[_type == "brandPage" && brand._ref == ^._id][0].buttonLink, buttonLink)
     }
   }`);
 }
@@ -272,8 +272,8 @@ export async function getSanityBrands() {
       "headline": coalesce(*[_type == "brandPage" && brand._ref == ^._id][0].headline, headline) { en, ar },
       "description": coalesce(*[_type == "brandPage" && brand._ref == ^._id][0].description, description) { en, ar },
       "bgImage": coalesce(*[_type == "brandPage" && brand._ref == ^._id][0].bgImage, bgImage) { asset->{ url } },
-      "buttonText": *[_type == "brandPage" && brand._ref == ^._id][0].buttonText { en, ar },
-      "buttonLink": *[_type == "brandPage" && brand._ref == ^._id][0].buttonLink
+      "buttonText": coalesce(*[_type == "brandPage" && brand._ref == ^._id][0].buttonText, buttonText) { en, ar },
+      "buttonLink": coalesce(*[_type == "brandPage" && brand._ref == ^._id][0].buttonLink, buttonLink)
     }`);
   } catch (err) {
     console.error("Error fetching sanity brands:", err);
@@ -313,8 +313,11 @@ export async function getSanityBrand(slug: string) {
       "headline": coalesce(*[_type == "brandPage" && brand._ref == ^._id][0].headline, headline) { en, ar },
       "description": coalesce(*[_type == "brandPage" && brand._ref == ^._id][0].description, description) { en, ar },
       "bgImage": coalesce(*[_type == "brandPage" && brand._ref == ^._id][0].bgImage, bgImage) { asset->{ url } },
-      "buttonText": *[_type == "brandPage" && brand._ref == ^._id][0].buttonText { en, ar },
-      "buttonLink": *[_type == "brandPage" && brand._ref == ^._id][0].buttonLink,
+      "buttonText": coalesce(*[_type == "brandPage" && brand._ref == ^._id][0].buttonText, buttonText) { en, ar },
+      "buttonLink": coalesce(*[_type == "brandPage" && brand._ref == ^._id][0].buttonLink, buttonLink),
+      "quote": coalesce(*[_type == "brandPage" && brand._ref == ^._id][0].quote, quote) { en, ar },
+      "showcasePortrait": coalesce(*[_type == "brandPage" && brand._ref == ^._id][0].showcasePortrait, showcasePortrait) { asset->{ url } },
+      "showcaseLandscape": coalesce(*[_type == "brandPage" && brand._ref == ^._id][0].showcaseLandscape, showcaseLandscape)[] { asset->{ url } },
       seo { metaTitle, metaDescription, keywords, ogImage { asset->{ url } }, canonicalUrl, noIndex }
     }`, { slug });
   } catch (err) {

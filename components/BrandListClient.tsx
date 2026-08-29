@@ -7,7 +7,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { brands as fallbackBrands } from "@/lib/brandData";
-import { getLocalizedValue } from "@/lib/sanity";
+import { getLocalizedValue, imageUrl } from "@/lib/sanity";
 
 const brandVectorLogos: Record<string, React.ReactNode> = {
   adidas: (
@@ -118,8 +118,24 @@ export default function BrandListClient({ initialBrands, initialLang }: BrandLis
       const headline = getLocalizedValue(sb.headline, "en", fb?.headline || "");
       const headlineAr = getLocalizedValue(sb.headline, "ar", fb?.headlineAr || headline);
 
-      const logoUrl = sb.image?.asset?.url || null;
+      let logoUrl = null;
+      if (sb.image?.asset) {
+        try {
+          logoUrl = imageUrl(sb.image).width(300).auto("format").quality(85).url() || null;
+        } catch (e) {
+          logoUrl = sb.image.asset.url || null;
+        }
+      }
       const fallbackLogo = logoUrl;
+
+      let bgImage = "";
+      if (sb.bgImage?.asset) {
+        try {
+          bgImage = imageUrl(sb.bgImage).width(800).auto("format").quality(85).url() || "";
+        } catch (e) {
+          bgImage = sb.bgImage.asset.url || "";
+        }
+      }
 
       return {
         id: sb.slug?.current || sb._id,
@@ -127,8 +143,9 @@ export default function BrandListClient({ initialBrands, initialLang }: BrandLis
         headline: lang === "ar" ? headlineAr : headline,
         description: lang === "ar" ? descriptionAr : description,
         logoUrl: fallbackLogo,
-        bgImage: sb.bgImage?.asset?.url || ""
+        bgImage: bgImage
       };
+
     });
   }, [brands, lang]);
 

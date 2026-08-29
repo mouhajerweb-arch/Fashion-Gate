@@ -14,7 +14,7 @@ import { useParams, usePathname, useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useLoader } from "@/components/LoaderProvider";
 import type { Product } from "@/lib/productData";
-import { getBrandById } from "@/lib/brandData";
+import { getBrandById, getAllBrands } from "@/lib/brandData";
 import { getAnnouncements, getLocalizedValue } from "@/lib/sanity";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import Tooltip from "./Tooltip";
@@ -459,6 +459,7 @@ interface SearchOptionProps {
   matchingHeading?: string;
   departmentsList?: any[] | null;
   suggestedBrandsList?: any[] | null;
+  allBrands?: any[] | null;
 }
 
 function SearchOption({
@@ -474,9 +475,31 @@ function SearchOption({
   suggestedBrandsHeading,
   matchingHeading,
   departmentsList,
-  suggestedBrandsList
+  suggestedBrandsList,
+  allBrands
 }: SearchOptionProps) {
   const router = useRouter();
+
+  const matchingBrands = useMemo(() => {
+    if (!searchQuery.trim()) return [];
+    const query = searchQuery.toLowerCase();
+    const sourceBrands = allBrands && allBrands.length > 0
+      ? allBrands
+      : getAllBrands().map(b => ({
+          _id: b.id,
+          title: b.name,
+          titleAr: b.nameAr,
+          slug: { current: b.id },
+          image: null
+        }));
+
+    return sourceBrands.filter(b => {
+      const nameEn = (b.title || "").toLowerCase();
+      const nameAr = (b.titleAr || "");
+      const slugStr = (b.slug?.current || "").toLowerCase();
+      return nameEn.includes(query) || nameAr.includes(searchQuery) || slugStr.includes(query);
+    }).slice(0, 3);
+  }, [searchQuery, allBrands]);
 
   const matchingProducts = useMemo(() => {
     if (!searchQuery.trim()) return [];
@@ -695,10 +718,73 @@ function SearchOption({
               </Box>
             ) : (
               <Box>
+                {/* 1. Matching Brands Section */}
+                {matchingBrands.length > 0 && (
+                  <Box sx={{ mb: 2.5 }}>
+                    <Typography sx={{ fontSize: 10, fontWeight: 800, color: "#CB6116", textTransform: "uppercase", letterSpacing: lang === "ar" ? 0 : "0.15em", mb: 1.5, fontFamily: '"Cairo", sans-serif' }}>
+                      {lang === "ar" ? "العلامات التجارية المطابقة" : "Matching Brands"}
+                    </Typography>
+                    <Stack spacing={1}>
+                      {matchingBrands.map((b) => {
+                        const brandId = b.slug?.current || b._id;
+                        const brandName = lang === "ar" ? b.titleAr || b.title : b.title || b.titleAr;
+                        const logoUrl = b.image?.asset?.url || "/brand/logo.png";
+                        return (
+                          <Link
+                            key={brandId}
+                            href={`/brand/${brandId}/${lang}`}
+                            onClick={handleLinkClick}
+                            style={{ textDecoration: "none", display: "block" }}
+                          >
+                            <Stack
+                              direction="row"
+                              spacing={2}
+                              alignItems="center"
+                              sx={{
+                                p: 0.8,
+                                "&:hover": { bgcolor: "rgba(203, 97, 22, 0.08)" },
+                                transition: "background 0.2s"
+                              }}
+                            >
+                              <Box
+                                component="img"
+                                src={logoUrl}
+                                alt={brandName}
+                                sx={{
+                                  width: 40,
+                                  height: 40,
+                                  objectFit: "contain",
+                                  p: 0.5,
+                                  bgcolor: "#ffffff",
+                                  border: "1px solid rgba(0,0,0,0.06)"
+                                }}
+                              />
+                              <Box sx={{ textAlign: lang === "ar" ? "right" : "left" }}>
+                                <Typography sx={{ fontSize: 12, fontWeight: 700, color: "#111111", lineHeight: 1.2 }}>
+                                  {brandName}
+                                </Typography>
+                                <Typography sx={{ fontSize: 9, color: "#CB6116", textTransform: "uppercase", fontWeight: 700, letterSpacing: lang === "ar" ? 0 : "0.1em", mt: 0.3 }}>
+                                  {lang === "ar" ? "علامة تجارية" : "Brand"}
+                                </Typography>
+                              </Box>
+                            </Stack>
+                          </Link>
+                        );
+                      })}
+                    </Stack>
+                  </Box>
+                )}
+
+                {/* 2. Matching Pieces Section */}
                 <Typography sx={{ fontSize: 10, fontWeight: 800, color: "#CB6116", textTransform: "uppercase", letterSpacing: lang === "ar" ? 0 : "0.15em", mb: 1.5, fontFamily: '"Cairo", sans-serif' }}>
                   {resolvedMatchingHeading}
                 </Typography>
-                {matchingProducts.length === 0 ? (
+                
+                {matchingBrands.length === 0 && matchingProducts.length === 0 ? (
+                  <Typography sx={{ color: "rgba(0,0,0,0.48)", fontSize: 12, py: 1, fontFamily: '"Cairo", sans-serif' }}>
+                    {lang === "ar" ? "لم نجد أي نتائج تطابق بحثك..." : "No matching results found..."}
+                  </Typography>
+                ) : matchingProducts.length === 0 ? (
                   <Typography sx={{ color: "rgba(0,0,0,0.48)", fontSize: 12, py: 1, fontFamily: '"Cairo", sans-serif' }}>
                     {lang === "ar" ? "لم نجد أي قطع تطابق بحثك..." : "No matching pieces found..."}
                   </Typography>
@@ -822,7 +908,14 @@ export default function SiteHeader({ settings, onLangToggleStart }: SiteHeaderPr
         // Fetch brands
         const brandsData = await sanityClient.fetch(`*[_type == "brand" && isActive == true] {
           _id,
-          slug
+          title,
+          titleAr,
+          slug,
+          image {
+            asset-> {
+              url
+            }
+          }
         }`);
         if (brandsData) {
           setSanityBrands(brandsData);
@@ -1110,6 +1203,7 @@ export default function SiteHeader({ settings, onLangToggleStart }: SiteHeaderPr
                 matchingHeading={lang === "ar" ? searchMatchingHeading?.ar : searchMatchingHeading?.en}
                 departmentsList={searchDepartments}
                 suggestedBrandsList={searchSuggestedBrands}
+                allBrands={sanityBrands}
               />
             )}
 
