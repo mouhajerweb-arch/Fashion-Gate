@@ -851,9 +851,9 @@ export default function CategoryDetailClient({
                               let bannerImg = "/brand-pages/page_01.jpg";
                               if (banner.image?.asset) {
                                 try {
-                                  bannerImg = imageUrl(banner.image).width(gridSize.sm === 12 ? 1200 : 800).auto("format").quality(85).url() || bannerImg;
+                                  bannerImg = banner.image.asset.url || imageUrl(banner.image).url() || bannerImg;
                                 } catch (e) {
-                                  console.error("Failed to parse optimized banner image url", e);
+                                  console.error("Failed to parse banner image url", e);
                                   bannerImg = banner.image.asset.url || bannerImg;
                                 }
                               }
@@ -897,7 +897,7 @@ export default function CategoryDetailClient({
                                       alt={bannerTitle || "Category Banner"}
                                       fill
                                       priority={index === 0}
-                                      sizes="(max-width: 600px) 100vw, (max-width: 960px) 50vw, 33vw"
+                                      unoptimized
                                       style={{
                                         objectFit: "cover",
                                         objectPosition: "center top"

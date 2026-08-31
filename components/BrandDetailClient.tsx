@@ -549,7 +549,7 @@ export default function BrandDetailClient({
                         src={portraitImgUrl} 
                         alt={`${brandName} Portrait`}
                         fill
-                        sizes="(max-width: 900px) 100vw, 40vw"
+                        unoptimized
                         style={{ objectFit: "cover" }}
                       />
                       {/* Hover Fullscreen Icon in Top-Right */}
@@ -634,7 +634,7 @@ export default function BrandDetailClient({
                               src={imgUrl} 
                               alt={`${brandName} Showcase ${i + 1}`}
                               fill
-                              sizes="(max-width: 600px) 100vw, (max-width: 900px) 50vw, 25vw"
+                              unoptimized
                               style={{ objectFit: "cover" }}
                             />
                             {/* Hover Fullscreen Icon in Top-Right */}
