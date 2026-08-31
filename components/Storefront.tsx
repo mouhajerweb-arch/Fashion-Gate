@@ -145,7 +145,7 @@ const stringMap: Record<string, string> = {
 
 export function resolveImage(source?: SanityImage, fallback?: string) {
   if (source?.asset?._ref || source?.asset?._id) {
-    return imageUrl(source).width(1800).quality(88).url();
+    return imageUrl(source).url() || "";
   }
   if (fallback && !fallback.startsWith("/brand-pages/") && !fallback.startsWith("/brand/") && !fallback.startsWith("/assets/")) {
     return fallback;
