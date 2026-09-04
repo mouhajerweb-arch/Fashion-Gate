@@ -12,7 +12,7 @@ import {
   SiSnapchat,
   SiX
 } from "react-icons/si";
-import { Box, Button, Container, IconButton, InputBase, Stack, Typography } from "@mui/material";
+import { Box, Button, CircularProgress, Container, IconButton, InputBase, Stack, Typography } from "@mui/material";
 import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
 import { getFooterSettings, getLocalizedValue } from "@/lib/sanity";
@@ -87,6 +87,9 @@ export default function SiteFooter() {
   const lang = (pathname?.endsWith("/ar") || pathname?.includes("/ar/") ? "ar" : "en") as "en" | "ar";
   
   const [settings, setSettings] = useState<any>(null);
+  const [subscriberEmail, setSubscriberEmail] = useState("");
+  const [subscribeStatus, setSubscribeStatus] = useState<"idle" | "loading" | "success" | "already" | "error">("idle");
+  const [subscribeMessage, setSubscribeMessage] = useState("");
 
   useEffect(() => {
     getFooterSettings().then((data) => {
@@ -130,6 +133,10 @@ export default function SiteFooter() {
     lang === "ar" ? "البريد الإلكتروني" : "Email address"
   );
 
+  const subscribeSuccessText = getLocalizedValue(settings?.subscribeSuccess, lang, lang === "ar" ? "تم الاشتراك بنجاح." : "Subscribed successfully.");
+  const subscribeAlreadyText = getLocalizedValue(settings?.subscribeAlready, lang, lang === "ar" ? "أنت مشترك بالفعل." : "You're already subscribed.");
+  const subscribeErrorText = getLocalizedValue(settings?.subscribeError, lang, lang === "ar" ? "تعذر الاشتراك الآن. يرجى المحاولة لاحقاً." : "Unable to subscribe right now.");
+
   const copyrightText = getLocalizedValue(
     settings?.copyright,
     lang,
@@ -146,6 +153,41 @@ export default function SiteFooter() {
   const pinterestUrl = settings?.pinterestUrl || "#";
   const snapchatUrl = settings?.snapchatUrl || "#";
   const xUrl = settings?.xUrl || "#";
+
+  const handleSubscribe = async (event: React.FormEvent) => {
+    event.preventDefault();
+    if (subscribeStatus === "loading") return;
+
+    setSubscribeStatus("loading");
+    setSubscribeMessage("");
+
+    try {
+      const response = await fetch("/api/newsletter/subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: subscriberEmail,
+          language: lang,
+          source: "footer-subscribe",
+          pageUrl: window.location.href,
+          companyWebsite: "",
+        }),
+      });
+      const data = await response.json().catch(() => null);
+
+      if (!response.ok) {
+        throw new Error(data?.message || "Unable to subscribe right now.");
+      }
+
+      const alreadySubscribed = data?.code === "already_subscribed";
+      setSubscribeStatus(alreadySubscribed ? "already" : "success");
+      setSubscribeMessage(alreadySubscribed ? subscribeAlreadyText : subscribeSuccessText);
+      setSubscriberEmail("");
+    } catch (error) {
+      setSubscribeStatus("error");
+      setSubscribeMessage(error instanceof Error ? error.message : subscribeErrorText);
+    }
+  };
 
   // Resolve Quick Links
   const rawLinks = settings?.links || [
@@ -286,6 +328,8 @@ export default function SiteFooter() {
               {subscribeText}
             </Typography>
             <Box
+              component="form"
+              onSubmit={handleSubscribe}
               sx={{
                 display: "flex",
                 alignItems: "center",
@@ -294,8 +338,29 @@ export default function SiteFooter() {
                 py: 0.6
               }}
             >
+              <input
+                aria-hidden="true"
+                autoComplete="off"
+                name="companyWebsite"
+                tabIndex={-1}
+                type="text"
+                value=""
+                readOnly
+                style={{ display: "none" }}
+              />
               <InputBase
                 placeholder={emailPlaceholder}
+                value={subscriberEmail}
+                onChange={(event) => {
+                  setSubscriberEmail(event.target.value);
+                  if (subscribeStatus !== "idle") {
+                    setSubscribeStatus("idle");
+                    setSubscribeMessage("");
+                  }
+                }}
+                type="email"
+                required
+                inputProps={{ "aria-label": emailPlaceholder }}
                 sx={{
                   flex: 1,
                   px: 0.5,
@@ -305,10 +370,27 @@ export default function SiteFooter() {
                   "& input::placeholder": { color: "rgba(0,0,0,0.42)", opacity: 1 }
                 }}
               />
-              <IconButton sx={{ color: "#111111", p: 0.5, "&:hover": { color: "primary.main" }, transform: lang === "ar" ? "rotate(180deg)" : "none" }}>
-                <ArrowForwardIcon sx={{ fontSize: 18 }} />
+              <IconButton type="submit" disabled={subscribeStatus === "loading"} sx={{ color: "#111111", p: 0.5, "&:hover": { color: "primary.main" }, "&.Mui-disabled": { color: "rgba(0,0,0,0.28)" }, transform: lang === "ar" ? "rotate(180deg)" : "none" }}>
+                {subscribeStatus === "loading" ? (
+                  <CircularProgress size={18} thickness={4} sx={{ color: "primary.main" }} />
+                ) : (
+                  <ArrowForwardIcon sx={{ fontSize: 18 }} />
+                )}
               </IconButton>
             </Box>
+            {subscribeMessage && (
+              <Typography
+                role={subscribeStatus === "error" ? "alert" : "status"}
+                sx={{
+                  color: subscribeStatus === "error" ? "#9D1C0C" : "primary.main",
+                  fontSize: 12.5,
+                  lineHeight: 1.5,
+                  fontFamily: '"Cairo", sans-serif',
+                }}
+              >
+                {subscribeMessage}
+              </Typography>
+            )}
           </Stack>
         </Box>
 

@@ -8,7 +8,11 @@ import {
   HelpCircle, 
   Heart,
   Award,
-  Utensils
+  Utensils,
+  MessageSquareText,
+  MailCheck,
+  Newspaper,
+  Mail
 } from "lucide-react";
 
 export const structure: StructureResolver = (S) =>
@@ -204,6 +208,21 @@ export const structure: StructureResolver = (S) =>
 
       S.divider(),
 
+      S.documentTypeListItem("contactInquiry")
+        .title("Leads & Inquiries")
+        .icon(MessageSquareText),
+      S.documentTypeListItem("newsletterSubscriber")
+        .title("Newsletter Subscribers")
+        .icon(MailCheck),
+      S.documentTypeListItem("newsletterCampaign")
+        .title("Newsletter Campaigns")
+        .icon(Newspaper),
+      S.documentTypeListItem("newsletterSettings")
+        .title("Newsletter Settings")
+        .icon(Mail),
+
+      S.divider(),
+
       // Core Content
       S.documentTypeListItem("announcement").title("Announcements").icon(Layers),
       S.documentTypeListItem("post").title("Blog Posts").icon(BookOpen),
@@ -239,6 +258,10 @@ export const structure: StructureResolver = (S) =>
             "page",
             "aboutPage",
             "contactPage",
+            "contactInquiry",
+            "newsletterSubscriber",
+            "newsletterCampaign",
+            "newsletterSettings",
             "blogsPage",
             "loginPage",
             "brandPage",
