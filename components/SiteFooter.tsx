@@ -87,6 +87,9 @@ export default function SiteFooter() {
   const lang = (pathname?.endsWith("/ar") || pathname?.includes("/ar/") ? "ar" : "en") as "en" | "ar";
   
   const [settings, setSettings] = useState<any>(null);
+  const [subscriberEmail, setSubscriberEmail] = useState("");
+  const [subscribeStatus, setSubscribeStatus] = useState<"idle" | "loading" | "success" | "already" | "error">("idle");
+  const [subscribeMessage, setSubscribeMessage] = useState("");
 
   useEffect(() => {
     getFooterSettings().then((data) => {
@@ -146,6 +149,40 @@ export default function SiteFooter() {
   const pinterestUrl = settings?.pinterestUrl || "#";
   const snapchatUrl = settings?.snapchatUrl || "#";
   const xUrl = settings?.xUrl || "#";
+
+  const handleSubscribe = async (event: React.FormEvent) => {
+    event.preventDefault();
+    if (subscribeStatus === "loading") return;
+
+    setSubscribeStatus("loading");
+    setSubscribeMessage("");
+
+    try {
+      const response = await fetch("/api/newsletter/subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: subscriberEmail,
+          language: lang,
+          source: "footer-subscribe",
+          pageUrl: window.location.href,
+          companyWebsite: "",
+        }),
+      });
+      const data = await response.json().catch(() => null);
+
+      if (!response.ok) {
+        throw new Error(data?.message || "Unable to subscribe right now.");
+      }
+
+      setSubscribeStatus(data?.code === "already_subscribed" ? "already" : "success");
+      setSubscribeMessage(data?.message || "Subscribed successfully.");
+      setSubscriberEmail("");
+    } catch (error) {
+      setSubscribeStatus("error");
+      setSubscribeMessage(error instanceof Error ? error.message : "Unable to subscribe right now.");
+    }
+  };
 
   // Resolve Quick Links
   const rawLinks = settings?.links || [
@@ -286,6 +323,8 @@ export default function SiteFooter() {
               {subscribeText}
             </Typography>
             <Box
+              component="form"
+              onSubmit={handleSubscribe}
               sx={{
                 display: "flex",
                 alignItems: "center",
@@ -294,8 +333,29 @@ export default function SiteFooter() {
                 py: 0.6
               }}
             >
+              <input
+                aria-hidden="true"
+                autoComplete="off"
+                name="companyWebsite"
+                tabIndex={-1}
+                type="text"
+                value=""
+                readOnly
+                style={{ display: "none" }}
+              />
               <InputBase
                 placeholder={emailPlaceholder}
+                value={subscriberEmail}
+                onChange={(event) => {
+                  setSubscriberEmail(event.target.value);
+                  if (subscribeStatus !== "idle") {
+                    setSubscribeStatus("idle");
+                    setSubscribeMessage("");
+                  }
+                }}
+                type="email"
+                required
+                inputProps={{ "aria-label": emailPlaceholder }}
                 sx={{
                   flex: 1,
                   px: 0.5,
@@ -305,10 +365,23 @@ export default function SiteFooter() {
                   "& input::placeholder": { color: "rgba(0,0,0,0.42)", opacity: 1 }
                 }}
               />
-              <IconButton sx={{ color: "#111111", p: 0.5, "&:hover": { color: "primary.main" }, transform: lang === "ar" ? "rotate(180deg)" : "none" }}>
+              <IconButton type="submit" disabled={subscribeStatus === "loading"} sx={{ color: "#111111", p: 0.5, "&:hover": { color: "primary.main" }, "&.Mui-disabled": { color: "rgba(0,0,0,0.28)" }, transform: lang === "ar" ? "rotate(180deg)" : "none" }}>
                 <ArrowForwardIcon sx={{ fontSize: 18 }} />
               </IconButton>
             </Box>
+            {subscribeMessage && (
+              <Typography
+                role={subscribeStatus === "error" ? "alert" : "status"}
+                sx={{
+                  color: subscribeStatus === "error" ? "#9D1C0C" : "primary.main",
+                  fontSize: 12.5,
+                  lineHeight: 1.5,
+                  fontFamily: '"Cairo", sans-serif',
+                }}
+              >
+                {subscribeMessage}
+              </Typography>
+            )}
           </Stack>
         </Box>
 

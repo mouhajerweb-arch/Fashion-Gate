@@ -21,6 +21,7 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import WhatsAppIcon from "@mui/icons-material/WhatsApp";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 
+import { submitContactInquiry } from "@/lib/contactInquiries";
 import { getLocalizedValue } from "@/lib/sanity";
 
 const MotionBox = motion.create(Box);
@@ -55,6 +56,8 @@ export default function ContactClient({ initialLang, initialData }: ContactClien
   const [phone, setPhone] = useState("");
   const [message, setMessage] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState("");
 
   useEffect(() => { setLang(initialLang); }, [initialLang]);
   const isAr = lang === "ar";
@@ -94,6 +97,7 @@ export default function ContactClient({ initialLang, initialData }: ContactClien
       phone: "Phone (optional)",
       msg: "Your Message",
       send: "Send Message",
+      sending: "Sending...",
       okTitle: "Thank You",
       okBody: "We've received your message and will respond shortly.",
       okReset: "Send Another",
@@ -161,11 +165,35 @@ export default function ContactClient({ initialLang, initialData }: ContactClien
     mapHead: getLocalizedValue(initialData?.mapTitle, lang, tx.mapHead),
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name || !email || !message) return;
-    setSubmitted(true);
+    if (!name || !email || !message || submitting) return;
+    setSubmitting(true);
+    setError("");
+    try {
+      await submitContactInquiry({ name, email, phone, message, language: lang, source: "contact-page" });
+      setSubmitted(true);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Unable to send your message right now.");
+    } finally {
+      setSubmitting(false);
+    }
   };
+
+  useEffect(() => {
+    if (!submitted) return;
+
+    const timer = window.setTimeout(() => {
+      setName("");
+      setEmail("");
+      setPhone("");
+      setMessage("");
+      setError("");
+      setSubmitted(false);
+    }, 5000);
+
+    return () => window.clearTimeout(timer);
+  }, [submitted]);
 
   return (
     <ThemeProvider theme={theme}>
@@ -463,6 +491,16 @@ export default function ContactClient({ initialLang, initialData }: ContactClien
 
                         <form onSubmit={handleSubmit}>
                           <Stack spacing={3.5}>
+                            <input
+                              aria-hidden="true"
+                              autoComplete="off"
+                              name="companyWebsite"
+                              tabIndex={-1}
+                              type="text"
+                              value=""
+                              readOnly
+                              style={{ display: "none" }}
+                            />
                             {/* Name + Email side by side */}
                             <Grid container spacing={3}>
                               <Grid size={{ xs: 12, sm: 6 }}>
@@ -475,11 +513,13 @@ export default function ContactClient({ initialLang, initialData }: ContactClien
 
                             <FormField label={t.phone} value={phone} onChange={setPhone} placeholder="+963 ..." isAr={isAr} />
                             <FormField label={t.msg} required multiline value={message} onChange={setMessage} isAr={isAr} />
+                            {error && <Typography role="alert" sx={{ fontSize: 13, color: "#9D1C0C", fontFamily: TK.body }}>{error}</Typography>}
 
                             <Box>
                               <Button
                                 type="submit"
-                                endIcon={isAr ? <ArrowBackIcon sx={{ fontSize: "15px !important" }} /> : <ArrowForwardIcon sx={{ fontSize: "15px !important" }} />}
+                                disabled={submitting}
+                                endIcon={!submitting && (isAr ? <ArrowBackIcon sx={{ fontSize: "15px !important" }} /> : <ArrowForwardIcon sx={{ fontSize: "15px !important" }} />)}
                                 sx={{
                                   bgcolor: TK.charcoal,
                                   color: "#fff",
@@ -491,14 +531,16 @@ export default function ContactClient({ initialLang, initialData }: ContactClien
                                   letterSpacing: isAr ? 0 : "0.12em",
                                   textTransform: "uppercase",
                                   transition: "all 0.3s ease",
+                                  "& .MuiButton-endIcon": { ml: isAr ? 0 : 1, mr: isAr ? 1 : 0 },
                                   "&:hover": {
                                     bgcolor: TK.copper,
                                     transform: "translateY(-1px)",
                                     boxShadow: "0 6px 18px rgba(203,97,22,0.18)",
                                   },
+                                  "&.Mui-disabled": { bgcolor: "rgba(0,0,0,0.28)", color: "#fff" },
                                 }}
                               >
-                                {t.send}
+                                {submitting ? (tx.sending || "Sending...") : t.send}
                               </Button>
                             </Box>
                           </Stack>
@@ -521,16 +563,6 @@ export default function ContactClient({ initialLang, initialData }: ContactClien
                         <Typography sx={{ fontSize: 14.5, color: "rgba(0,0,0,0.55)", lineHeight: 1.7, maxWidth: 360, mx: "auto", mb: 3.5, fontFamily: TK.body }}>
                           {t.okBody}
                         </Typography>
-                        <Button
-                          onClick={() => { setName(""); setEmail(""); setPhone(""); setMessage(""); setSubmitted(false); }}
-                          sx={{
-                            bgcolor: TK.charcoal, color: "#fff", px: 4, py: 1.3,
-                            fontSize: 12, fontWeight: 700, fontFamily: TK.body, textTransform: "uppercase",
-                            "&:hover": { bgcolor: TK.copper },
-                          }}
-                        >
-                          {t.okReset}
-                        </Button>
                       </MotionBox>
                     )}
                   </AnimatePresence>
