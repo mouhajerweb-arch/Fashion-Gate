@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { createClient } from "@sanity/client";
 import { z } from "zod";
 import { sendNewsletterWelcomeEmail } from "@/lib/email/send-newsletter-welcome-email";
+import { getNewsletterSettings, localized } from "@/lib/newsletter/settings";
 import { checkRateLimit } from "@/lib/rate-limit/contact";
 import { apiVersion, dataset, projectId } from "@/lib/sanity";
 
@@ -62,13 +63,16 @@ function subscriberId(email: string) {
 }
 
 export async function POST(request: Request) {
+  const settings = await getNewsletterSettings();
+  let language: "en" | "ar" = "ar";
+
   if (!isAllowedOrigin(request)) {
-    return json(false, "Please check the submitted information.", 400);
+    return json(false, localized(settings.subscribeError, language), 400);
   }
 
   const contentLength = request.headers.get("content-length");
   if (contentLength && Number(contentLength) > MAX_BODY_BYTES) {
-    return json(false, "Please check the submitted information.", 400);
+    return json(false, localized(settings.subscribeError, language), 400);
   }
 
   const rateLimit = await checkRateLimit({
@@ -78,7 +82,7 @@ export async function POST(request: Request) {
     windowMs: 10 * 60 * 1000,
   });
   if (!rateLimit.allowed) {
-    return json(false, "Too many requests. Please try again later.", 429);
+    return json(false, localized(settings.tooManyRequests, language), 429);
   }
 
   let body: unknown;
@@ -89,22 +93,23 @@ export async function POST(request: Request) {
     }
     body = JSON.parse(rawBody);
   } catch {
-    return json(false, "Please check the submitted information.", 400);
+    return json(false, localized(settings.subscribeError, language), 400);
   }
 
   const parsed = subscribeSchema.safeParse(body);
+  if (parsed.success) language = parsed.data.language || "ar";
   if (!parsed.success) {
-    return json(false, "Please enter a valid email address.", 400);
+    return json(false, localized(settings.invalidEmail, language), 400);
   }
 
   const payload = parsed.data;
   if (payload.companyWebsite) {
-    return json(true, "Subscribed successfully.", 200);
+    return json(true, localized(settings.subscribeSuccess, language), 200);
   }
 
   if (!writeClient.config().token) {
     console.error("Newsletter subscribe failed: Sanity write token missing");
-    return json(false, "Unable to subscribe right now. Please try again later.", 500);
+    return json(false, localized(settings.subscribeError, language), 500);
   }
 
   const id = subscriberId(payload.email);
@@ -150,7 +155,7 @@ export async function POST(request: Request) {
       .commit({ autoGenerateArrayKeys: true });
 
     if (existing?.status === "subscribed") {
-      return json(true, "You're already subscribed.", 200, "already_subscribed");
+      return json(true, localized(settings.subscribeAlready, language), 200, "already_subscribed");
     }
 
     if (process.env.RESEND_API_KEY) {
@@ -169,9 +174,9 @@ export async function POST(request: Request) {
       }
     }
 
-    return json(true, "Subscribed successfully.", 200, "subscribed");
+    return json(true, localized(settings.subscribeSuccess, language), 200, "subscribed");
   } catch (error) {
     console.error("Newsletter subscribe failed", error instanceof Error ? error.message : "Unknown error");
-    return json(false, "Unable to subscribe right now. Please try again later.", 500);
+    return json(false, localized(settings.subscribeError, language), 500);
   }
 }

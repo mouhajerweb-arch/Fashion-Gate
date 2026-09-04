@@ -10,6 +10,12 @@ export const newsletterCampaign = defineType({
     defineField({ name: "title", title: "Internal Title", type: "string", validation: (Rule) => Rule.required() }),
     defineField({ name: "subject", title: "Email Subject", type: "string", validation: (Rule) => Rule.required().max(120) }),
     defineField({ name: "previewText", title: "Preview Text", type: "text", rows: 2, validation: (Rule) => Rule.max(180) }),
+    defineField({ name: "titleLocalized", title: "Email Title", type: "localizedString" }),
+    defineField({ name: "subjectLocalized", title: "Email Subject", type: "localizedString" }),
+    defineField({ name: "previewTextLocalized", title: "Preview Text", type: "localizedText" }),
+    defineField({ name: "bodyAr", title: "Arabic Email Body", type: "text", rows: 8 }),
+    defineField({ name: "bodyEn", title: "English Email Body", type: "text", rows: 8 }),
+    defineField({ name: "ctaLabelLocalized", title: "CTA Label", type: "localizedString" }),
     defineField({ name: "heroImageUrl", title: "Hero Image URL", type: "url" }),
     defineField({
       name: "status",

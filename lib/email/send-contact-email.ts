@@ -1,12 +1,13 @@
 import "server-only";
 
 import { randomUUID } from "crypto";
+import { bilingual, bilingualSubject, getNewsletterSettings } from "@/lib/newsletter/settings";
 import { assertResendResult } from "./assert-resend-result";
 import { getEmailConfig, getResendClient } from "./resend";
 
 const PUBLIC_ASSET_URL = process.env.EMAIL_PUBLIC_ASSET_URL || "https://fashiongatemall.com";
 const LOGO_URL = `${PUBLIC_ASSET_URL.replace(/\/$/, "")}/brand/logo.png`;
-const BRAND_ADDRESS = "Fashion Gate Boulevard, Damascus, Syria";
+const BRAND_ADDRESS = "Fashion Gate Mall, Damascus Boulevard, Syria";
 const BRAND_PHONE = "+963 930 000 000";
 
 type ContactEmailInput = {
@@ -40,15 +41,11 @@ function formatDate(value: string) {
 
 function renderShell({
   eyebrow,
-  title,
-  intro,
   body,
   footerNote,
   contactBlock,
 }: {
   eyebrow: string;
-  title: string;
-  intro: string;
   body: string;
   footerNote: string;
   contactBlock?: string;
@@ -74,17 +71,7 @@ function renderShell({
                   </td>
                 </tr>
                 <tr>
-                  <td style="padding:38px 34px 8px;">
-                    <h1 style="margin:0; font-family:Georgia, 'Times New Roman', serif; font-size:34px; line-height:1.12; font-weight:400; color:#111111;">
-                      ${title}
-                    </h1>
-                    <p style="margin:14px 0 0; font-family:Arial, sans-serif; font-size:15px; line-height:1.75; color:#5f5750;">
-                      ${intro}
-                    </p>
-                  </td>
-                </tr>
-                <tr>
-                  <td style="padding:24px 34px 38px;">
+                  <td style="padding:38px 34px;">
                     ${body}
                     ${contactBlock || ""}
                   </td>
@@ -105,16 +92,26 @@ function renderShell({
   `;
 }
 
-function renderInfoRow(label: string, value: string) {
+function renderInfoRows(rows: Array<[string, string]>, dir: "rtl" | "ltr") {
+  const align = dir === "rtl" ? "right" : "left";
+
   return `
-    <tr>
-      <td style="padding:13px 0; border-bottom:1px solid #e2d8cf; font-family:Arial, sans-serif; font-size:12px; letter-spacing:1.2px; color:#8a7e73; text-transform:uppercase; width:130px;">
-        ${label}
-      </td>
-      <td style="padding:13px 0; border-bottom:1px solid #e2d8cf; font-family:Arial, sans-serif; font-size:14px; line-height:1.6; color:#111111;">
-        ${value}
-      </td>
-    </tr>
+    <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="border-collapse:collapse;">
+      ${rows
+        .map(
+          ([label, value]) => `
+            <tr>
+              <td style="padding:13px 0; border-bottom:1px solid #e2d8cf; font-family:Arial, sans-serif; font-size:12px; letter-spacing:1.2px; color:#8a7e73; text-transform:uppercase; width:135px; text-align:${align};">
+                ${label}
+              </td>
+              <td style="padding:13px 0; border-bottom:1px solid #e2d8cf; font-family:Arial, sans-serif; font-size:14px; line-height:1.6; color:#111111; text-align:${align};">
+                ${value}
+              </td>
+            </tr>
+          `
+        )
+        .join("")}
+    </table>
   `;
 }
 
@@ -122,7 +119,11 @@ function renderContactBlock(email: string) {
   const safeSupportEmail = escapeHtml(email);
 
   return `
-    <div style="margin-top:28px; padding-top:22px; border-top:1px solid #ded2c8;">
+    <div style="margin-top:30px; padding-top:22px; border-top:1px solid #ded2c8;">
+      <p style="margin:0 0 20px; font-family:Arial, sans-serif; font-size:14px; line-height:1.8; color:#5f5750;">
+        Best regards,<br />
+        <strong style="color:#111111;">Fashion Gate Mall</strong>
+      </p>
       <div style="font-family:Arial, sans-serif; font-size:11px; letter-spacing:1.5px; color:#8a7e73; text-transform:uppercase; margin-bottom:10px;">Contact</div>
       <div style="font-family:Arial, sans-serif; font-size:13px; line-height:1.8; color:#4d4741;">
         ${BRAND_ADDRESS}<br />
@@ -134,9 +135,54 @@ function renderContactBlock(email: string) {
   `;
 }
 
+function renderLanguageIntro({
+  title,
+  intro,
+  dir,
+  divider,
+}: {
+  title: string;
+  intro: string;
+  dir: "rtl" | "ltr";
+  divider?: boolean;
+}) {
+  const align = dir === "rtl" ? "right" : "left";
+
+  return `
+    <div dir="${dir}" style="${divider ? "margin-top:34px; padding-top:30px; border-top:1px solid #CB6116;" : ""} text-align:${align};">
+      <h1 style="margin:0; font-family:Georgia, 'Times New Roman', serif; font-size:${dir === "rtl" ? "34px" : "30px"}; line-height:1.14; font-weight:400; color:#111111;">
+        ${title}
+      </h1>
+      <p style="margin:14px 0 0; font-family:Arial, sans-serif; font-size:15px; line-height:1.85; color:#5f5750;">
+        ${intro}
+      </p>
+    </div>
+  `;
+}
+
+function renderMessageBox(label: string, message: string, dir: "rtl" | "ltr") {
+  const align = dir === "rtl" ? "right" : "left";
+
+  return `
+    <div dir="${dir}" style="margin-top:24px; padding:24px; background:#ffffff; border-top:1px solid #CB6116; border-bottom:1px solid #e2d8cf; text-align:${align};">
+      <div style="font-family:Arial, sans-serif; font-size:12px; letter-spacing:1.4px; color:#8a7e73; text-transform:uppercase; margin-bottom:10px;">${label}</div>
+      <div style="font-family:Georgia, 'Times New Roman', serif; font-size:18px; line-height:1.65; color:#111111;">${message}</div>
+    </div>
+  `;
+}
+
 export async function sendContactEmail(input: ContactEmailInput) {
   const resend = getResendClient();
   const { from, to } = getEmailConfig();
+  const settings = await getNewsletterSettings();
+  const supportSubject = bilingualSubject(settings.contactSupportSubject, "New Website Enquiry - Fashion Gate Mall");
+  const supportTitle = bilingual(settings.contactSupportTitle);
+  const supportIntro = bilingual(settings.contactSupportIntro);
+  const customerSubject = bilingualSubject(settings.contactCustomerSubject, "We received your message");
+  const customerIntro = bilingual(settings.contactCustomerIntro);
+  const customerBody = bilingual(settings.contactCustomerBody);
+  const replyFooter = bilingual(settings.contactReplyFooter);
+  const ackFooter = bilingual(settings.contactAckFooter);
   const idempotencyKey = input.idempotencyKey || randomUUID();
   const safeName = escapeHtml(input.name);
   const safeEmail = escapeHtml(input.email);
@@ -145,44 +191,66 @@ export async function sendContactEmail(input: ContactEmailInput) {
   const safeSource = escapeHtml(input.source);
   const safePageUrl = input.pageUrl ? escapeHtml(input.pageUrl) : "Not provided";
   const safeSubmittedAt = escapeHtml(formatDate(input.submittedAt));
+  const safeLanguage = escapeHtml(input.language.toUpperCase());
+  const mailTo = `<a href="mailto:${safeEmail}" style="color:#CB6116; text-decoration:none;">${safeEmail}</a>`;
+
   const supportHtml = renderShell({
     eyebrow: "Client Services",
-    title: "New website enquiry",
-    intro: "A new contact request has been submitted through the Fashion Gate Mall website.",
     body: `
-      <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="border-collapse:collapse;">
-        ${renderInfoRow("Name", safeName)}
-        ${renderInfoRow("Email", `<a href="mailto:${safeEmail}" style="color:#CB6116; text-decoration:none;">${safeEmail}</a>`)}
-        ${renderInfoRow("Phone", safePhone)}
-        ${renderInfoRow("Language", escapeHtml(input.language.toUpperCase()))}
-        ${renderInfoRow("Source", safeSource)}
-        ${renderInfoRow("Page", safePageUrl)}
-        ${renderInfoRow("Submitted", safeSubmittedAt)}
-      </table>
-      <div style="margin-top:28px; padding:24px; background:#ffffff; border-left:3px solid #CB6116;">
-        <div style="font-family:Arial, sans-serif; font-size:12px; letter-spacing:1.4px; color:#8a7e73; text-transform:uppercase; margin-bottom:10px;">Message</div>
-        <div style="font-family:Georgia, 'Times New Roman', serif; font-size:19px; line-height:1.65; color:#111111;">${safeMessage}</div>
+      ${renderLanguageIntro({ title: escapeHtml(supportTitle.ar), intro: escapeHtml(supportIntro.ar), dir: "rtl" })}
+      <div dir="rtl" style="margin-top:22px;">
+        ${renderInfoRows(
+          [
+            ["الاسم", safeName],
+            ["البريد الإلكتروني", mailTo],
+            ["الهاتف", safePhone],
+            ["اللغة", safeLanguage],
+            ["المصدر", safeSource],
+            ["الصفحة", safePageUrl],
+            ["تاريخ الإرسال", safeSubmittedAt],
+          ],
+          "rtl"
+        )}
+        ${renderMessageBox("الرسالة", safeMessage, "rtl")}
+      </div>
+      ${renderLanguageIntro({ title: escapeHtml(supportTitle.en), intro: escapeHtml(supportIntro.en), dir: "ltr", divider: true })}
+      <div style="margin-top:22px;">
+        ${renderInfoRows(
+          [
+            ["Name", safeName],
+            ["Email", mailTo],
+            ["Phone", safePhone],
+            ["Language", safeLanguage],
+            ["Source", safeSource],
+            ["Page", safePageUrl],
+            ["Submitted", safeSubmittedAt],
+          ],
+          "ltr"
+        )}
+        ${renderMessageBox("Message", safeMessage, "ltr")}
       </div>
     `,
-    footerNote: "Reply to this email to respond directly to the customer.",
+    footerNote: `${escapeHtml(replyFooter.ar)}<br />${escapeHtml(replyFooter.en)}`,
     contactBlock: renderContactBlock(to),
   });
+
   const customerHtml = renderShell({
     eyebrow: "Message Received",
-    title: `Thank you, ${safeName}`,
-    intro: "Your message has reached Fashion Gate Mall. Our client services team will review it and get back to you shortly.",
     body: `
-      <div style="padding:26px; background:#ffffff; border-top:1px solid #CB6116; border-bottom:1px solid #e2d8cf;">
-        <p style="margin:0; font-family:Arial, sans-serif; font-size:15px; line-height:1.8; color:#4d4741;">
-          We appreciate you taking the time to contact us. A member of our team will follow up with you as soon as possible.
+      ${renderLanguageIntro({ title: `شكراً لك، ${safeName}`, intro: escapeHtml(customerIntro.ar), dir: "rtl" })}
+      <div dir="rtl" style="margin-top:24px; padding:24px; background:#ffffff; border-top:1px solid #CB6116; border-bottom:1px solid #e2d8cf; text-align:right;">
+        <p style="margin:0; font-family:Arial, sans-serif; font-size:15px; line-height:1.85; color:#4d4741;">
+          ${escapeHtml(customerBody.ar)}
         </p>
       </div>
-      <p style="margin:24px 0 0; font-family:Arial, sans-serif; font-size:14px; line-height:1.8; color:#5f5750;">
-        Regards,<br />
-        <strong style="color:#111111;">Fashion Gate Mall</strong>
-      </p>
+      ${renderLanguageIntro({ title: `Thank you, ${safeName}`, intro: escapeHtml(customerIntro.en), dir: "ltr", divider: true })}
+      <div style="margin-top:24px; padding:24px; background:#ffffff; border-top:1px solid #CB6116; border-bottom:1px solid #e2d8cf;">
+        <p style="margin:0; font-family:Arial, sans-serif; font-size:15px; line-height:1.85; color:#4d4741;">
+          ${escapeHtml(customerBody.en)}
+        </p>
+      </div>
     `,
-    footerNote: "This is an automated acknowledgement from Fashion Gate Mall.",
+    footerNote: `${escapeHtml(ackFooter.ar)}<br />${escapeHtml(ackFooter.en)}`,
     contactBlock: renderContactBlock(to),
   });
 
@@ -191,10 +259,25 @@ export async function sendContactEmail(input: ContactEmailInput) {
       from,
       to,
       replyTo: input.email,
-      subject: "New Website Enquiry - Fashion Gate Mall",
+      subject: supportSubject,
       html: supportHtml,
       text: [
-        "New Website Enquiry - Fashion Gate Mall",
+        supportSubject,
+        "",
+        supportTitle.ar,
+        supportIntro.ar,
+        `الاسم: ${input.name}`,
+        `البريد الإلكتروني: ${input.email}`,
+        `الهاتف: ${input.phone || "Not provided"}`,
+        `اللغة: ${input.language}`,
+        `المصدر: ${input.source}`,
+        `الصفحة: ${input.pageUrl || "Not provided"}`,
+        `تاريخ الإرسال: ${input.submittedAt}`,
+        "",
+        input.message,
+        "",
+        supportTitle.en,
+        supportIntro.en,
         `Name: ${input.name}`,
         `Email: ${input.email}`,
         `Phone: ${input.phone || "Not provided"}`,
@@ -215,16 +298,20 @@ export async function sendContactEmail(input: ContactEmailInput) {
       from,
       to: input.email,
       replyTo: from,
-      subject: "We received your message",
+      subject: customerSubject,
       html: customerHtml,
       text: [
-        `Hi ${input.name},`,
+        customerSubject,
         "",
-        "Thank you for contacting Fashion Gate Mall.",
+        `شكراً لك، ${input.name}`,
+        customerIntro.ar,
+        customerBody.ar,
         "",
-        "We have received your message and our team will get back to you shortly.",
+        `Thank you, ${input.name}`,
+        customerIntro.en,
+        customerBody.en,
         "",
-        "Regards,",
+        "Best regards,",
         "Fashion Gate Mall",
       ].join("\n"),
     },

@@ -1,13 +1,15 @@
 import "server-only";
 
 import { randomUUID } from "crypto";
+import { bilingual, bilingualSubject, getNewsletterSettings, type LocalizedText } from "@/lib/newsletter/settings";
 import { assertResendResult } from "./assert-resend-result";
 import { getEmailConfig, getResendClient } from "./resend";
 
 const PUBLIC_ASSET_URL = process.env.EMAIL_PUBLIC_ASSET_URL || "https://fashiongatemall.com";
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://fashiongatemall.com";
 const LOGO_URL = `${PUBLIC_ASSET_URL.replace(/\/$/, "")}/brand/logo.png`;
-const BRAND_ADDRESS = "Fashion Gate Boulevard, Damascus, Syria";
+const BRAND_ADDRESS_AR = "فاشن غيت مول، بوليفارد دمشق، سوريا";
+const BRAND_ADDRESS = "Fashion Gate Mall, Damascus Boulevard, Syria";
 const BRAND_PHONE = "+963 930 000 000";
 
 export type NewsletterCampaignEmailInput = {
@@ -19,6 +21,12 @@ export type NewsletterCampaignEmailInput = {
   body: string;
   ctaLabel?: string;
   ctaUrl?: string;
+  subjectLocalized?: LocalizedText;
+  titleLocalized?: LocalizedText;
+  previewTextLocalized?: LocalizedText;
+  bodyAr?: string;
+  bodyEn?: string;
+  ctaLabelLocalized?: LocalizedText;
   unsubscribeToken?: string;
   idempotencyKey?: string;
 };
@@ -32,14 +40,14 @@ function escapeHtml(value: string) {
     .replace(/'/g, "&#39;");
 }
 
-function renderParagraphs(value: string) {
+function renderParagraphs(value: string, dir: "rtl" | "ltr") {
   return value
     .split(/\n{2,}/)
     .map((paragraph) => paragraph.trim())
     .filter(Boolean)
     .map(
       (paragraph) => `
-        <p style="margin:0 0 18px; font-family:Arial, sans-serif; font-size:15px; line-height:1.85; color:#4d4741;">
+        <p dir="${dir}" style="margin:0 0 18px; font-family:Arial, sans-serif; font-size:15px; line-height:1.85; color:#4d4741; text-align:${dir === "rtl" ? "right" : "left"};">
           ${escapeHtml(paragraph).replace(/\n/g, "<br />")}
         </p>
       `
@@ -53,22 +61,99 @@ function getUnsubscribeUrl(token?: string) {
   return `${baseUrl}/newsletter/unsubscribe?token=${encodeURIComponent(token)}`;
 }
 
-function renderHtml(input: NewsletterCampaignEmailInput) {
+function renderSection({
+  title,
+  previewText,
+  body,
+  ctaLabel,
+  ctaUrl,
+  dir,
+}: {
+  title: string;
+  previewText?: string;
+  body: string;
+  ctaLabel?: string;
+  ctaUrl?: string;
+  dir: "rtl" | "ltr";
+}) {
+  if (!title && !previewText && !body) return "";
+  const textAlign = dir === "rtl" ? "right" : "left";
+
+  return `
+    <tr>
+      <td dir="${dir}" style="padding:34px 36px 8px; text-align:${textAlign};">
+        <h1 style="margin:0; font-family:Georgia, 'Times New Roman', serif; font-size:38px; line-height:1.08; font-weight:400; color:#111111;">
+          ${escapeHtml(title)}
+        </h1>
+        ${
+          previewText
+            ? `<p style="margin:14px 0 0; font-family:Arial, sans-serif; font-size:15px; line-height:1.75; color:#5f5750;">${escapeHtml(previewText)}</p>`
+            : ""
+        }
+      </td>
+    </tr>
+    <tr>
+      <td style="padding:18px 36px 30px;">
+        <div style="padding-top:24px; border-top:1px solid #CB6116;">
+          ${renderParagraphs(body, dir)}
+        </div>
+        ${
+          ctaLabel && ctaUrl
+            ? `<div dir="${dir}" style="text-align:${textAlign};"><a href="${escapeHtml(ctaUrl)}" style="display:inline-block; margin-top:12px; background:#111111; color:#ffffff; text-decoration:none; font-family:Arial, sans-serif; font-size:12px; font-weight:700; letter-spacing:1.8px; text-transform:uppercase; padding:15px 24px;">${escapeHtml(ctaLabel)}</a></div>`
+            : ""
+        }
+      </td>
+    </tr>
+  `;
+}
+
+function renderCommonContactBlock(supportEmail: string) {
+  const safeSupportEmail = escapeHtml(supportEmail);
+
+  return `
+    <tr>
+      <td style="padding:0 36px 40px;">
+        <div style="margin-top:10px; padding-top:24px; border-top:1px solid #ded2c8;">
+          <p style="margin:0 0 22px; font-family:Arial, sans-serif; font-size:14px; line-height:1.8; color:#5f5750;">
+            Best regards,<br />
+            <strong style="color:#111111;">Fashion Gate Mall</strong>
+          </p>
+          <div style="font-family:Arial, sans-serif; font-size:11px; letter-spacing:1.6px; color:#8a7e73; text-transform:uppercase; margin-bottom:10px;">Contact</div>
+          <div style="font-family:Arial, sans-serif; font-size:13px; line-height:1.8; color:#4d4741;">
+            ${BRAND_ADDRESS}<br />
+            <a href="tel:${BRAND_PHONE.replace(/\s/g, "")}" style="color:#CB6116; text-decoration:none;">${BRAND_PHONE}</a><br />
+            <a href="mailto:${safeSupportEmail}" style="color:#CB6116; text-decoration:none;">${safeSupportEmail}</a><br />
+            <a href="https://fashiongatemall.com" style="color:#CB6116; text-decoration:none;">fashiongatemall.com</a>
+          </div>
+        </div>
+      </td>
+    </tr>
+  `;
+}
+
+async function renderHtml(input: NewsletterCampaignEmailInput) {
+  const settings = await getNewsletterSettings();
   const { to: supportEmail } = getEmailConfig();
   const unsubscribeUrl = getUnsubscribeUrl(input.unsubscribeToken);
-  const safeTitle = escapeHtml(input.title);
-  const safePreviewText = input.previewText ? escapeHtml(input.previewText) : "";
+  const title = bilingual(input.titleLocalized);
+  const preview = bilingual(input.previewTextLocalized);
+  const cta = bilingual(input.ctaLabelLocalized);
+  const arTitle = title.ar || "";
+  const enTitle = title.en || "";
+  const arPreviewText = preview.ar || "";
+  const enPreviewText = preview.en || "";
+  const arBody = input.bodyAr || "";
+  const enBody = input.bodyEn || "";
+  const arCtaLabel = cta.ar || "";
+  const enCtaLabel = cta.en || "";
   const safeHeroImageUrl = input.heroImageUrl ? escapeHtml(input.heroImageUrl) : "";
-  const safeCtaLabel = input.ctaLabel ? escapeHtml(input.ctaLabel) : "";
-  const safeCtaUrl = input.ctaUrl ? escapeHtml(input.ctaUrl) : "";
-  const safeSupportEmail = escapeHtml(supportEmail);
+  const eyebrow = bilingual(settings.campaignEyebrow);
+  const subscribedReason = bilingual(settings.subscribedReason);
+  const unsubscribe = bilingual(settings.unsubscribeLabel);
 
   return `
     <!doctype html>
     <html>
-      <head>
-        ${safePreviewText ? `<meta name="description" content="${safePreviewText}" />` : ""}
-      </head>
       <body style="margin:0; padding:0; background:#f4efe8;">
         <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:#f4efe8; width:100%;">
           <tr>
@@ -82,61 +167,28 @@ function renderHtml(input: NewsletterCampaignEmailInput) {
                     <div style="font-family:Georgia, 'Times New Roman', serif; font-size:28px; line-height:1; letter-spacing:3px; color:#ffffff; text-transform:uppercase;">Fashion Gate Mall</div>
                     <div style="width:56px; height:1px; background:#CB6116; margin:18px auto 0;"></div>
                     <div style="font-family:Arial, sans-serif; font-size:11px; line-height:1.6; letter-spacing:2px; color:#c8bdb2; text-transform:uppercase; margin-top:14px;">
-                      Bespoke Updates
+                      ${escapeHtml(eyebrow.ar || eyebrow.en)}
                     </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td style="padding:40px 36px 12px;">
-                    <h1 style="margin:0; font-family:Georgia, 'Times New Roman', serif; font-size:38px; line-height:1.08; font-weight:400; color:#111111;">
-                      ${safeTitle}
-                    </h1>
-                    ${
-                      safePreviewText
-                        ? `<p style="margin:14px 0 0; font-family:Arial, sans-serif; font-size:15px; line-height:1.75; color:#5f5750;">${safePreviewText}</p>`
-                        : ""
-                    }
+                    ${eyebrow.en && eyebrow.en !== eyebrow.ar ? `<div style="font-family:Arial, sans-serif; font-size:10px; line-height:1.6; letter-spacing:2px; color:#9f9488; text-transform:uppercase; margin-top:4px;">${escapeHtml(eyebrow.en)}</div>` : ""}
                   </td>
                 </tr>
                 ${
                   safeHeroImageUrl
-                    ? `<tr>
-                        <td style="padding:12px 36px 0;">
-                          <img src="${safeHeroImageUrl}" alt="" width="628" style="display:block; width:100%; max-width:628px; height:auto; border:0; outline:none; text-decoration:none;" />
-                        </td>
-                      </tr>`
+                    ? `<tr><td style="padding:34px 36px 0;"><img src="${safeHeroImageUrl}" alt="" width="628" style="display:block; width:100%; max-width:628px; height:auto; border:0; outline:none; text-decoration:none;" /></td></tr>`
                     : ""
                 }
-                <tr>
-                  <td style="padding:24px 36px 40px;">
-                    <div style="padding-top:24px; border-top:1px solid #CB6116;">
-                      ${renderParagraphs(input.body)}
-                    </div>
-                    ${
-                      safeCtaLabel && safeCtaUrl
-                        ? `<a href="${safeCtaUrl}" style="display:inline-block; margin-top:12px; background:#111111; color:#ffffff; text-decoration:none; font-family:Arial, sans-serif; font-size:12px; font-weight:700; letter-spacing:1.8px; text-transform:uppercase; padding:15px 24px;">${safeCtaLabel}</a>`
-                        : ""
-                    }
-                    <p style="margin:28px 0 0; font-family:Arial, sans-serif; font-size:14px; line-height:1.8; color:#5f5750;">
-                      Best regards,<br />
-                      <strong style="color:#111111;">Fashion Gate Mall</strong>
-                    </p>
-                    <div style="margin-top:30px; padding-top:22px; border-top:1px solid #ded2c8;">
-                      <div style="font-family:Arial, sans-serif; font-size:11px; letter-spacing:1.6px; color:#8a7e73; text-transform:uppercase; margin-bottom:10px;">Contact</div>
-                      <div style="font-family:Arial, sans-serif; font-size:13px; line-height:1.8; color:#4d4741;">
-                        ${BRAND_ADDRESS}<br />
-                        <a href="tel:${BRAND_PHONE.replace(/\s/g, "")}" style="color:#CB6116; text-decoration:none;">${BRAND_PHONE}</a><br />
-                        <a href="mailto:${safeSupportEmail}" style="color:#CB6116; text-decoration:none;">${safeSupportEmail}</a><br />
-                        <a href="https://fashiongatemall.com" style="color:#CB6116; text-decoration:none;">fashiongatemall.com</a>
-                      </div>
-                    </div>
-                  </td>
-                </tr>
+                ${renderSection({ title: arTitle, previewText: arPreviewText, body: arBody, ctaLabel: arCtaLabel, ctaUrl: input.ctaUrl, dir: "rtl" })}
+                ${renderSection({ title: enTitle, previewText: enPreviewText, body: enBody, ctaLabel: enCtaLabel, ctaUrl: input.ctaUrl, dir: "ltr" })}
+                ${renderCommonContactBlock(supportEmail)}
                 <tr>
                   <td style="background:#eee6dd; padding:22px 34px; text-align:center; border-top:1px solid #ded2c8;">
+                    <p dir="rtl" style="margin:0 0 8px; font-family:Arial, sans-serif; font-size:12px; line-height:1.7; color:#756b62;">
+                      ${escapeHtml(subscribedReason.ar)}
+                      ${unsubscribeUrl ? `<a href="${escapeHtml(unsubscribeUrl)}" style="color:#CB6116; text-decoration:none;">${escapeHtml(unsubscribe.ar)}</a>` : ""}
+                    </p>
                     <p style="margin:0; font-family:Arial, sans-serif; font-size:12px; line-height:1.7; color:#756b62;">
-                      You are receiving this email because you subscribed on Fashion Gate Mall.
-                      ${unsubscribeUrl ? `<a href="${escapeHtml(unsubscribeUrl)}" style="color:#CB6116; text-decoration:none;">Unsubscribe</a>` : ""}
+                      ${escapeHtml(subscribedReason.en)}
+                      ${unsubscribeUrl ? `<a href="${escapeHtml(unsubscribeUrl)}" style="color:#CB6116; text-decoration:none;">${escapeHtml(unsubscribe.en)}</a>` : ""}
                     </p>
                   </td>
                 </tr>
@@ -152,20 +204,27 @@ function renderHtml(input: NewsletterCampaignEmailInput) {
 export async function sendNewsletterCampaignEmail(input: NewsletterCampaignEmailInput) {
   const resend = getResendClient();
   const { from } = getEmailConfig();
+  const subject = bilingualSubject(input.subjectLocalized, input.subject);
+  const title = bilingual(input.titleLocalized);
 
   const result = await resend.emails.send(
     {
       from,
       to: input.to,
       replyTo: from,
-      subject: input.subject,
-      html: renderHtml(input),
+      subject,
+      html: await renderHtml(input),
       text: [
-        input.title,
-        input.previewText || "",
+        title.ar || input.title,
+        input.previewTextLocalized?.ar || input.previewText || "",
         input.heroImageUrl ? `Image: ${input.heroImageUrl}` : "",
         "",
-        input.body,
+        input.bodyAr || input.body,
+        "",
+        title.en || input.title,
+        input.previewTextLocalized?.en || input.previewText || "",
+        "",
+        input.bodyEn || input.body,
         "",
         input.ctaLabel && input.ctaUrl ? `${input.ctaLabel}: ${input.ctaUrl}` : "",
         "",

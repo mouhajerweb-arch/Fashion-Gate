@@ -19,10 +19,20 @@ const sendSchema = z.object({
   title: z.string().trim().min(2).max(140),
   subject: z.string().trim().min(2).max(120),
   previewText: z.string().trim().max(180).optional().or(z.literal("")),
+  titleAr: z.string().trim().max(140).optional().or(z.literal("")),
+  titleEn: z.string().trim().max(140).optional().or(z.literal("")),
+  subjectAr: z.string().trim().max(120).optional().or(z.literal("")),
+  subjectEn: z.string().trim().max(120).optional().or(z.literal("")),
+  previewTextAr: z.string().trim().max(180).optional().or(z.literal("")),
+  previewTextEn: z.string().trim().max(180).optional().or(z.literal("")),
   heroImageUrl: z.string().trim().url().max(500).optional().or(z.literal("")),
   heroImageAssetId: z.string().trim().min(5).max(180).optional().or(z.literal("")),
   body: z.string().trim().min(10).max(12000),
+  bodyAr: z.string().trim().max(12000).optional().or(z.literal("")),
+  bodyEn: z.string().trim().max(12000).optional().or(z.literal("")),
   ctaLabel: z.string().trim().max(60).optional().or(z.literal("")),
+  ctaLabelAr: z.string().trim().max(60).optional().or(z.literal("")),
+  ctaLabelEn: z.string().trim().max(60).optional().or(z.literal("")),
   ctaUrl: z.string().trim().url().max(500).optional().or(z.literal("")),
 }).strict();
 
@@ -59,6 +69,14 @@ function assetIdFromSanityImageUrl(url?: string) {
   } catch {
     return "";
   }
+}
+
+function containsArabic(value?: string) {
+  return /[\u0600-\u06FF]/.test(value || "");
+}
+
+function englishOnly(value?: string) {
+  return containsArabic(value) ? "" : value || "";
 }
 
 type Subscriber = {
@@ -103,11 +121,17 @@ export async function POST(request: Request) {
     title: parsed.data.title,
     subject: parsed.data.subject,
     previewText: parsed.data.previewText || "",
+    titleLocalized: { ar: parsed.data.titleAr || "", en: englishOnly(parsed.data.titleEn) },
+    subjectLocalized: { ar: parsed.data.subjectAr || "", en: englishOnly(parsed.data.subjectEn) },
+    previewTextLocalized: { ar: parsed.data.previewTextAr || "", en: englishOnly(parsed.data.previewTextEn) },
     heroImageUrl: parsed.data.heroImageUrl || "",
     ...(heroImage ? { heroImage } : {}),
     status: "sending",
     body: bodyToBlocks(parsed.data.body),
+    bodyAr: parsed.data.bodyAr || "",
+    bodyEn: englishOnly(parsed.data.bodyEn),
     ctaLabel: parsed.data.ctaLabel || "",
+    ctaLabelLocalized: { ar: parsed.data.ctaLabelAr || "", en: englishOnly(parsed.data.ctaLabelEn) },
     ctaUrl: parsed.data.ctaUrl || "",
   };
 
@@ -132,6 +156,11 @@ export async function POST(request: Request) {
 
       const resendId = await sendNewsletterCampaignEmail({
         ...parsed.data,
+        titleLocalized: { ar: parsed.data.titleAr || "", en: englishOnly(parsed.data.titleEn) },
+        subjectLocalized: { ar: parsed.data.subjectAr || "", en: englishOnly(parsed.data.subjectEn) },
+        previewTextLocalized: { ar: parsed.data.previewTextAr || "", en: englishOnly(parsed.data.previewTextEn) },
+        bodyEn: englishOnly(parsed.data.bodyEn),
+        ctaLabelLocalized: { ar: parsed.data.ctaLabelAr || "", en: englishOnly(parsed.data.ctaLabelEn) },
         to: subscriber.email,
         unsubscribeToken,
         idempotencyKey: `newsletter-${campaign._id}-${subscriber.email}`,

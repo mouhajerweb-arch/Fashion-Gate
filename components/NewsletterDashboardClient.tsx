@@ -29,15 +29,32 @@ type Stats = {
   sentCampaigns: number;
 };
 
+type LocalizedText = {
+  ar?: string;
+  en?: string;
+};
+
+type DashboardSettings = Record<string, LocalizedText | string | undefined>;
+
 type CampaignForm = {
   campaignId: string;
   title: string;
   subject: string;
   previewText: string;
+  titleAr: string;
+  titleEn: string;
+  subjectAr: string;
+  subjectEn: string;
+  previewTextAr: string;
+  previewTextEn: string;
   heroImageUrl: string;
   heroImageAssetId: string;
   body: string;
+  bodyAr: string;
+  bodyEn: string;
   ctaLabel: string;
+  ctaLabelAr: string;
+  ctaLabelEn: string;
   ctaUrl: string;
   testEmail: string;
 };
@@ -47,10 +64,20 @@ const initialForm: CampaignForm = {
   title: "",
   subject: "",
   previewText: "",
+  titleAr: "",
+  titleEn: "",
+  subjectAr: "",
+  subjectEn: "",
+  previewTextAr: "",
+  previewTextEn: "",
   heroImageUrl: "",
   heroImageAssetId: "",
   body: "",
+  bodyAr: "",
+  bodyEn: "",
   ctaLabel: "",
+  ctaLabelAr: "",
+  ctaLabelEn: "",
   ctaUrl: "",
   testEmail: "",
 };
@@ -67,12 +94,31 @@ function getStoredToken() {
   return window.localStorage.getItem("fg_newsletter_admin_session") || "";
 }
 
-export default function NewsletterDashboardClient() {
+function getLocalized(settings: DashboardSettings | null, key: string, lang: "ar" | "en", fallback: string) {
+  const value = settings?.[key];
+  if (value && typeof value === "object") {
+    return value[lang] || value.en || value.ar || fallback;
+  }
+  return fallback;
+}
+
+function containsArabic(value?: string) {
+  return /[\u0600-\u06FF]/.test(value || "");
+}
+
+function englishOnly(value?: string) {
+  return containsArabic(value) ? "" : value || "";
+}
+
+export default function NewsletterDashboardClient({ initialLanguage = "en" }: { initialLanguage?: "ar" | "en" }) {
   const [token, setToken] = useState("");
   const [accessToken, setAccessToken] = useState("");
   const [stats, setStats] = useState<Stats | null>(null);
+  const [dashboardSettings, setDashboardSettings] = useState<DashboardSettings | null>(null);
   const [drafts, setDrafts] = useState<CampaignDraft[]>([]);
   const [libraryTab, setLibraryTab] = useState<"drafts" | "sent">("drafts");
+  const [pageLang] = useState<"ar" | "en">(initialLanguage);
+  const [editorLang, setEditorLang] = useState<"ar" | "en">(initialLanguage);
   const [form, setForm] = useState<CampaignForm>(initialForm);
   const [status, setStatus] = useState<{ type: "success" | "error" | "info"; message: string } | null>(null);
   const [loadingAction, setLoadingAction] = useState<"stats" | "save" | "test" | "send" | "upload" | "otp" | "verify" | null>(null);
@@ -98,6 +144,12 @@ export default function NewsletterDashboardClient() {
     if (savedToken) {
       setToken(savedToken);
     }
+    fetch("/api/newsletter/settings")
+      .then((response) => response.json())
+      .then((data) => {
+        if (data?.success) setDashboardSettings(data.settings || null);
+      })
+      .catch(() => undefined);
   }, []);
 
   useEffect(() => {
@@ -192,10 +244,20 @@ export default function NewsletterDashboardClient() {
       title: draft.title,
       subject: draft.subject,
       previewText: draft.previewText,
+      titleAr: draft.titleAr || "",
+      titleEn: englishOnly(draft.titleEn),
+      subjectAr: draft.subjectAr || "",
+      subjectEn: englishOnly(draft.subjectEn),
+      previewTextAr: draft.previewTextAr || "",
+      previewTextEn: englishOnly(draft.previewTextEn),
       heroImageUrl: draft.heroImageUrl,
       heroImageAssetId: draft.heroImageAssetId,
       body: draft.body,
+      bodyAr: draft.bodyAr || "",
+      bodyEn: englishOnly(draft.bodyEn),
       ctaLabel: draft.ctaLabel,
+      ctaLabelAr: draft.ctaLabelAr || "",
+      ctaLabelEn: englishOnly(draft.ctaLabelEn),
       ctaUrl: draft.ctaUrl,
     }));
     setStatus({ type: "info", message: "Draft loaded into editor." });
@@ -207,15 +269,31 @@ export default function NewsletterDashboardClient() {
   }
 
   function campaignPayload() {
+    const title = form.titleEn || form.titleAr || form.title;
+    const subject = form.subjectEn || form.subjectAr || form.subject;
+    const previewText = form.previewTextEn || form.previewTextAr || form.previewText;
+    const body = form.bodyEn || form.bodyAr || form.body;
+    const ctaLabel = form.ctaLabelEn || form.ctaLabelAr || form.ctaLabel;
+
     return {
       campaignId: form.campaignId,
-      title: form.title,
-      subject: form.subject,
-      previewText: form.previewText,
+      title,
+      subject,
+      previewText,
+      titleAr: form.titleAr,
+      titleEn: englishOnly(form.titleEn),
+      subjectAr: form.subjectAr,
+      subjectEn: englishOnly(form.subjectEn),
+      previewTextAr: form.previewTextAr,
+      previewTextEn: englishOnly(form.previewTextEn),
       heroImageUrl: form.heroImageUrl,
       heroImageAssetId: form.heroImageAssetId,
-      body: form.body,
-      ctaLabel: form.ctaLabel,
+      body,
+      bodyAr: form.bodyAr,
+      bodyEn: englishOnly(form.bodyEn),
+      ctaLabel,
+      ctaLabelAr: form.ctaLabelAr,
+      ctaLabelEn: englishOnly(form.ctaLabelEn),
       ctaUrl: form.ctaUrl,
     };
   }
@@ -343,20 +421,83 @@ export default function NewsletterDashboardClient() {
 
   const disabled = !token || loadingAction !== null;
   const sendDisabled = disabled || pendingSendSeconds > 0;
+  const uiLang = pageLang;
+  const dashboardCopy = {
+    eyebrow: getLocalized(dashboardSettings, "dashboardEyebrow", uiLang, uiLang === "ar" ? "فاشن غيت مول" : "Fashion Gate Mall"),
+    title: getLocalized(dashboardSettings, "dashboardTitle", uiLang, uiLang === "ar" ? "لوحة النشرة البريدية" : "Newsletter Dashboard"),
+    intro: getLocalized(
+      dashboardSettings,
+      "dashboardIntro",
+      uiLang,
+      uiLang === "ar"
+        ? "أنشئ تحديثات أنيقة، أرسل بريداً تجريبياً للمراجعة، ثم أرسل الحملة للمشتركين فقط."
+        : "Create polished updates, send a test email for approval, then send the campaign to subscribed users only."
+    ),
+    libraryTitle: getLocalized(dashboardSettings, "dashboardLibraryTitle", uiLang, uiLang === "ar" ? "مكتبة الحملات" : "Campaign Library"),
+    libraryIntro: getLocalized(dashboardSettings, "dashboardLibraryIntro", uiLang, uiLang === "ar" ? "اختر مسودة محفوظة أو حملة مرسلة." : "Select a saved draft or sent campaign."),
+    editorTitle: getLocalized(dashboardSettings, "dashboardEditorTitle", uiLang, uiLang === "ar" ? "محرر الحملة" : "Campaign Editor"),
+    creatingDraft: getLocalized(dashboardSettings, "dashboardCreatingDraft", uiLang, uiLang === "ar" ? "إنشاء مسودة جديدة" : "Creating new draft"),
+    editingDraft: getLocalized(dashboardSettings, "dashboardEditingDraft", uiLang, uiLang === "ar" ? "تعديل مسودة محفوظة" : "Editing saved draft"),
+    newDraft: getLocalized(dashboardSettings, "dashboardNewDraft", uiLang, uiLang === "ar" ? "مسودة جديدة" : "New Draft"),
+    draftsTab: getLocalized(dashboardSettings, "dashboardDraftsTab", uiLang, uiLang === "ar" ? "المسودات" : "Drafts"),
+    sentTab: getLocalized(dashboardSettings, "dashboardSentTab", uiLang, uiLang === "ar" ? "المرسلة" : "Sent"),
+  };
+  const text = {
+    generateToken: uiLang === "ar" ? "إرسال رمز الدخول إلى بريد الدعم" : "Generate Token to Support Email",
+    generatingToken: uiLang === "ar" ? "جاري إرسال الرمز..." : "Generating Token...",
+    accessToken: uiLang === "ar" ? "رمز الدخول" : "Access Token",
+    verified: uiLang === "ar" ? "تم التحقق في هذا المتصفح." : "Verified in this browser.",
+    pasteToken: uiLang === "ar" ? "ألصق الرمز من بريد الدعم." : "Paste the token from support inbox.",
+    verify: uiLang === "ar" ? "تحقق" : "Verify",
+    verifying: uiLang === "ar" ? "جاري التحقق..." : "Verifying...",
+    testEmail: uiLang === "ar" ? "بريد الاختبار" : "Test Email",
+    saveDraft: uiLang === "ar" ? "حفظ المسودة" : "Save Draft",
+    sendTest: uiLang === "ar" ? "إرسال اختبار" : "Send Test",
+    sendSubscribers: uiLang === "ar" ? "إرسال للمشتركين" : "Send to Subscribers",
+    sendingIn: uiLang === "ar" ? "الإرسال خلال" : "Sending in",
+    undoSend: uiLang === "ar" ? "إلغاء الإرسال" : "Undo Send",
+    verificationRequired: uiLang === "ar" ? "التحقق مطلوب" : "Verification Required",
+    generateToContinue: uiLang === "ar" ? "أرسل الرمز للمتابعة" : "Generate token to continue",
+    lockedIntro:
+      uiLang === "ar"
+        ? "سيظهر محرر النشرة والمسودات ورفع الصور وخيارات الإرسال بعد التحقق من رمز بريد الدعم."
+        : "The newsletter editor, drafts, image upload, and send options will appear after support email token verification.",
+  };
+  const rtlFieldSx = {
+    "& .MuiInputBase-input, & .MuiInputBase-inputMultiline": {
+      textAlign: "right",
+      pt: 2.25,
+    },
+    "& .MuiInputLabel-root": {
+      left: "auto",
+      right: 14,
+      px: 0.75,
+      bgcolor: "#fffdfa",
+      transform: "translate(0, -9px) scale(0.75)",
+      transformOrigin: "top right",
+      zIndex: 1,
+      pointerEvents: "none",
+    },
+    "& .MuiOutlinedInput-root": { direction: "rtl" },
+    "& .MuiOutlinedInput-notchedOutline legend": {
+      display: "none",
+    },
+    "& .MuiFormHelperText-root": { textAlign: "right" },
+  };
 
   return (
-    <Box sx={{ minHeight: "100vh", bgcolor: "#f7f3ee", color: "#111111", py: { xs: 4, md: 7 } }}>
+    <Box dir={uiLang === "ar" ? "rtl" : "ltr"} sx={{ minHeight: "100vh", bgcolor: "#f7f3ee", color: "#111111", py: { xs: 4, md: 7 } }}>
       <Container maxWidth="lg">
         <Stack spacing={4}>
           <Box>
             <Typography sx={{ fontSize: 12, fontWeight: 800, letterSpacing: "0.22em", color: "#CB6116", textTransform: "uppercase" }}>
-              Fashion Gate Mall
+              {dashboardCopy.eyebrow}
             </Typography>
             <Typography sx={{ mt: 1, fontFamily: "var(--font-cormorant), Georgia, serif", fontSize: { xs: 42, md: 64 }, lineHeight: 0.95 }}>
-              Newsletter Dashboard
+              {dashboardCopy.title}
             </Typography>
             <Typography sx={{ mt: 2, maxWidth: 680, color: "rgba(0,0,0,0.58)", lineHeight: 1.8 }}>
-              Create polished updates, send a test email for approval, then send the campaign to subscribed users only.
+              {dashboardCopy.intro}
             </Typography>
           </Box>
 
@@ -377,16 +518,17 @@ export default function NewsletterDashboardClient() {
                     "&:hover": { bgcolor: "#CB6116" },
                   }}
                 >
-                  {loadingAction === "otp" ? "Generating Token..." : "Generate Token to Support Email"}
+                  {loadingAction === "otp" ? text.generatingToken : text.generateToken}
                 </Button>
               </Grid>
               <Grid size={{ xs: 12, md: 4 }}>
                 <TextField
                   fullWidth
-                  label="Access Token"
+                  label={text.accessToken}
                   value={accessToken}
                   onChange={(event) => setAccessToken(event.target.value.toUpperCase().slice(0, 16))}
-                  helperText={token ? "Verified in this browser." : "Paste the token from support inbox."}
+                  helperText={token ? text.verified : text.pasteToken}
+                  sx={uiLang === "ar" ? rtlFieldSx : undefined}
                 />
               </Grid>
               <Grid size={{ xs: 12, md: 3 }}>
@@ -400,7 +542,7 @@ export default function NewsletterDashboardClient() {
                     borderRadius: 0,
                   }}
                 >
-                  {loadingAction === "verify" ? "Verifying..." : "Verify"}
+                  {loadingAction === "verify" ? text.verifying : text.verify}
                 </Button>
               </Grid>
             </Grid>
@@ -443,9 +585,9 @@ export default function NewsletterDashboardClient() {
             <>
           <Grid container spacing={2}>
             {[
-              ["Subscribed", stats?.subscribed ?? "-"],
-              ["Unsubscribed", stats?.unsubscribed ?? "-"],
-              ["Sent Campaigns", stats?.sentCampaigns ?? "-"],
+              [uiLang === "ar" ? "المشتركون" : "Subscribed", stats?.subscribed ?? "-"],
+              [uiLang === "ar" ? "إلغاء الاشتراك" : "Unsubscribed", stats?.unsubscribed ?? "-"],
+              [uiLang === "ar" ? "الحملات المرسلة" : "Sent Campaigns", stats?.sentCampaigns ?? "-"],
             ].map(([label, value]) => (
               <Grid size={{ xs: 12, md: 4 }} key={label}>
                 <Paper elevation={0} sx={{ p: 3, borderRadius: 0, border: "1px solid #e3d9cf", bgcolor: "#fffdfa" }}>
@@ -466,10 +608,10 @@ export default function NewsletterDashboardClient() {
                 <Stack direction="row" spacing={1.5} alignItems="center" justifyContent="space-between" sx={{ mb: 2 }}>
                   <Box>
                     <Typography sx={{ fontSize: 11, fontWeight: 800, letterSpacing: "0.18em", color: "#8a7e73", textTransform: "uppercase" }}>
-                      Campaign Library
+                      {dashboardCopy.libraryTitle}
                     </Typography>
                     <Typography sx={{ mt: 0.5, fontSize: 13, color: "rgba(0,0,0,0.55)" }}>
-                      Select a saved draft or sent campaign.
+                      {dashboardCopy.libraryIntro}
                     </Typography>
                   </Box>
                   <Button
@@ -500,8 +642,8 @@ export default function NewsletterDashboardClient() {
                     "& .MuiTabs-indicator": { bgcolor: "#CB6116" },
                   }}
                 >
-                  <Tab value="drafts" label={`Drafts (${drafts.filter((draft) => draft.status !== "sent").length})`} />
-                  <Tab value="sent" label={`Sent (${drafts.filter((draft) => draft.status === "sent").length})`} />
+                  <Tab value="drafts" label={`${dashboardCopy.draftsTab} (${drafts.filter((draft) => draft.status !== "sent").length})`} />
+                  <Tab value="sent" label={`${dashboardCopy.sentTab} (${drafts.filter((draft) => draft.status === "sent").length})`} />
                 </Tabs>
 
                 <Stack spacing={1.25} sx={{ maxHeight: 520, overflowY: "auto", pr: 0.5 }}>
@@ -540,7 +682,9 @@ export default function NewsletterDashboardClient() {
                     })
                   ) : (
                     <Typography sx={{ py: 4, textAlign: "center", color: "rgba(0,0,0,0.48)", fontSize: 13 }}>
-                      {libraryTab === "sent" ? "No sent campaigns yet." : "No drafts yet."}
+                      {libraryTab === "sent"
+                        ? uiLang === "ar" ? "لا توجد حملات مرسلة بعد." : "No sent campaigns yet."
+                        : uiLang === "ar" ? "لا توجد مسودات بعد." : "No drafts yet."}
                     </Typography>
                   )}
                 </Stack>
@@ -553,34 +697,120 @@ export default function NewsletterDashboardClient() {
               <Stack direction={{ xs: "column", sm: "row" }} justifyContent="space-between" spacing={1.5}>
                 <Box>
                   <Typography sx={{ fontSize: 11, fontWeight: 800, letterSpacing: "0.18em", color: "#8a7e73", textTransform: "uppercase" }}>
-                    Campaign Editor
+                    {dashboardCopy.editorTitle}
                   </Typography>
                   <Typography sx={{ mt: 0.5, fontSize: 13, color: "rgba(0,0,0,0.55)" }}>
-                    {form.campaignId ? "Editing saved draft" : "Creating new draft"}
+                    {form.campaignId ? dashboardCopy.editingDraft : dashboardCopy.creatingDraft}
                   </Typography>
                 </Box>
                 <Button disabled={disabled} startIcon={<AddOutlinedIcon />} variant="outlined" onClick={startNewDraft} sx={{ borderRadius: 0 }}>
-                  New Draft
+                  {dashboardCopy.newDraft}
                 </Button>
               </Stack>
+              <Tabs
+                value={editorLang}
+                onChange={(_, value: "ar" | "en") => setEditorLang(value)}
+                sx={{
+                  minHeight: 44,
+                  borderBottom: "1px solid #eadfd5",
+                  "& .MuiTab-root": {
+                    minHeight: 44,
+                    fontSize: 11,
+                    fontWeight: 900,
+                    letterSpacing: "0.12em",
+                    color: "#8a7e73",
+                  },
+                  "& .Mui-selected": { color: "#111111 !important" },
+                  "& .MuiTabs-indicator": { bgcolor: "#CB6116" },
+                }}
+              >
+                <Tab value="ar" label="العربية" />
+                <Tab value="en" label="English" />
+              </Tabs>
               <Grid container spacing={2.5}>
-                <Grid size={{ xs: 12, md: 6 }}>
-                  <TextField fullWidth label="Newsletter Title" value={form.title} onChange={(event) => updateField("title", event.target.value)} />
-                </Grid>
-                <Grid size={{ xs: 12, md: 6 }}>
-                  <TextField fullWidth label="Email Subject" value={form.subject} onChange={(event) => updateField("subject", event.target.value)} />
-                </Grid>
-                <Grid size={{ xs: 12 }}>
-                  <TextField fullWidth label="Preview Text" value={form.previewText} onChange={(event) => updateField("previewText", event.target.value)} inputProps={{ maxLength: 180 }} />
-                </Grid>
+                {editorLang === "ar" ? (
+                  <>
+                    <Grid size={{ xs: 12 }}>
+                      <TextField
+                        fullWidth
+                        label="عنوان النشرة"
+                        placeholder="مثال: افتتاح علامات جديدة في فاشن غيت مول"
+                        dir="rtl"
+                        sx={rtlFieldSx}
+                        inputProps={{ dir: "rtl" }}
+                        value={form.titleAr}
+                        onChange={(event) => updateField("titleAr", event.target.value)}
+                      />
+                    </Grid>
+                    <Grid size={{ xs: 12 }}>
+                      <TextField
+                        fullWidth
+                        label="موضوع البريد الإلكتروني"
+                        placeholder="مثال: دعوة خاصة لاكتشاف أحدث الإطلاقات"
+                        dir="rtl"
+                        sx={rtlFieldSx}
+                        inputProps={{ dir: "rtl" }}
+                        value={form.subjectAr}
+                        onChange={(event) => updateField("subjectAr", event.target.value)}
+                      />
+                    </Grid>
+                    <Grid size={{ xs: 12 }}>
+                      <TextField
+                        fullWidth
+                        label="نص المعاينة"
+                        placeholder="نص قصير يظهر بجانب عنوان البريد في صندوق الوارد"
+                        dir="rtl"
+                        sx={rtlFieldSx}
+                        value={form.previewTextAr}
+                        onChange={(event) => updateField("previewTextAr", event.target.value)}
+                        inputProps={{ maxLength: 180, dir: "rtl" }}
+                      />
+                    </Grid>
+                  </>
+                ) : (
+                  <>
+                    <Grid size={{ xs: 12 }}>
+                      <TextField
+                        fullWidth
+                        label="Newsletter Title"
+                        placeholder="Example: New brands have arrived at Fashion Gate Mall"
+                        value={form.titleEn}
+                        onChange={(event) => updateField("titleEn", event.target.value)}
+                      />
+                    </Grid>
+                    <Grid size={{ xs: 12 }}>
+                      <TextField
+                        fullWidth
+                        label="Email Subject"
+                        placeholder="Example: A private invitation to explore our latest launches"
+                        value={form.subjectEn}
+                        onChange={(event) => updateField("subjectEn", event.target.value)}
+                      />
+                    </Grid>
+                    <Grid size={{ xs: 12 }}>
+                      <TextField
+                        fullWidth
+                        label="Preview Text"
+                        placeholder="A short line shown beside the subject in the inbox"
+                        value={form.previewTextEn}
+                        onChange={(event) => updateField("previewTextEn", event.target.value)}
+                        inputProps={{ maxLength: 180 }}
+                      />
+                    </Grid>
+                  </>
+                )}
                 <Grid size={{ xs: 12 }}>
                   <Stack spacing={1.5}>
                     <TextField
                       fullWidth
-                      label="Hero Image URL"
+                      label={editorLang === "ar" ? "رابط صورة الغلاف المشتركة" : "Shared Hero Image URL"}
+                      placeholder={editorLang === "ar" ? "صورة واحدة تظهر في النسخة العربية والإنجليزية" : "One image used for both Arabic and English"}
                       value={form.heroImageUrl}
                       onChange={(event) => updateField("heroImageUrl", event.target.value)}
-                      helperText="Upload an image or paste a public URL. Email inboxes cannot render local computer paths."
+                      helperText={editorLang === "ar" ? "هذه الصورة مشتركة للحملة كاملة. ارفع صورة أو استخدم رابطاً عاماً." : "This image is shared across the whole campaign. Upload an image or paste a public URL."}
+                      dir={editorLang === "ar" ? "rtl" : "ltr"}
+                      sx={editorLang === "ar" ? rtlFieldSx : undefined}
+                      inputProps={{ dir: "ltr" }}
                     />
                     <Stack direction={{ xs: "column", sm: "row" }} spacing={1.5} alignItems={{ xs: "stretch", sm: "center" }}>
                       <Button
@@ -590,7 +820,7 @@ export default function NewsletterDashboardClient() {
                         variant="outlined"
                         sx={{ borderRadius: 0, alignSelf: { xs: "stretch", sm: "flex-start" } }}
                       >
-                        {loadingAction === "upload" ? "Uploading..." : "Upload Image"}
+                        {loadingAction === "upload" ? (editorLang === "ar" ? "جاري الرفع..." : "Uploading...") : editorLang === "ar" ? "رفع صورة" : "Upload Image"}
                         <input
                           hidden
                           type="file"
@@ -618,22 +848,70 @@ export default function NewsletterDashboardClient() {
                     </Stack>
                   </Stack>
                 </Grid>
+                {editorLang === "ar" ? (
+                  <>
+                    <Grid size={{ xs: 12 }}>
+                      <TextField
+                        fullWidth
+                        multiline
+                        minRows={9}
+                        label="محتوى النشرة"
+                        placeholder="اكتب محتوى البريد باللغة العربية. اترك سطراً فارغاً بين الفقرات."
+                        dir="rtl"
+                        sx={rtlFieldSx}
+                        inputProps={{ dir: "rtl" }}
+                        value={form.bodyAr}
+                        onChange={(event) => updateField("bodyAr", event.target.value)}
+                        helperText="استخدم سطراً فارغاً للفصل بين الفقرات."
+                      />
+                    </Grid>
+                    <Grid size={{ xs: 12 }}>
+                      <TextField
+                        fullWidth
+                        label="نص زر الدعوة"
+                        placeholder="مثال: اكتشف المزيد"
+                        dir="rtl"
+                        sx={rtlFieldSx}
+                        inputProps={{ dir: "rtl" }}
+                        value={form.ctaLabelAr}
+                        onChange={(event) => updateField("ctaLabelAr", event.target.value)}
+                      />
+                    </Grid>
+                  </>
+                ) : (
+                  <>
+                    <Grid size={{ xs: 12 }}>
+                      <TextField
+                        fullWidth
+                        multiline
+                        minRows={9}
+                        label="Newsletter Body"
+                        placeholder="Write the English email content. Leave a blank line between paragraphs."
+                        value={form.bodyEn}
+                        onChange={(event) => updateField("bodyEn", event.target.value)}
+                        helperText="Use blank lines to separate paragraphs."
+                      />
+                    </Grid>
+                    <Grid size={{ xs: 12 }}>
+                      <TextField
+                        fullWidth
+                        label="CTA Label"
+                        placeholder="Example: Explore More"
+                        value={form.ctaLabelEn}
+                        onChange={(event) => updateField("ctaLabelEn", event.target.value)}
+                      />
+                    </Grid>
+                  </>
+                )}
                 <Grid size={{ xs: 12 }}>
                   <TextField
                     fullWidth
-                    multiline
-                    minRows={9}
-                    label="Newsletter Body"
-                    value={form.body}
-                    onChange={(event) => updateField("body", event.target.value)}
-                    helperText="Use blank lines to separate paragraphs."
+                    label={editorLang === "ar" ? "رابط زر الدعوة" : "CTA URL"}
+                    placeholder={editorLang === "ar" ? "مثال: https://fashiongatemall.com/ar" : "Example: https://fashiongatemall.com/en"}
+                    value={form.ctaUrl}
+                    onChange={(event) => updateField("ctaUrl", event.target.value)}
+                    dir="ltr"
                   />
-                </Grid>
-                <Grid size={{ xs: 12, md: 6 }}>
-                  <TextField fullWidth label="CTA Label" value={form.ctaLabel} onChange={(event) => updateField("ctaLabel", event.target.value)} />
-                </Grid>
-                <Grid size={{ xs: 12, md: 6 }}>
-                  <TextField fullWidth label="CTA URL" value={form.ctaUrl} onChange={(event) => updateField("ctaUrl", event.target.value)} />
                 </Grid>
               </Grid>
 
@@ -641,18 +919,18 @@ export default function NewsletterDashboardClient() {
 
               <Grid container spacing={2} alignItems="center">
                 <Grid size={{ xs: 12, md: 5 }}>
-                  <TextField fullWidth label="Test Email" type="email" value={form.testEmail} onChange={(event) => updateField("testEmail", event.target.value)} />
+                  <TextField fullWidth label={text.testEmail} type="email" value={form.testEmail} onChange={(event) => updateField("testEmail", event.target.value)} sx={uiLang === "ar" ? rtlFieldSx : undefined} />
                 </Grid>
                 <Grid size={{ xs: 12, md: 7 }}>
                   <Stack direction={{ xs: "column", sm: "row" }} spacing={1.5}>
                     <Button disabled={disabled} startIcon={<SaveOutlinedIcon />} variant="outlined" onClick={() => runAction("save")} sx={{ borderRadius: 0 }}>
-                      Save Draft
+                      {text.saveDraft}
                     </Button>
                     <Button disabled={disabled} startIcon={<MarkEmailReadOutlinedIcon />} variant="outlined" onClick={() => runAction("test")} sx={{ borderRadius: 0 }}>
-                      Send Test
+                      {text.sendTest}
                     </Button>
                     <Button disabled={sendDisabled} startIcon={<SendOutlinedIcon />} variant="contained" onClick={scheduleSend} sx={{ borderRadius: 0, bgcolor: "#111111", "&:hover": { bgcolor: "#CB6116" } }}>
-                      {pendingSendSeconds > 0 ? `Sending in ${pendingSendSeconds}s` : "Send to Subscribers"}
+                      {pendingSendSeconds > 0 ? `${text.sendingIn} ${pendingSendSeconds}s` : text.sendSubscribers}
                     </Button>
                     {pendingSendSeconds > 0 ? (
                       <Button
@@ -667,7 +945,7 @@ export default function NewsletterDashboardClient() {
                           "&:hover": { bgcolor: "#9D430C" },
                         }}
                       >
-                        Undo Send
+                        {text.undoSend}
                       </Button>
                     ) : null}
                   </Stack>
@@ -681,13 +959,13 @@ export default function NewsletterDashboardClient() {
           ) : (
             <Paper elevation={0} sx={{ p: { xs: 3, md: 5 }, borderRadius: 0, border: "1px solid #e3d9cf", bgcolor: "#fffdfa", textAlign: "center" }}>
               <Typography sx={{ fontSize: 11, fontWeight: 800, letterSpacing: "0.2em", color: "#8a7e73", textTransform: "uppercase" }}>
-                Verification Required
+                {text.verificationRequired}
               </Typography>
               <Typography sx={{ mt: 1.5, fontFamily: "var(--font-cormorant), Georgia, serif", fontSize: { xs: 34, md: 46 }, lineHeight: 1 }}>
-                Generate token to continue
+                {text.generateToContinue}
               </Typography>
               <Typography sx={{ mt: 2, mx: "auto", maxWidth: 520, color: "rgba(0,0,0,0.58)", lineHeight: 1.8 }}>
-                The newsletter editor, drafts, image upload, and send options will appear after support email token verification.
+                {text.lockedIntro}
               </Typography>
             </Paper>
           )}

@@ -12,7 +12,7 @@ import {
   SiSnapchat,
   SiX
 } from "react-icons/si";
-import { Box, Button, Container, IconButton, InputBase, Stack, Typography } from "@mui/material";
+import { Box, Button, CircularProgress, Container, IconButton, InputBase, Stack, Typography } from "@mui/material";
 import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
 import { getFooterSettings, getLocalizedValue } from "@/lib/sanity";
@@ -133,6 +133,10 @@ export default function SiteFooter() {
     lang === "ar" ? "البريد الإلكتروني" : "Email address"
   );
 
+  const subscribeSuccessText = getLocalizedValue(settings?.subscribeSuccess, lang, lang === "ar" ? "تم الاشتراك بنجاح." : "Subscribed successfully.");
+  const subscribeAlreadyText = getLocalizedValue(settings?.subscribeAlready, lang, lang === "ar" ? "أنت مشترك بالفعل." : "You're already subscribed.");
+  const subscribeErrorText = getLocalizedValue(settings?.subscribeError, lang, lang === "ar" ? "تعذر الاشتراك الآن. يرجى المحاولة لاحقاً." : "Unable to subscribe right now.");
+
   const copyrightText = getLocalizedValue(
     settings?.copyright,
     lang,
@@ -175,12 +179,13 @@ export default function SiteFooter() {
         throw new Error(data?.message || "Unable to subscribe right now.");
       }
 
-      setSubscribeStatus(data?.code === "already_subscribed" ? "already" : "success");
-      setSubscribeMessage(data?.message || "Subscribed successfully.");
+      const alreadySubscribed = data?.code === "already_subscribed";
+      setSubscribeStatus(alreadySubscribed ? "already" : "success");
+      setSubscribeMessage(alreadySubscribed ? subscribeAlreadyText : subscribeSuccessText);
       setSubscriberEmail("");
     } catch (error) {
       setSubscribeStatus("error");
-      setSubscribeMessage(error instanceof Error ? error.message : "Unable to subscribe right now.");
+      setSubscribeMessage(error instanceof Error ? error.message : subscribeErrorText);
     }
   };
 
@@ -366,7 +371,11 @@ export default function SiteFooter() {
                 }}
               />
               <IconButton type="submit" disabled={subscribeStatus === "loading"} sx={{ color: "#111111", p: 0.5, "&:hover": { color: "primary.main" }, "&.Mui-disabled": { color: "rgba(0,0,0,0.28)" }, transform: lang === "ar" ? "rotate(180deg)" : "none" }}>
-                <ArrowForwardIcon sx={{ fontSize: 18 }} />
+                {subscribeStatus === "loading" ? (
+                  <CircularProgress size={18} thickness={4} sx={{ color: "primary.main" }} />
+                ) : (
+                  <ArrowForwardIcon sx={{ fontSize: 18 }} />
+                )}
               </IconButton>
             </Box>
             {subscribeMessage && (

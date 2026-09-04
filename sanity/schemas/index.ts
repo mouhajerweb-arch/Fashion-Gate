@@ -40,6 +40,7 @@ import { contactPage } from "./contactPage";
 import { contactInquiry } from "./contactInquiry";
 import { newsletterSubscriber } from "./newsletterSubscriber";
 import { newsletterCampaign } from "./newsletterCampaign";
+import { newsletterSettings } from "./newsletterSettings";
 import { blogsPage } from "./blogsPage";
 import { loginPage } from "./loginPage";
 import { brandPage } from "./brandPage";
@@ -98,6 +99,7 @@ export const schemaTypes = [
   contactInquiry,
   newsletterSubscriber,
   newsletterCampaign,
+  newsletterSettings,
   blogsPage,
   loginPage,
   brandPage,

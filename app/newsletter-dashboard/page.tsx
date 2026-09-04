@@ -9,5 +9,5 @@ export const metadata = {
 };
 
 export default function NewsletterDashboardPage() {
-  return <NewsletterDashboardClient />;
+  return <NewsletterDashboardClient initialLanguage="en" />;
 }

@@ -1,6 +1,7 @@
 import { createClient } from "@sanity/client";
 import Link from "next/link";
 import { apiVersion, dataset, projectId } from "@/lib/sanity";
+import { bilingual, getNewsletterSettings } from "@/lib/newsletter/settings";
 
 export const metadata = {
   title: "Unsubscribe | Fashion Gate Mall",
@@ -23,10 +24,19 @@ type PageProps = {
 };
 
 async function unsubscribe(token?: string) {
+  const settings = await getNewsletterSettings();
+  const invalidTitle = bilingual(settings.unsubscribeInvalidTitle);
+  const invalidMessage = bilingual(settings.unsubscribeInvalidMessage);
+  const alreadyTitle = bilingual(settings.unsubscribeAlreadyTitle);
+  const alreadyMessage = bilingual(settings.unsubscribeAlreadyMessage);
+  const successTitle = bilingual(settings.unsubscribeSuccessTitle);
+  const successMessage = bilingual(settings.unsubscribeSuccessMessage);
+
   if (!token || token.length < 10 || token.length > 120 || !writeClient.config().token) {
     return {
-      title: "Unable to update your subscription",
-      message: "This unsubscribe link is invalid or has expired.",
+      title: invalidTitle,
+      message: invalidMessage,
+      settings,
     };
   }
 
@@ -38,8 +48,9 @@ async function unsubscribe(token?: string) {
 
     if (!subscriber?._id) {
       return {
-        title: "Subscription already updated",
-        message: "We could not find an active subscription for this link.",
+        title: alreadyTitle,
+        message: alreadyMessage,
+        settings,
       };
     }
 
@@ -49,14 +60,16 @@ async function unsubscribe(token?: string) {
       .commit();
 
     return {
-      title: "You have been unsubscribed",
-      message: "You will no longer receive Fashion Gate Mall newsletter updates.",
+      title: successTitle,
+      message: successMessage,
+      settings,
     };
   } catch (error) {
     console.error("Newsletter unsubscribe page failed", error instanceof Error ? error.message : "Unknown error");
     return {
-      title: "Unable to update your subscription",
-      message: "Please try again later or contact our team for assistance.",
+      title: invalidTitle,
+      message: invalidMessage,
+      settings,
     };
   }
 }
@@ -64,6 +77,10 @@ async function unsubscribe(token?: string) {
 export default async function NewsletterUnsubscribePage({ searchParams }: PageProps) {
   const params = await searchParams;
   const result = await unsubscribe(params?.token);
+  const preferences = bilingual(result.settings.newsletterPreferences);
+  const returnToWebsite = bilingual(result.settings.returnToWebsite);
+  const logoUrl = result.settings.unsubscribeLogoUrl || "/brand/logo.png";
+  const reactionImageUrl = result.settings.unsubscribeReactionImageUrl || "/newsletter/unsubscribe-reaction.jpg";
 
   return (
     <main
@@ -100,8 +117,8 @@ export default async function NewsletterUnsubscribePage({ searchParams }: PagePr
               justifyContent: "center",
             }}
           >
-            <img
-              src="/brand/logo.png"
+              <img
+              src={logoUrl}
               alt="Fashion Gate Mall"
               width={42}
               height={42}
@@ -117,8 +134,8 @@ export default async function NewsletterUnsubscribePage({ searchParams }: PagePr
               overflow: "hidden",
             }}
           >
-            <img
-              src="/newsletter/unsubscribe-reaction.jpg"
+              <img
+              src={reactionImageUrl}
               alt=""
               width={210}
               height={148}
@@ -141,7 +158,7 @@ export default async function NewsletterUnsubscribePage({ searchParams }: PagePr
               textTransform: "uppercase",
             }}
           >
-            Newsletter Preferences
+            {preferences.ar}
           </p>
           <h1
             style={{
@@ -153,7 +170,8 @@ export default async function NewsletterUnsubscribePage({ searchParams }: PagePr
               color: "#111111",
             }}
           >
-            {result.title}
+            <span dir="rtl">{result.title.ar}</span>
+            <span style={{ display: "block", marginTop: 8, fontSize: "0.62em", lineHeight: 1.15 }}>{result.title.en}</span>
           </h1>
           <div
             style={{
@@ -173,7 +191,8 @@ export default async function NewsletterUnsubscribePage({ searchParams }: PagePr
               color: "#5f5750",
             }}
           >
-            {result.message}
+            <span dir="rtl" style={{ display: "block" }}>{result.message.ar}</span>
+            <span style={{ display: "block", marginTop: 8 }}>{result.message.en}</span>
           </p>
           <Link
             href="/"
@@ -195,7 +214,9 @@ export default async function NewsletterUnsubscribePage({ searchParams }: PagePr
               boxShadow: "0 16px 34px rgba(17, 17, 17, 0.16)",
             }}
           >
-            Return to website
+            <span dir="rtl">{returnToWebsite.ar}</span>
+            <span aria-hidden="true" style={{ margin: "0 8px", opacity: 0.48 }}>/</span>
+            <span>{returnToWebsite.en}</span>
           </Link>
         </div>
       </section>

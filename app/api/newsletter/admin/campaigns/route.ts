@@ -17,10 +17,20 @@ const campaignSchema = z.object({
   title: z.string().trim().min(2).max(140),
   subject: z.string().trim().min(2).max(120),
   previewText: z.string().trim().max(180).optional().or(z.literal("")),
+  titleAr: z.string().trim().max(140).optional().or(z.literal("")),
+  titleEn: z.string().trim().max(140).optional().or(z.literal("")),
+  subjectAr: z.string().trim().max(120).optional().or(z.literal("")),
+  subjectEn: z.string().trim().max(120).optional().or(z.literal("")),
+  previewTextAr: z.string().trim().max(180).optional().or(z.literal("")),
+  previewTextEn: z.string().trim().max(180).optional().or(z.literal("")),
   heroImageUrl: z.string().trim().url().max(500).optional().or(z.literal("")),
   heroImageAssetId: z.string().trim().min(5).max(180).optional().or(z.literal("")),
   body: z.string().trim().min(10).max(12000),
+  bodyAr: z.string().trim().max(12000).optional().or(z.literal("")),
+  bodyEn: z.string().trim().max(12000).optional().or(z.literal("")),
   ctaLabel: z.string().trim().max(60).optional().or(z.literal("")),
+  ctaLabelAr: z.string().trim().max(60).optional().or(z.literal("")),
+  ctaLabelEn: z.string().trim().max(60).optional().or(z.literal("")),
   ctaUrl: z.string().trim().url().max(500).optional().or(z.literal("")),
 }).strict();
 
@@ -66,6 +76,14 @@ function assetIdFromSanityImageUrl(url?: string) {
   }
 }
 
+function containsArabic(value?: string) {
+  return /[\u0600-\u06FF]/.test(value || "");
+}
+
+function englishOnly(value?: string) {
+  return containsArabic(value) ? "" : value || "";
+}
+
 export async function GET(request: Request) {
   if (!(await isAuthorizedNewsletterAdmin(request))) return unauthorizedResponse();
 
@@ -79,10 +97,16 @@ export async function GET(request: Request) {
       title?: string;
       subject?: string;
       previewText?: string;
+      titleLocalized?: { ar?: string; en?: string };
+      subjectLocalized?: { ar?: string; en?: string };
+      previewTextLocalized?: { ar?: string; en?: string };
       heroImageUrl?: string;
       heroImage?: { asset?: { _ref?: string } };
       body?: Array<{ children?: Array<{ text?: string }> }>;
+      bodyAr?: string;
+      bodyEn?: string;
       ctaLabel?: string;
+      ctaLabelLocalized?: { ar?: string; en?: string };
       ctaUrl?: string;
       status?: string;
       sentAt?: string;
@@ -94,10 +118,16 @@ export async function GET(request: Request) {
       title,
       subject,
       previewText,
+      titleLocalized,
+      subjectLocalized,
+      previewTextLocalized,
       heroImageUrl,
       heroImage,
       body,
+      bodyAr,
+      bodyEn,
       ctaLabel,
+      ctaLabelLocalized,
       ctaUrl,
       status,
       sentAt,
@@ -112,10 +142,20 @@ export async function GET(request: Request) {
       title: campaign.title || "Untitled campaign",
       subject: campaign.subject || "",
       previewText: campaign.previewText || "",
+      titleAr: campaign.titleLocalized?.ar || "",
+      titleEn: englishOnly(campaign.titleLocalized?.en),
+      subjectAr: campaign.subjectLocalized?.ar || "",
+      subjectEn: englishOnly(campaign.subjectLocalized?.en),
+      previewTextAr: campaign.previewTextLocalized?.ar || "",
+      previewTextEn: englishOnly(campaign.previewTextLocalized?.en),
       heroImageUrl: campaign.heroImageUrl || "",
       heroImageAssetId: campaign.heroImage?.asset?._ref || "",
       body: blocksToText(campaign.body),
+      bodyAr: campaign.bodyAr || "",
+      bodyEn: englishOnly(campaign.bodyEn),
       ctaLabel: campaign.ctaLabel || "",
+      ctaLabelAr: campaign.ctaLabelLocalized?.ar || "",
+      ctaLabelEn: englishOnly(campaign.ctaLabelLocalized?.en),
       ctaUrl: campaign.ctaUrl || "",
       status: campaign.status || "draft",
       sentAt: campaign.sentAt || "",
@@ -152,11 +192,17 @@ export async function POST(request: Request) {
     title: parsed.data.title,
     subject: parsed.data.subject,
     previewText: parsed.data.previewText || "",
+    titleLocalized: { ar: parsed.data.titleAr || "", en: englishOnly(parsed.data.titleEn) },
+    subjectLocalized: { ar: parsed.data.subjectAr || "", en: englishOnly(parsed.data.subjectEn) },
+    previewTextLocalized: { ar: parsed.data.previewTextAr || "", en: englishOnly(parsed.data.previewTextEn) },
     heroImageUrl: parsed.data.heroImageUrl || "",
     ...(heroImage ? { heroImage } : {}),
     status: "draft",
     body: bodyToBlocks(parsed.data.body),
+    bodyAr: parsed.data.bodyAr || "",
+    bodyEn: englishOnly(parsed.data.bodyEn),
     ctaLabel: parsed.data.ctaLabel || "",
+    ctaLabelLocalized: { ar: parsed.data.ctaLabelAr || "", en: englishOnly(parsed.data.ctaLabelEn) },
     ctaUrl: parsed.data.ctaUrl || "",
   };
 

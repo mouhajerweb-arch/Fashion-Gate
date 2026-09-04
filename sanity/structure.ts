@@ -11,7 +11,8 @@ import {
   Utensils,
   MessageSquareText,
   MailCheck,
-  Newspaper
+  Newspaper,
+  Mail
 } from "lucide-react";
 
 export const structure: StructureResolver = (S) =>
@@ -216,6 +217,9 @@ export const structure: StructureResolver = (S) =>
       S.documentTypeListItem("newsletterCampaign")
         .title("Newsletter Campaigns")
         .icon(Newspaper),
+      S.documentTypeListItem("newsletterSettings")
+        .title("Newsletter Settings")
+        .icon(Mail),
 
       S.divider(),
 
@@ -257,6 +261,7 @@ export const structure: StructureResolver = (S) =>
             "contactInquiry",
             "newsletterSubscriber",
             "newsletterCampaign",
+            "newsletterSettings",
             "blogsPage",
             "loginPage",
             "brandPage",
