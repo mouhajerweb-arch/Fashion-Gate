@@ -1,0 +1,64 @@
+services:
+  wordpress:
+    image: wordpress:latest
+    container_name: fashiongate_wordpress
+    restart: always
+    ports:
+      - "8080:80"
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_NAME: ${WORDPRESS_DB_NAME:-fashiongate_wp}
+      WORDPRESS_DB_USER: ${WORDPRESS_DB_USER:-fg_wp_user}
+      WORDPRESS_DB_PASSWORD: ${WORDPRESS_DB_PASSWORD:-fg_wp_pass_123!}
+      WORDPRESS_CONFIG_EXTRA: |
+        define('WP_DEBUG', true);
+        define('WP_DEBUG_LOG', true);
+        define('WP_DEBUG_DISPLAY', false);
+        @ini_set('display_errors', 0);
+    volumes:
+      - wp_data:/var/www/html
+      - ../wordpress/themes/fashiongate-astra-child:/var/www/html/wp-content/themes/fashiongate-astra-child:rw
+      - ../wordpress/plugins/fashiongate-elementor-experience:/var/www/html/wp-content/plugins/fashiongate-elementor-experience:rw
+      - ./php/uploads.ini:/usr/local/etc/php/conf.d/uploads.ini:ro
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: mariadb:11.4
+    container_name: fashiongate_db
+    restart: always
+    environment:
+      MYSQL_DATABASE: ${WORDPRESS_DB_NAME:-fashiongate_wp}
+      MYSQL_USER: ${WORDPRESS_DB_USER:-fg_wp_user}
+      MYSQL_PASSWORD: ${WORDPRESS_DB_PASSWORD:-fg_wp_pass_123!}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-fg_root_pass_123!}
+    volumes:
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mariadb-admin ping -h 127.0.0.1 -u root -p$$MYSQL_ROOT_PASSWORD || exit 1"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  cli:
+    image: wordpress:cli-php8.3
+    container_name: fashiongate_wpcli
+    user: "33:33"
+    volumes:
+      - wp_data:/var/www/html
+      - ../wordpress/themes/fashiongate-astra-child:/var/www/html/wp-content/themes/fashiongate-astra-child:rw
+      - ../wordpress/plugins/fashiongate-elementor-experience:/var/www/html/wp-content/plugins/fashiongate-elementor-experience:rw
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_NAME: ${WORDPRESS_DB_NAME:-fashiongate_wp}
+      WORDPRESS_DB_USER: ${WORDPRESS_DB_USER:-fg_wp_user}
+      WORDPRESS_DB_PASSWORD: ${WORDPRESS_DB_PASSWORD:-fg_wp_pass_123!}
+      WP_CLI_CACHE_DIR: /tmp/.wp-cli/cache
+    depends_on:
+      - wordpress
+      - db
+
+volumes:
+  wp_data:
+  db_data:

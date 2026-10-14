@@ -1,0 +1,6 @@
+{
+  "login": true,
+  "steps": [
+    { "step": "runPHP", "code": "<?php require '/fg-tests/setup.php';" }
+  ]
+}

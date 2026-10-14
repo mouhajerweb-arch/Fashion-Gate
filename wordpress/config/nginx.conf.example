@@ -1,0 +1,38 @@
+# Adapt to managed hosting. WordPress files live in /srv/www/landing.
+# Keep this file and the real secret outside the public document root.
+# Replace CHANGE_ME on the host; NEVER commit the actual credential.
+map $http_x_fg_proxy_token $fg_authorized {
+    default 0;
+    "CHANGE_ME" 1;
+}
+server {
+    listen 443 ssl;
+    server_name wp-landing.fashiongatemall.com;
+    root /srv/www;
+    # Supply ssl_certificate / ssl_certificate_key through hosting.
+    if ($fg_authorized = 0) { return 403; }
+    client_max_body_size 32m;
+    location = / { return 404; }
+    location = /robots.txt { return 200 "User-agent: *\nDisallow: /\n"; }
+    location /landing/ {
+        try_files $uri $uri/ /landing/index.php?$args;
+    }
+    location = /landing {
+        rewrite ^ /landing/index.php last;
+    }
+    location ~ ^/landing/wp-content/uploads/.*\.php$ { deny all; }
+    location ~ ^/landing/.*\.php$ {
+        try_files $uri =404;
+        include fastcgi_params;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        fastcgi_param HTTPS on;
+        fastcgi_pass unix:/run/php/php8.3-fpm.sock;
+        add_header Cache-Control "private, no-store, max-age=0" always;
+    }
+    location ~ /\. { deny all; }
+    location ~* ^/landing/.*\.(css|js|woff2|webp|avif|jpg|jpeg|png|svg)$ {
+        try_files $uri =404;
+        # Generated Elementor filenames can stay stable: revalidate instead of immutable.
+        add_header Cache-Control "public, max-age=0, must-revalidate";
+    }
+}

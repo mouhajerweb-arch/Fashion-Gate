@@ -9,6 +9,8 @@ export default function robots(): MetadataRoute.Robots {
       allow: "/",
       disallow: ["/studio/", "/api/"]
     },
-    sitemap: `${SITE_URL}/sitemap.xml`
+    sitemap: process.env.FG_WORDPRESS_ORIGIN
+      ? [`${SITE_URL}/sitemap.xml`, "https://www.fashiongatemall.com/landing/sitemap_index.xml"]
+      : `${SITE_URL}/sitemap.xml`
   };
 }

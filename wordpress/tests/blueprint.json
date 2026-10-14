@@ -1,0 +1,41 @@
+{
+    "$schema":  "https://playground.wordpress.net/blueprint-schema.json",
+    "preferredVersions":  {
+                              "php":  "8.3",
+                              "wp":  "latest"
+                          },
+    "login":  true,
+    "constants":  {
+                      "WP_DEBUG":  true,
+                      "WP_DEBUG_DISPLAY":  true
+                  },
+    "plugins":  [
+                    "elementor",
+                    "wordpress-seo",
+                    "polylang"
+                ],
+    "steps":  [
+                  {
+                      "step":  "installTheme",
+                      "themeData":  {
+                                        "resource":  "wordpress.org/themes",
+                                        "slug":  "astra"
+                                    },
+                      "options":  {
+                                      "activate":  false
+                                  }
+                  },
+                  {
+                      "step":  "activateTheme",
+                      "themeFolderName":  "fashiongate-astra-child"
+                  },
+                  {
+                      "step":  "activatePlugin",
+                      "pluginPath":  "fashiongate-elementor-experience/fashiongate-elementor-experience.php"
+                  },
+                  {
+                      "step":  "runPHP",
+                      "code":  "\u003c?php require \u0027/fg-tests/setup.php\u0027;"
+                  }
+              ]
+}

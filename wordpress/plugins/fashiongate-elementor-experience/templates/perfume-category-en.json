@@ -1,0 +1,122 @@
+{
+  "version": "0.4",
+  "title": "FG Perfume Category — EN",
+  "type": "container",
+  "content": [
+    {
+      "id": "0000024",
+      "elType": "container",
+      "isInner": false,
+      "settings": {
+        "_title": "FG Perfume Category",
+        "content_width": "full",
+        "flex_direction": "column",
+        "padding": {
+          "unit": "px",
+          "top": "60",
+          "right": "60",
+          "bottom": "60",
+          "left": "60",
+          "isLinked": true
+        },
+        "padding_tablet": {
+          "unit": "px",
+          "top": "40",
+          "right": "40",
+          "bottom": "40",
+          "left": "40",
+          "isLinked": true
+        },
+        "padding_mobile": {
+          "unit": "px",
+          "top": "24",
+          "right": "24",
+          "bottom": "24",
+          "left": "24",
+          "isLinked": true
+        },
+        "flex_gap": {
+          "column": "24",
+          "row": "24",
+          "unit": "px"
+        },
+        "_element_id": "perfume"
+      },
+      "elements": [
+        {
+          "id": "0000023",
+          "elType": "widget",
+          "widgetType": "fg-luxury-cards",
+          "settings": {
+            "title": "03 / PERFUME",
+            "eyebrow": "▪ HAUTE PARFUMERIE HOUSE",
+            "body": "Discover atmospheric, sensual, and rare fragrance extraits crafted by world-renowned perfumers.",
+            "cards": [
+              {
+                "_id": "0000020",
+                "title": "Royal Oud & Damascus Amber",
+                "label": "PARFUM EXTRAIT",
+                "image": {
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/hero-unisex-perfume.jpg",
+                  "id": ""
+                },
+                "hover_image": {
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/lookbook-scent.png",
+                  "id": ""
+                },
+                "body": "Deep aged agarwood blended with golden amber and smoked spices.",
+                "link": {
+                  "url": "#register"
+                }
+              },
+              {
+                "_id": "0000021",
+                "title": "Velvet Damask Rose & Musk",
+                "label": "EAU DE PARFUM",
+                "image": {
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/lookbook-scent.png",
+                  "id": ""
+                },
+                "hover_image": {
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/hero-unisex-perfume.jpg",
+                  "id": ""
+                },
+                "body": "Sensual floral heart notes wrapped in white cashmere musk.",
+                "link": {
+                  "url": "#register"
+                }
+              },
+              {
+                "_id": "0000022",
+                "title": "Smoked Vanilla & Cedar Nectar",
+                "label": "PRIVATE BLEND",
+                "image": {
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/hero-look-06.jpg",
+                  "id": ""
+                },
+                "hover_image": {
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/hero-unisex-perfume.jpg",
+                  "id": ""
+                },
+                "body": "Warm Madagascar vanilla with rich Atlas cedarwood.",
+                "link": {
+                  "url": "#register"
+                }
+              }
+            ],
+            "cta": "EXPLORE PERFUME COLLECTION",
+            "link": {
+              "url": "#register"
+            },
+            "tag": "h2"
+          },
+          "elements": []
+        }
+      ]
+    }
+  ],
+  "page_settings": {
+    "template": "elementor_canvas",
+    "hide_title": "yes"
+  }
+}

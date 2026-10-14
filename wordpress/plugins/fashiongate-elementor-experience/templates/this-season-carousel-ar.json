@@ -1,0 +1,147 @@
+{
+  "version": "0.4",
+  "title": "FG Editorial Carousel — AR",
+  "type": "container",
+  "content": [
+    {
+      "id": "000004a",
+      "elType": "container",
+      "isInner": false,
+      "settings": {
+        "_title": "FG Editorial Carousel",
+        "content_width": "full",
+        "flex_direction": "column",
+        "padding": {
+          "unit": "px",
+          "top": "60",
+          "right": "60",
+          "bottom": "60",
+          "left": "60",
+          "isLinked": true
+        },
+        "padding_tablet": {
+          "unit": "px",
+          "top": "40",
+          "right": "40",
+          "bottom": "40",
+          "left": "40",
+          "isLinked": true
+        },
+        "padding_mobile": {
+          "unit": "px",
+          "top": "24",
+          "right": "24",
+          "bottom": "24",
+          "left": "24",
+          "isLinked": true
+        },
+        "flex_gap": {
+          "column": "24",
+          "row": "24",
+          "unit": "px"
+        },
+        "_element_id": "this-season"
+      },
+      "elements": [
+        {
+          "id": "0000049",
+          "elType": "widget",
+          "widgetType": "fg-horizontal-showcase",
+          "settings": {
+            "title": "مختارات حصرية",
+            "eyebrow": "▪ إطلالات الموسم وأجواء الموضة",
+            "cards": [
+              {
+                "_id": "000000e",
+                "title": "فستان ميدي كتان",
+                "label": "فساتين",
+                "image": {
+                  "url": "http://localhost:8080/wp-content/plugins/fashiongate-elementor-experience/assets/media/product-midi-dress.jpg",
+                  "id": ""
+                },
+                "body": "فساتين",
+                "link": {
+                  "url": "#clothes"
+                }
+              },
+              {
+                "_id": "000000f",
+                "title": "بلوزة موون كتان",
+                "label": "بلوزات",
+                "image": {
+                  "url": "http://localhost:8080/wp-content/plugins/fashiongate-elementor-experience/assets/media/product-moon-blouse.jpg",
+                  "id": ""
+                },
+                "body": "بلوزات",
+                "link": {
+                  "url": "#clothes"
+                }
+              },
+              {
+                "_id": "0000010",
+                "title": "قميص صن أوفرسايز",
+                "label": "بلوزات",
+                "image": {
+                  "url": "http://localhost:8080/wp-content/plugins/fashiongate-elementor-experience/assets/media/product-sun-blouse.jpg",
+                  "id": ""
+                },
+                "body": "بلوزات",
+                "link": {
+                  "url": "#clothes"
+                }
+              },
+              {
+                "_id": "0000011",
+                "title": "بليزر صيفي أنيق",
+                "label": "بليزرات وتفصيل",
+                "image": {
+                  "url": "http://localhost:8080/wp-content/plugins/fashiongate-elementor-experience/assets/media/blazer.png",
+                  "id": ""
+                },
+                "body": "بليزرات وتفصيل",
+                "link": {
+                  "url": "#clothes"
+                }
+              },
+              {
+                "_id": "0000012",
+                "title": "فستان سهرة كوتور",
+                "label": "أزياء راقية",
+                "image": {
+                  "url": "http://localhost:8080/wp-content/plugins/fashiongate-elementor-experience/assets/media/designer-collections.png",
+                  "id": ""
+                },
+                "body": "أزياء راقية",
+                "link": {
+                  "url": "#clothes"
+                }
+              },
+              {
+                "_id": "0000013",
+                "title": "معطف ترنش خريفي",
+                "label": "معاطف",
+                "image": {
+                  "url": "http://localhost:8080/wp-content/plugins/fashiongate-elementor-experience/assets/media/autumn-edit.png",
+                  "id": ""
+                },
+                "body": "معاطف",
+                "link": {
+                  "url": "#clothes"
+                }
+              }
+            ],
+            "pin": "yes",
+            "gallery_scrub": 1,
+            "mobile_layout": "swipe",
+            "tag": "h2"
+          },
+          "elements": []
+        }
+      ]
+    }
+  ],
+  "page_settings": {
+    "template": "elementor_canvas",
+    "hide_title": "yes"
+  }
+}

@@ -8,3 +8,14 @@ pnpm-debug.log*
 .vercel
 .env*
 !.env.local.example
+npm-cache
+.npm-cache
+**/npm-cache/
+**/.npm-cache/
+wordpress/.npm-cache/
+wordpress/npm-cache/
+.qa
+**/.qa/
+wordpress/.qa/
+*.png.qa
+

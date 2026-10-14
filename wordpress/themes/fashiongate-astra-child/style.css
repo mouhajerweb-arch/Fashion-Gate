@@ -1,0 +1,16 @@
+/*
+Theme Name: Fashion Gate Astra Child
+Template: astra
+Version: 1.0.0
+Text Domain: fashiongate
+*/
+:root{--fg-accent:#CB6116;--fg-accent-deep:#9D430C;--fg-dark:#050505;--fg-cream:#F7F2EC;--fg-light:#fbfaf8;--fg-text:#101010;--fg-display:"Cormorant Garamond","EB Garamond",Georgia,serif;--fg-body:"Cairo",Arial,sans-serif}
+body{background:var(--fg-light);color:var(--fg-text);font-family:var(--fg-body)}
+body.rtl{font-family:"Cairo",sans-serif}
+.fg-skip{position:fixed;inset-block-start:8px;inset-inline-start:8px;z-index:100000;background:#fff;color:#101010;padding:12px;transform:translateY(-200%)}
+.fg-skip:focus{transform:none}
+:where(a,button,input,textarea,select,summary):focus-visible{outline:3px solid var(--fg-accent-deep);outline-offset:5px}
+.fg-editorial-width{max-inline-size:52rem}.fg-no-overflow{overflow:clip}.fg-full-bleed{inline-size:100%}
+.fg-luxury-label{font-size:.75rem;letter-spacing:.16em;text-transform:uppercase}.rtl .fg-luxury-label{letter-spacing:normal}
+.fg-dark-section{background:var(--fg-dark);color:var(--fg-light)}.fg-light-section{background:var(--fg-light);color:var(--fg-text)}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto!important}}

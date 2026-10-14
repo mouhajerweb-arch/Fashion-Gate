@@ -1,0 +1,92 @@
+{
+  "title": "Fashion Gate Global Settings",
+  "type": "kit",
+  "version": "0.4",
+  "content": [],
+  "page_settings": {
+    "custom_colors": [
+      {
+        "_id": "fg_background",
+        "title": "FG background",
+        "color": "#FAF9F5"
+      },
+      {
+        "_id": "fg_light",
+        "title": "FG light",
+        "color": "#FFFFFF"
+      },
+      {
+        "_id": "fg_dark",
+        "title": "FG dark",
+        "color": "#161616"
+      },
+      {
+        "_id": "fg_text",
+        "title": "FG text",
+        "color": "#161616"
+      },
+      {
+        "_id": "fg_muted",
+        "title": "FG muted",
+        "color": "#55504A"
+      },
+      {
+        "_id": "fg_accent",
+        "title": "FG accent",
+        "color": "#E85D04"
+      },
+      {
+        "_id": "fg_accent_deep",
+        "title": "FG accent deep",
+        "color": "#C84C00"
+      },
+      {
+        "_id": "fg_border",
+        "title": "FG border",
+        "color": "#E8E3DC"
+      }
+    ],
+    "custom_typography": [
+      {
+        "_id": "fg_display_en",
+        "title": "FG display en",
+        "typography_typography": "custom",
+        "typography_font_family": "Cormorant Garamond",
+        "typography_font_weight": "400"
+      },
+      {
+        "_id": "fg_body_en",
+        "title": "FG body en",
+        "typography_typography": "custom",
+        "typography_font_family": "Cairo",
+        "typography_font_weight": "400"
+      },
+      {
+        "_id": "fg_display_ar",
+        "title": "FG display ar",
+        "typography_typography": "custom",
+        "typography_font_family": "Cairo",
+        "typography_font_weight": "400"
+      },
+      {
+        "_id": "fg_body_ar",
+        "title": "FG body ar",
+        "typography_typography": "custom",
+        "typography_font_family": "Cairo",
+        "typography_font_weight": "400"
+      }
+    ],
+    "body_typography_typography": "custom",
+    "body_typography_font_family": "Cairo",
+    "body_typography_font_size": {
+      "unit": "px",
+      "size": 16
+    },
+    "body_typography_line_height": {
+      "unit": "em",
+      "size": 1.8
+    },
+    "viewport_mobile": 767,
+    "viewport_tablet": 1024
+  }
+}

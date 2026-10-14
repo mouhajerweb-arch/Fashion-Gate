@@ -1,0 +1,147 @@
+{
+  "version": "0.4",
+  "title": "FG Editorial Carousel — EN",
+  "type": "container",
+  "content": [
+    {
+      "id": "0000014",
+      "elType": "container",
+      "isInner": false,
+      "settings": {
+        "_title": "FG Editorial Carousel",
+        "content_width": "full",
+        "flex_direction": "column",
+        "padding": {
+          "unit": "px",
+          "top": "60",
+          "right": "60",
+          "bottom": "60",
+          "left": "60",
+          "isLinked": true
+        },
+        "padding_tablet": {
+          "unit": "px",
+          "top": "40",
+          "right": "40",
+          "bottom": "40",
+          "left": "40",
+          "isLinked": true
+        },
+        "padding_mobile": {
+          "unit": "px",
+          "top": "24",
+          "right": "24",
+          "bottom": "24",
+          "left": "24",
+          "isLinked": true
+        },
+        "flex_gap": {
+          "column": "24",
+          "row": "24",
+          "unit": "px"
+        },
+        "_element_id": "this-season"
+      },
+      "elements": [
+        {
+          "id": "0000013",
+          "elType": "widget",
+          "widgetType": "fg-horizontal-showcase",
+          "settings": {
+            "title": "Curated Collection",
+            "eyebrow": "▪ SEASONAL LOOKBOOK & ATMOSPHERE",
+            "cards": [
+              {
+                "_id": "000000e",
+                "title": "MIDI DRESS",
+                "label": "Dresses",
+                "image": {
+                  "url": "http://localhost:8080/wp-content/plugins/fashiongate-elementor-experience/assets/media/product-midi-dress.jpg",
+                  "id": ""
+                },
+                "body": "Dresses",
+                "link": {
+                  "url": "#clothes"
+                }
+              },
+              {
+                "_id": "000000f",
+                "title": "MOON BLOUSE",
+                "label": "Blouse",
+                "image": {
+                  "url": "http://localhost:8080/wp-content/plugins/fashiongate-elementor-experience/assets/media/product-moon-blouse.jpg",
+                  "id": ""
+                },
+                "body": "Blouse",
+                "link": {
+                  "url": "#clothes"
+                }
+              },
+              {
+                "_id": "0000010",
+                "title": "SUN BLOUSE",
+                "label": "Blouse",
+                "image": {
+                  "url": "http://localhost:8080/wp-content/plugins/fashiongate-elementor-experience/assets/media/product-sun-blouse.jpg",
+                  "id": ""
+                },
+                "body": "Blouse",
+                "link": {
+                  "url": "#clothes"
+                }
+              },
+              {
+                "_id": "0000011",
+                "title": "SUMMER BLAZER",
+                "label": "Tailoring",
+                "image": {
+                  "url": "http://localhost:8080/wp-content/plugins/fashiongate-elementor-experience/assets/media/blazer.png",
+                  "id": ""
+                },
+                "body": "Tailoring",
+                "link": {
+                  "url": "#clothes"
+                }
+              },
+              {
+                "_id": "0000012",
+                "title": "EVENING SILK GOWN",
+                "label": "Couture",
+                "image": {
+                  "url": "http://localhost:8080/wp-content/plugins/fashiongate-elementor-experience/assets/media/designer-collections.png",
+                  "id": ""
+                },
+                "body": "Couture",
+                "link": {
+                  "url": "#clothes"
+                }
+              },
+              {
+                "_id": "0000013",
+                "title": "STRUCTURED TRENCH",
+                "label": "Outerwear",
+                "image": {
+                  "url": "http://localhost:8080/wp-content/plugins/fashiongate-elementor-experience/assets/media/autumn-edit.png",
+                  "id": ""
+                },
+                "body": "Outerwear",
+                "link": {
+                  "url": "#clothes"
+                }
+              }
+            ],
+            "pin": "yes",
+            "gallery_scrub": 1,
+            "mobile_layout": "swipe",
+            "tag": "h2"
+          },
+          "elements": []
+        }
+      ]
+    }
+  ],
+  "page_settings": {
+    "template": "elementor_canvas",
+    "hide_title": "yes"
+  }
+}

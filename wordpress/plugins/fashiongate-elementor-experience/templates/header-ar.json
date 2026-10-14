@@ -1,0 +1,96 @@
+{
+  "version": "0.4",
+  "title": "FG Main Header — AR",
+  "type": "container",
+  "content": [
+    {
+      "id": "000003d",
+      "elType": "container",
+      "isInner": false,
+      "settings": {
+        "_title": "FG Main Header",
+        "content_width": "full",
+        "flex_direction": "column",
+        "padding": {
+          "unit": "px",
+          "top": "0",
+          "right": "0",
+          "bottom": "0",
+          "left": "0",
+          "isLinked": true
+        },
+        "padding_tablet": {
+          "unit": "px",
+          "top": "40",
+          "right": "40",
+          "bottom": "40",
+          "left": "40",
+          "isLinked": true
+        },
+        "padding_mobile": {
+          "unit": "px",
+          "top": "24",
+          "right": "24",
+          "bottom": "24",
+          "left": "24",
+          "isLinked": true
+        },
+        "flex_gap": {
+          "column": "24",
+          "row": "24",
+          "unit": "px"
+        },
+        "html_tag": "header",
+        "css_classes": "fg-header-bar",
+        "_element_id": "fg-main-header-container"
+      },
+      "elements": [
+        {
+          "id": "000003c",
+          "elType": "widget",
+          "widgetType": "fg-fashion-header",
+          "settings": {
+            "logo": {
+              "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/fashion-gate-logo.svg",
+              "id": ""
+            },
+            "logo_url": {
+              "url": "/"
+            },
+            "whatsapp_label": "تواصل عبر واتساب",
+            "whatsapp_number": "+963 930 000 000",
+            "whatsapp_url": {
+              "url": "https://wa.me/963930000000"
+            },
+            "phone_number": "+963 930 000 000",
+            "phone_url": {
+              "url": "tel:+963930000000"
+            },
+            "x_url": {
+              "url": "https://x.com/fashiongatemall"
+            },
+            "instagram_url": {
+              "url": "https://www.instagram.com/fashiongatemall"
+            },
+            "facebook_url": {
+              "url": "https://www.facebook.com/fashiongatemall"
+            },
+            "lang_label": "EN",
+            "lang_url": {
+              "url": "/landing/en"
+            },
+            "flag_image": {
+              "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/United-Kingdom-flag.svg",
+              "id": ""
+            }
+          },
+          "elements": []
+        }
+      ]
+    }
+  ],
+  "page_settings": {
+    "template": "elementor_canvas",
+    "hide_title": "yes"
+  }
+}

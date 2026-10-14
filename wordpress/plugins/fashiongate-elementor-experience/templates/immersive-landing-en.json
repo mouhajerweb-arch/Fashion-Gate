@@ -1,0 +1,2030 @@
+{
+  "version": "0.4",
+  "title": "Fashion Gate — Immersive Lead Generation EN",
+  "type": "page",
+  "content": [
+    {
+      "id": "000003b",
+      "elType": "container",
+      "isInner": false,
+      "settings": {
+        "_title": "FG Announcement Marquee Bar",
+        "content_width": "full",
+        "flex_direction": "column",
+        "padding": {
+          "unit": "px",
+          "top": "0",
+          "right": "0",
+          "bottom": "0",
+          "left": "0",
+          "isLinked": true
+        },
+        "padding_tablet": {
+          "unit": "px",
+          "top": "40",
+          "right": "40",
+          "bottom": "40",
+          "left": "40",
+          "isLinked": true
+        },
+        "padding_mobile": {
+          "unit": "px",
+          "top": "24",
+          "right": "24",
+          "bottom": "24",
+          "left": "24",
+          "isLinked": true
+        },
+        "flex_gap": {
+          "column": "24",
+          "row": "24",
+          "unit": "px"
+        },
+        "_element_id": "fg-header-marquee"
+      },
+      "elements": [
+        {
+          "id": "000003a",
+          "elType": "widget",
+          "widgetType": "fg-announcement-bar",
+          "settings": {
+            "show_announcement": "yes",
+            "speed": 45,
+            "messages": [
+              {
+                "_id": "0000001",
+                "text": "NEW COLLECTIONS HAVE ARRIVED · VISIT FASHION GATE AT BOULEVARD DAMASCUS",
+                "link": {
+                  "url": "#clothes"
+                }
+              },
+              {
+                "_id": "0000002",
+                "text": "SPECIAL SEASONAL HIGHLIGHTS & EXCLUSIVE LUXURY BRANDS",
+                "link": {
+                  "url": "#brands"
+                }
+              },
+              {
+                "_id": "0000003",
+                "text": "DISCOVER PRIVATE PERFUME BLENDS & HAUTE BEAUTY RITUALS",
+                "link": {
+                  "url": "#perfume"
+                }
+              }
+            ]
+          },
+          "elements": []
+        }
+      ]
+    },
+    {
+      "id": "000003d",
+      "elType": "container",
+      "isInner": false,
+      "settings": {
+        "_title": "FG Main Header",
+        "content_width": "full",
+        "flex_direction": "column",
+        "padding": {
+          "unit": "px",
+          "top": "0",
+          "right": "0",
+          "bottom": "0",
+          "left": "0",
+          "isLinked": true
+        },
+        "padding_tablet": {
+          "unit": "px",
+          "top": "40",
+          "right": "40",
+          "bottom": "40",
+          "left": "40",
+          "isLinked": true
+        },
+        "padding_mobile": {
+          "unit": "px",
+          "top": "24",
+          "right": "24",
+          "bottom": "24",
+          "left": "24",
+          "isLinked": true
+        },
+        "flex_gap": {
+          "column": "24",
+          "row": "24",
+          "unit": "px"
+        },
+        "html_tag": "header",
+        "css_classes": "fg-header-bar",
+        "_element_id": "fg-main-header-container"
+      },
+      "elements": [
+        {
+          "id": "000003c",
+          "elType": "widget",
+          "widgetType": "fg-fashion-header",
+          "settings": {
+            "logo": {
+              "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/fashion-gate-logo.svg",
+              "id": ""
+            },
+            "logo_url": {
+              "url": "/"
+            },
+            "whatsapp_label": "WhatsApp Us",
+            "whatsapp_number": "+963 930 000 000",
+            "whatsapp_url": {
+              "url": "https://wa.me/963930000000"
+            },
+            "phone_number": "+963 930 000 000",
+            "phone_url": {
+              "url": "tel:+963930000000"
+            },
+            "x_url": {
+              "url": "https://x.com/fashiongatemall"
+            },
+            "instagram_url": {
+              "url": "https://www.instagram.com/fashiongatemall"
+            },
+            "facebook_url": {
+              "url": "https://www.facebook.com/fashiongatemall"
+            },
+            "lang_label": "AR",
+            "lang_url": {
+              "url": "/landing/ar"
+            },
+            "flag_image": {
+              "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/Syrian-flag.svg",
+              "id": ""
+            },
+            "show_header_contacts": "no"
+          },
+          "elements": []
+        }
+      ]
+    },
+    {
+      "id": "0000042_container",
+      "elType": "container",
+      "isInner": false,
+      "settings": {
+        "_title": "FG Luxury Hero",
+        "content_width": "full",
+        "flex_direction": "column",
+        "padding": {
+          "unit": "px",
+          "top": "0",
+          "right": "0",
+          "bottom": "0",
+          "left": "0",
+          "isLinked": true
+        },
+        "padding_tablet": {
+          "unit": "px",
+          "top": "40",
+          "right": "40",
+          "bottom": "40",
+          "left": "40",
+          "isLinked": true
+        },
+        "padding_mobile": {
+          "unit": "px",
+          "top": "24",
+          "right": "24",
+          "bottom": "24",
+          "left": "24",
+          "isLinked": true
+        },
+        "flex_gap": {
+          "column": "24",
+          "row": "24",
+          "unit": "px"
+        },
+        "_element_id": "fg-hero"
+      },
+      "elements": [
+        {
+          "id": "000000c",
+          "elType": "widget",
+          "widgetType": "fg-animated-hero",
+          "settings": {
+            "title": "FASHION GATE MALL",
+            "subtitle": "Damascus, Syria",
+            "eyebrow": "▪ FASHION GATE · DAMASCUS",
+            "body": "Discover ready-to-wear haute couture, high beauty rituals, and private perfume blends at Damascus’s premier luxury fashion address.",
+            "tag": "h1",
+            "image": {
+              "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/hero-woman-wide.png",
+              "id": ""
+            },
+            "mobile_image": {
+              "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/hero-look-01.jpg",
+              "id": ""
+            },
+            "alt": "Fashion Gate Hero Campaign",
+            "cta": "EXPLORE FASHION",
+            "link": {
+              "url": "#clothes"
+            },
+            "secondary_cta": "PLAN YOUR VISIT",
+            "secondary_link": {
+              "url": "#register"
+            },
+            "bottom_nav": [
+              {
+                "_id": "0000008",
+                "label": "WOMEN",
+                "link": {
+                  "url": "#clothes"
+                }
+              },
+              {
+                "_id": "0000009",
+                "label": "MEN",
+                "link": {
+                  "url": "#clothes"
+                }
+              },
+              {
+                "_id": "000000a",
+                "label": "BEAUTY",
+                "link": {
+                  "url": "#skincare"
+                }
+              },
+              {
+                "_id": "000000b",
+                "label": "PERFUME",
+                "link": {
+                  "url": "#perfume"
+                }
+              }
+            ],
+            "fg_animation": "mask-up",
+            "fg_trigger": "load",
+            "fg_duration": 0.9,
+            "fg_delay": 0,
+            "fg_stagger": 0.09,
+            "fg_ease": "power2.out",
+            "fg_start": "top 85%",
+            "fg_end": "bottom top",
+            "fg_desktop": "yes",
+            "fg_tablet": "yes",
+            "fg_mobile": "",
+            "fg_reduced": "none"
+          },
+          "elements": []
+        }
+      ]
+    },
+    {
+      "id": "0000040_curated_unified",
+      "elType": "container",
+      "isInner": false,
+      "settings": {
+        "_title": "FG Curated Fashion Unified Section",
+        "content_width": "full",
+        "flex_direction": "column",
+        "padding": {
+          "unit": "px",
+          "top": "0",
+          "right": "0",
+          "bottom": "0",
+          "left": "0",
+          "isLinked": true
+        },
+        "_element_id": "curated-unified-section",
+        "css_classes": "fg-unified-curated"
+      },
+      "elements": [
+        {
+          "id": "0000043a",
+          "elType": "widget",
+          "widgetType": "fg-editorial-banner",
+          "settings": {
+            "banner_theme": "curated",
+            "banner_image": {
+              "url": "http://localhost:8080/wp-content/plugins/fashiongate-elementor-experience/assets/media/curated-fashion-banner.jpg",
+              "id": ""
+            },
+            "eyebrow": "READY-TO-WEAR & COUTURE",
+            "title": "Contemporary Luxury & Designer Clothes",
+            "cta": "EXPLORE COLLECTION",
+            "link": {
+              "url": "#clothes"
+            }
+          },
+          "elements": []
+        },
+        {
+          "id": "0000049",
+          "elType": "widget",
+          "widgetType": "fg-horizontal-showcase",
+          "settings": {
+            "title": "Curated Designer Clothes",
+            "eyebrow": "▪ READY-TO-WEAR & BRAND ATELIER",
+            "cards": [
+              {
+                "_id": "fgcard_7qnqt1e_0",
+                "title": "DIOR EVENING COUTURE",
+                "label": "Dior · Haute Couture",
+                "image": {
+                  "url": "http://localhost:8080/wp-content/plugins/fashiongate-elementor-experience/assets/media/product_4.png",
+                  "id": ""
+                },
+                "body": "Silk chiffon and dramatic floor-length silhouettes.",
+                "link": {
+                  "url": ""
+                }
+              },
+              {
+                "_id": "fgcard_zv0lmh4_1",
+                "title": "CHANEL TWEED ENSEMBLE",
+                "label": "Chanel · Ready-to-Wear",
+                "image": {
+                  "url": "http://localhost:8080/wp-content/plugins/fashiongate-elementor-experience/assets/media/product_5.png",
+                  "id": ""
+                },
+                "body": "Iconic Parisian boucle weave and tailored lines.",
+                "link": {
+                  "url": ""
+                }
+              },
+              {
+                "_id": "fgcard_6wz41tj_2",
+                "title": "MAX MARA TAILORED BLAZER",
+                "label": "Max Mara · Italian Atelier",
+                "image": {
+                  "url": "http://localhost:8080/wp-content/plugins/fashiongate-elementor-experience/assets/media/blazer.png",
+                  "id": ""
+                },
+                "body": "Structured shoulders and premium Italian wool blends.",
+                "link": {
+                  "url": ""
+                }
+              },
+              {
+                "_id": "fgcard_w476fk6_3",
+                "title": "SAINT LAURENT TUXEDO",
+                "label": "Saint Laurent · Tailoring",
+                "image": {
+                  "url": "http://localhost:8080/wp-content/plugins/fashiongate-elementor-experience/assets/media/modern-sophistication.png",
+                  "id": ""
+                },
+                "body": "Sharp masculine tailoring reimagined for modern nights.",
+                "link": {
+                  "url": ""
+                }
+              },
+              {
+                "_id": "fgcard_94t55w2_4",
+                "title": "PRADA STRUCTURED TRENCH",
+                "label": "Prada · Outerwear",
+                "image": {
+                  "url": "http://localhost:8080/wp-content/plugins/fashiongate-elementor-experience/assets/media/lookbook-trench.png",
+                  "id": ""
+                },
+                "body": "Timeless double-breasted cut with refined waist accents.",
+                "link": {
+                  "url": ""
+                }
+              },
+              {
+                "_id": "fgcard_o245rhn_5",
+                "title": "GUCCI SILK EMBROIDERED EDIT",
+                "label": "Gucci · Florence",
+                "image": {
+                  "url": "http://localhost:8080/wp-content/plugins/fashiongate-elementor-experience/assets/media/autumn-edit.png",
+                  "id": ""
+                },
+                "body": "Cultural grace met with Florentine botanical details.",
+                "link": {
+                  "url": ""
+                }
+              },
+              {
+                "_id": "fgcard_kst40ux_6",
+                "title": "PURE LINEN MIDI DRESS",
+                "label": "Dresses · Contemporary Summer",
+                "image": {
+                  "url": "http://localhost:8080/wp-content/plugins/fashiongate-elementor-experience/assets/media/product-midi-dress.jpg",
+                  "id": ""
+                },
+                "body": "Effortless lightweight luxury linen.",
+                "link": {
+                  "url": ""
+                }
+              },
+              {
+                "_id": "fgcard_er1ty9z_7",
+                "title": "SILK MOON BLOUSE",
+                "label": "Blouse · Fluid Tailoring",
+                "image": {
+                  "url": "http://localhost:8080/wp-content/plugins/fashiongate-elementor-experience/assets/media/product_7.png",
+                  "id": ""
+                },
+                "body": "Soft draping in pearl silk crepe.",
+                "link": {
+                  "url": ""
+                }
+              },
+              {
+                "_id": "fgcard_z6rz0mh_8",
+                "title": "OVERSIZED SUN SHIRT",
+                "label": "Blouse · Resort Elegance",
+                "image": {
+                  "url": "http://localhost:8080/wp-content/plugins/fashiongate-elementor-experience/assets/media/product-sun-blouse.jpg",
+                  "id": ""
+                },
+                "body": "Relaxed silhouette crafted from organic Egyptian cotton.",
+                "link": {
+                  "url": ""
+                }
+              },
+              {
+                "_id": "fgcard_upf26f6_9",
+                "title": "HUGO BOSS MODERN POLO",
+                "label": "Hugo Boss · Contemporary Menswear",
+                "image": {
+                  "url": "http://localhost:8080/wp-content/plugins/fashiongate-elementor-experience/assets/media/product_1.png",
+                  "id": ""
+                },
+                "body": "Signature pique cotton polo crafted with precision collar detailing.",
+                "link": {
+                  "url": ""
+                }
+              }
+            ],
+            "pin": "yes",
+            "gallery_scrub": 1,
+            "mobile_layout": "swipe",
+            "tag": "h2"
+          },
+          "elements": []
+        }
+      ]
+    },
+    {
+      "id": "0000071",
+      "elType": "container",
+      "isInner": false,
+      "settings": {
+        "_title": "FG Perfume Unified Section",
+        "content_width": "full",
+        "flex_direction": "column",
+        "padding": {
+          "unit": "px",
+          "top": "0",
+          "right": "0",
+          "bottom": "0",
+          "left": "0",
+          "isLinked": true
+        },
+        "_element_id": "perfume-unified-section",
+        "css_classes": "fg-unified-perfume"
+      },
+      "elements": [
+        {
+          "id": "0000071a",
+          "elType": "widget",
+          "widgetType": "fg-editorial-banner",
+          "settings": {
+            "banner_theme": "perfume",
+            "banner_image": {
+              "url": "http://localhost:8080/wp-content/plugins/fashiongate-elementor-experience/assets/media/banner-perfume-visual.png",
+              "id": ""
+            },
+            "eyebrow": "NEW ARRIVAL",
+            "title": "Massive Fragrance Deals",
+            "quote_text": "Perfume is the indispensable complement of the personality; the finishing touch of an outfit.",
+            "quote_author": "Christian Dior",
+            "deal_highlight": "Up To <span class=\"fg-highlight-teal\">50%</span> Discount!"
+          },
+          "elements": []
+        },
+        {
+          "id": "0000072a",
+          "elType": "widget",
+          "widgetType": "fg-horizontal-showcase",
+          "settings": {
+            "collection_type": "perfume",
+            "title": "Curated Fragrance Collection",
+            "cards": [
+              {
+                "_id": "fgcard_y20p4d9_0",
+                "title": "NOIR & AMBRE",
+                "label": "Maison Vestige · Parfums de Prestige",
+                "image": {
+                  "url": "http://localhost:8080/wp-content/plugins/fashiongate-elementor-experience/assets/media/product-perfume-noir.jpg",
+                  "id": ""
+                },
+                "body": "Maison Vestige",
+                "link": {
+                  "url": ""
+                }
+              },
+              {
+                "_id": "fgcard_ys5xi0a_1",
+                "title": "MAISON L'AMOUR",
+                "label": "Paris · Eau De Parfum Intense",
+                "image": {
+                  "url": "http://localhost:8080/wp-content/plugins/fashiongate-elementor-experience/assets/media/product-perfume-maison.jpg",
+                  "id": ""
+                },
+                "body": "Maison L'Amour",
+                "link": {
+                  "url": ""
+                }
+              },
+              {
+                "_id": "fgcard_yosnetk_2",
+                "title": "JASMINE SAMBAC",
+                "label": "Luxury Botanicals · Rare Flower Elixir",
+                "image": {
+                  "url": "http://localhost:8080/wp-content/plugins/fashiongate-elementor-experience/assets/media/product-perfume-jasmine.jpg",
+                  "id": ""
+                },
+                "body": "Luxury Botanicals",
+                "link": {
+                  "url": ""
+                }
+              },
+              {
+                "_id": "fgcard_vasiade_3",
+                "title": "MYTH EAU DE PARFUM",
+                "label": "Ellis Brooklyn · Modern Floral",
+                "image": {
+                  "url": "http://localhost:8080/wp-content/plugins/fashiongate-elementor-experience/assets/media/product-perfume-ellis.jpg",
+                  "id": ""
+                },
+                "body": "Ellis Brooklyn",
+                "link": {
+                  "url": ""
+                }
+              },
+              {
+                "_id": "fgcard_p9r77ey_4",
+                "title": "VELVET ROSE CRYSTAL",
+                "label": "Haute Parfumerie · Signature Blend",
+                "image": {
+                  "url": "http://localhost:8080/wp-content/plugins/fashiongate-elementor-experience/assets/media/hero-unisex-perfume.jpg",
+                  "id": ""
+                },
+                "body": "Haute Parfumerie",
+                "link": {
+                  "url": ""
+                }
+              },
+              {
+                "_id": "fgcard_0s3hgna_5",
+                "title": "CHANEL NO. 5",
+                "label": "Chanel · Iconic Parisian Flacon",
+                "image": {
+                  "url": "http://localhost:8080/wp-content/plugins/fashiongate-elementor-experience/assets/media/product_6.png",
+                  "id": ""
+                },
+                "body": "Chanel",
+                "link": {
+                  "url": ""
+                }
+              },
+              {
+                "_id": "fgcard_ei2eiod_6",
+                "title": "TOM FORD OUD WOOD",
+                "label": "Tom Ford · Private Blend Reserve",
+                "image": {
+                  "url": "http://localhost:8080/wp-content/plugins/fashiongate-elementor-experience/assets/media/lookbook-scent.png",
+                  "id": ""
+                },
+                "body": "Tom Ford",
+                "link": {
+                  "url": ""
+                }
+              },
+              {
+                "_id": "fgcard_5c1295k_7",
+                "title": "BACCARAT ROUGE 540",
+                "label": "Maison Francis Kurkdjian · Amber Floral",
+                "image": {
+                  "url": "http://localhost:8080/wp-content/plugins/fashiongate-elementor-experience/assets/media/product-perfume-noir.jpg",
+                  "id": ""
+                },
+                "body": "Maison Francis Kurkdjian",
+                "link": {
+                  "url": ""
+                }
+              },
+              {
+                "_id": "fgcard_sd1l3ih_8",
+                "title": "SANTAL 33",
+                "label": "Le Labo · Artisanal Smoky Cardamom",
+                "image": {
+                  "url": "http://localhost:8080/wp-content/plugins/fashiongate-elementor-experience/assets/media/product-perfume-maison.jpg",
+                  "id": ""
+                },
+                "body": "Le Labo",
+                "link": {
+                  "url": ""
+                }
+              },
+              {
+                "_id": "fgcard_pq7toa1_9",
+                "title": "IMPERIAL VIOLET ELIXIR",
+                "label": "Haute Damascus · Pure Extraction",
+                "image": {
+                  "url": "http://localhost:8080/wp-content/plugins/fashiongate-elementor-experience/assets/media/product-perfume-ellis.jpg",
+                  "id": ""
+                },
+                "body": "Haute Damascus",
+                "link": {
+                  "url": ""
+                }
+              }
+            ]
+          },
+          "elements": []
+        }
+      ]
+    },
+    {
+      "id": "0000073",
+      "elType": "container",
+      "isInner": false,
+      "settings": {
+        "_title": "FG Skincare Unified Section",
+        "content_width": "full",
+        "flex_direction": "column",
+        "padding": {
+          "unit": "px",
+          "top": "0",
+          "right": "0",
+          "bottom": "0",
+          "left": "0",
+          "isLinked": true
+        },
+        "_element_id": "skincare-unified-section",
+        "css_classes": "fg-unified-skincare"
+      },
+      "elements": [
+        {
+          "id": "0000073a",
+          "elType": "widget",
+          "widgetType": "fg-editorial-banner",
+          "settings": {
+            "banner_theme": "skincare",
+            "banner_image": {
+              "url": "http://localhost:8080/wp-content/plugins/fashiongate-elementor-experience/assets/media/banner-skincare-visual.jpg",
+              "id": ""
+            },
+            "eyebrow": "NEW ARRIVAL",
+            "title": "Skin Care Deals",
+            "quote_text": "Invest in your skin, glowing skin is the purest reflection of inner harmony.",
+            "quote_author": "Fashion Gate Haute Beauté",
+            "skincare_highlight": "<span class=\"fg-skincare-white-accent\">50%</span> Massive"
+          },
+          "elements": []
+        },
+        {
+          "id": "0000074a",
+          "elType": "widget",
+          "widgetType": "fg-horizontal-showcase",
+          "settings": {
+            "collection_type": "skincare",
+            "title": "Most Wanted Products",
+            "cards": [
+              {
+                "_id": "fgcard_la49qj9_0",
+                "title": "SAFFRON RADIANCE NECTAR",
+                "label": "Arthur & Co. · Youth Infusion",
+                "image": {
+                  "url": "http://localhost:8080/wp-content/plugins/fashiongate-elementor-experience/assets/media/product-skincare-saffron.jpg",
+                  "id": ""
+                },
+                "body": "Arthur & Co.",
+                "link": {
+                  "url": ""
+                }
+              },
+              {
+                "_id": "fgcard_tf7zoj2_1",
+                "title": "BOTANICAL RADIANCE OIL",
+                "label": "Pure Botanicals · Restorative Elixir",
+                "image": {
+                  "url": "http://localhost:8080/wp-content/plugins/fashiongate-elementor-experience/assets/media/product-skincare-botanical.jpg",
+                  "id": ""
+                },
+                "body": "Pure Botanicals",
+                "link": {
+                  "url": ""
+                }
+              },
+              {
+                "_id": "fgcard_05m5juh_2",
+                "title": "VELVET GLOW HYDRA-BALM",
+                "label": "Luxury Skincare · Deep Hydration",
+                "image": {
+                  "url": "http://localhost:8080/wp-content/plugins/fashiongate-elementor-experience/assets/media/product-skincare-glow.jpg",
+                  "id": ""
+                },
+                "body": "Luxury Skincare",
+                "link": {
+                  "url": ""
+                }
+              },
+              {
+                "_id": "fgcard_n76wxki_3",
+                "title": "GOLDEN IMPERIAL INFUSION",
+                "label": "Haute Beauté · Cellular Renewal",
+                "image": {
+                  "url": "http://localhost:8080/wp-content/plugins/fashiongate-elementor-experience/assets/media/honey.png",
+                  "id": ""
+                },
+                "body": "Haute Beauté",
+                "link": {
+                  "url": ""
+                }
+              },
+              {
+                "_id": "fgcard_z9zwgz4_4",
+                "title": "ROSE BOTANICAL ELIXIR",
+                "label": "Botanical Labs · Nutrient Drops",
+                "image": {
+                  "url": "http://localhost:8080/wp-content/plugins/fashiongate-elementor-experience/assets/media/jasmine-oil.png",
+                  "id": ""
+                },
+                "body": "Botanical Labs",
+                "link": {
+                  "url": ""
+                }
+              },
+              {
+                "_id": "fgcard_l321hee_5",
+                "title": "CRÈME DE LA MER",
+                "label": "La Mer · Miracle Broth Concentrate",
+                "image": {
+                  "url": "http://localhost:8080/wp-content/plugins/fashiongate-elementor-experience/assets/media/product-skincare-botanical.jpg",
+                  "id": ""
+                },
+                "body": "La Mer",
+                "link": {
+                  "url": ""
+                }
+              },
+              {
+                "_id": "fgcard_uvn3v91_6",
+                "title": "THE RICH CREAM",
+                "label": "Augustinus Bader · TFC8 Cellular Renew",
+                "image": {
+                  "url": "http://localhost:8080/wp-content/plugins/fashiongate-elementor-experience/assets/media/product-skincare-glow.jpg",
+                  "id": ""
+                },
+                "body": "Augustinus Bader",
+                "link": {
+                  "url": ""
+                }
+              },
+              {
+                "_id": "fgcard_8k38r1l_7",
+                "title": "ADVANCED NIGHT REPAIR",
+                "label": "Estée Lauder · Synchronized Recovery",
+                "image": {
+                  "url": "http://localhost:8080/wp-content/plugins/fashiongate-elementor-experience/assets/media/product-skincare-saffron.jpg",
+                  "id": ""
+                },
+                "body": "Estée Lauder",
+                "link": {
+                  "url": ""
+                }
+              },
+              {
+                "_id": "fgcard_28f4bax_8",
+                "title": "FACIAL TREATMENT ESSENCE",
+                "label": "SK-II · Pure Pitera Miracle Moisture",
+                "image": {
+                  "url": "http://localhost:8080/wp-content/plugins/fashiongate-elementor-experience/assets/media/jasmine-oil.png",
+                  "id": ""
+                },
+                "body": "SK-II",
+                "link": {
+                  "url": ""
+                }
+              },
+              {
+                "_id": "fgcard_rtngbsd_9",
+                "title": "ROYAL JASMINE NOURISHING OIL",
+                "label": "Damascus Botanicals · Pure Cold-Pressed",
+                "image": {
+                  "url": "http://localhost:8080/wp-content/plugins/fashiongate-elementor-experience/assets/media/honey.png",
+                  "id": ""
+                },
+                "body": "Damascus Botanicals",
+                "link": {
+                  "url": ""
+                }
+              }
+            ]
+          },
+          "elements": []
+        }
+      ]
+    },
+    {
+      "id": "0000075_manifesto",
+      "elType": "container",
+      "isInner": false,
+      "settings": {
+        "_title": "FG Brand Manifesto Statement",
+        "content_width": "full",
+        "flex_direction": "column",
+        "padding": {
+          "unit": "px",
+          "top": "0",
+          "right": "0",
+          "bottom": "0",
+          "left": "0",
+          "isLinked": true
+        },
+        "css_classes": "fg-manifesto-section",
+        "_element_id": "brand-manifesto"
+      },
+      "elements": [
+        {
+          "id": "0000075a",
+          "elType": "widget",
+          "widgetType": "fg-brand-manifesto",
+          "settings": {
+            "eyebrow": "WHERE GLOBAL COUTURE MEETS DAMASCUS",
+            "quote_text": "\"Syria has never had a luxury mall of this scale. Fashion Gate Mall Syria is not just a business. It is the reopening of Syria to the world through fashion.\"",
+            "subtitle": "On Boulevard. For the world...",
+            "signature_image": {
+              "url": "http://localhost:8080/wp-content/plugins/fashiongate-elementor-experience/assets/media/fashion-gate-signature.png",
+              "id": ""
+            },
+            "signature_text": "Fashion Gate"
+          },
+          "elements": []
+        }
+      ]
+    },
+    {
+      "id": "000005c",
+      "elType": "container",
+      "isInner": false,
+      "settings": {
+        "_title": "FG Brand Logo Marquee",
+        "content_width": "full",
+        "flex_direction": "column",
+        "padding": {
+          "unit": "px",
+          "top": "0",
+          "right": "0",
+          "bottom": "0",
+          "left": "0",
+          "isLinked": true
+        },
+        "padding_tablet": {
+          "unit": "px",
+          "top": "0",
+          "right": "0",
+          "bottom": "0",
+          "left": "0",
+          "isLinked": true
+        },
+        "padding_mobile": {
+          "unit": "px",
+          "top": "0",
+          "right": "0",
+          "bottom": "0",
+          "left": "0",
+          "isLinked": true
+        },
+        "flex_gap": {
+          "column": "24",
+          "row": "24",
+          "unit": "px"
+        },
+        "css_classes": "fg-marquee-section",
+        "_element_id": "brands"
+      },
+      "elements": [
+        {
+          "id": "000005b",
+          "elType": "widget",
+          "widgetType": "fg-marquee",
+          "settings": {
+            "title": "DIOR ▪ CHANEL ▪ TOM FORD ▪ HERMÈS ▪ PRADA ▪ GUCCI ▪ SAINT LAURENT ▪ VALENTINO ▪ FASHION GATE ▪ ",
+            "speed": 110,
+            "direction": "normal",
+            "logo_height": {
+              "unit": "px",
+              "size": 38
+            },
+            "brands": [
+              {
+                "_id": "fgbrand_0",
+                "title": "Acler",
+                "logo": {
+                  "id": 102,
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/logos/acler.png"
+                },
+                "url": {
+                  "url": "/brand/acler"
+                },
+                "logo_height": 32,
+                "logo_width": ""
+              },
+              {
+                "_id": "fgbrand_1",
+                "title": "Adidas",
+                "logo": {
+                  "id": 117,
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/logos/adidas.png"
+                },
+                "url": {
+                  "url": "/brand/adidas"
+                },
+                "logo_height": 38,
+                "logo_width": ""
+              },
+              {
+                "_id": "fgbrand_2",
+                "title": "Alfaparf Milano",
+                "logo": {
+                  "id": 118,
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/logos/alfaparf-milano.png"
+                },
+                "url": {
+                  "url": "/brand/alfaparf-milano"
+                },
+                "logo_height": 42,
+                "logo_width": ""
+              },
+              {
+                "_id": "fgbrand_3",
+                "title": "Allione",
+                "logo": {
+                  "id": 119,
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/logos/allione.png"
+                },
+                "url": {
+                  "url": "/brand/allione"
+                },
+                "logo_height": 44,
+                "logo_width": ""
+              },
+              {
+                "_id": "fgbrand_4",
+                "title": "Almais",
+                "logo": {
+                  "id": 103,
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/logos/almais.png"
+                },
+                "url": {
+                  "url": "/brand/almais"
+                },
+                "logo_height": 32,
+                "logo_width": ""
+              },
+              {
+                "_id": "fgbrand_5",
+                "title": "Anastasia Beverly Hills",
+                "logo": {
+                  "id": 120,
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/logos/anastasia-beverly-hills.png"
+                },
+                "url": {
+                  "url": "/brand/anastasia-beverly-hills"
+                },
+                "logo_height": 38,
+                "logo_width": ""
+              },
+              {
+                "_id": "fgbrand_6",
+                "title": "Armand Basi",
+                "logo": {
+                  "id": 121,
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/logos/armand-basi.png"
+                },
+                "url": {
+                  "url": "/brand/armand-basi"
+                },
+                "logo_height": 42,
+                "logo_width": ""
+              },
+              {
+                "_id": "fgbrand_7",
+                "title": "Atelier Rebul",
+                "logo": {
+                  "id": 122,
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/logos/atelier-rebul.png"
+                },
+                "url": {
+                  "url": "/brand/atelier-rebul"
+                },
+                "logo_height": 38,
+                "logo_width": ""
+              },
+              {
+                "_id": "fgbrand_8",
+                "title": "Azzaro",
+                "logo": {
+                  "id": 123,
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/logos/azzaro.png"
+                },
+                "url": {
+                  "url": "/brand/azzaro"
+                },
+                "logo_height": 38,
+                "logo_width": ""
+              },
+              {
+                "_id": "fgbrand_9",
+                "title": "BMW",
+                "logo": {
+                  "id": 127,
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/logos/bmw.png"
+                },
+                "url": {
+                  "url": "/brand/bmw"
+                },
+                "logo_height": 38,
+                "logo_width": ""
+              },
+              {
+                "_id": "fgbrand_10",
+                "title": "Belif",
+                "logo": {
+                  "id": 124,
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/logos/belif.png"
+                },
+                "url": {
+                  "url": "/brand/belif"
+                },
+                "logo_height": 44,
+                "logo_width": ""
+              },
+              {
+                "_id": "fgbrand_11",
+                "title": "Beverly Hills Polo Club",
+                "logo": {
+                  "id": 125,
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/logos/beverly-hills-polo-club.png"
+                },
+                "url": {
+                  "url": "/brand/beverly-hills-polo-club"
+                },
+                "logo_height": 38,
+                "logo_width": ""
+              },
+              {
+                "_id": "fgbrand_12",
+                "title": "Beyond",
+                "logo": {
+                  "id": 126,
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/logos/beyond.png"
+                },
+                "url": {
+                  "url": "/brand/beyond"
+                },
+                "logo_height": 38,
+                "logo_width": ""
+              },
+              {
+                "_id": "fgbrand_13",
+                "title": "Calvin Klein",
+                "logo": {
+                  "id": 128,
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/logos/calvin-klein.png"
+                },
+                "url": {
+                  "url": "/brand/calvin-klein"
+                },
+                "logo_height": 42,
+                "logo_width": ""
+              },
+              {
+                "_id": "fgbrand_14",
+                "title": "Cartier",
+                "logo": {
+                  "id": 129,
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/logos/cartier.png"
+                },
+                "url": {
+                  "url": "/brand/cartier"
+                },
+                "logo_height": 42,
+                "logo_width": ""
+              },
+              {
+                "_id": "fgbrand_15",
+                "title": "Chloé",
+                "logo": {
+                  "id": 130,
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/logos/chloe.png"
+                },
+                "url": {
+                  "url": "/brand/chloe"
+                },
+                "logo_height": 42,
+                "logo_width": ""
+              },
+              {
+                "_id": "fgbrand_16",
+                "title": "Clarins Paris",
+                "logo": {
+                  "id": 131,
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/logos/clarins-paris.png"
+                },
+                "url": {
+                  "url": "/brand/clarins-paris"
+                },
+                "logo_height": 38,
+                "logo_width": ""
+              },
+              {
+                "_id": "fgbrand_17",
+                "title": "Coach",
+                "logo": {
+                  "id": 132,
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/logos/coach.png"
+                },
+                "url": {
+                  "url": "/brand/coach"
+                },
+                "logo_height": 42,
+                "logo_width": ""
+              },
+              {
+                "_id": "fgbrand_18",
+                "title": "Davidoff",
+                "logo": {
+                  "id": 133,
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/logos/davidoff.png"
+                },
+                "url": {
+                  "url": "/brand/davidoff"
+                },
+                "logo_height": 38,
+                "logo_width": ""
+              },
+              {
+                "_id": "fgbrand_19",
+                "title": "Dermedic",
+                "logo": {
+                  "id": 134,
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/logos/dermedic.png"
+                },
+                "url": {
+                  "url": "/brand/dermedic"
+                },
+                "logo_height": 36,
+                "logo_width": ""
+              },
+              {
+                "_id": "fgbrand_20",
+                "title": "Diesel",
+                "logo": {
+                  "id": 135,
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/logos/diesel.png"
+                },
+                "url": {
+                  "url": "/brand/diesel"
+                },
+                "logo_height": 42,
+                "logo_width": ""
+              },
+              {
+                "_id": "fgbrand_21",
+                "title": "Dr. Belmeur",
+                "logo": {
+                  "id": 136,
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/logos/dr-belmeur.png"
+                },
+                "url": {
+                  "url": "/brand/dr-belmeur"
+                },
+                "logo_height": 38,
+                "logo_width": ""
+              },
+              {
+                "_id": "fgbrand_22",
+                "title": "Editorial",
+                "logo": {
+                  "id": 137,
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/logos/editorial.png"
+                },
+                "url": {
+                  "url": "/brand/editorial"
+                },
+                "logo_height": 42,
+                "logo_width": ""
+              },
+              {
+                "_id": "fgbrand_23",
+                "title": "Elie Saab",
+                "logo": {
+                  "id": 104,
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/logos/elie-saab.png"
+                },
+                "url": {
+                  "url": "/brand/elie-saab"
+                },
+                "logo_height": 38,
+                "logo_width": ""
+              },
+              {
+                "_id": "fgbrand_24",
+                "title": "Elizabeth Arden",
+                "logo": {
+                  "id": 138,
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/logos/elizabeth-arden.png"
+                },
+                "url": {
+                  "url": "/brand/elizabeth-arden"
+                },
+                "logo_height": 38,
+                "logo_width": ""
+              },
+              {
+                "_id": "fgbrand_25",
+                "title": "Emporio Armani EA7",
+                "logo": {
+                  "id": 139,
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/logos/emporio-armani-ea7.png"
+                },
+                "url": {
+                  "url": "/brand/emporio-armani-ea7"
+                },
+                "logo_height": 36,
+                "logo_width": ""
+              },
+              {
+                "_id": "fgbrand_26",
+                "title": "FMGT",
+                "logo": {
+                  "id": 141,
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/logos/fmgt.png"
+                },
+                "url": {
+                  "url": "/brand/fmgt"
+                },
+                "logo_height": 44,
+                "logo_width": ""
+              },
+              {
+                "_id": "fgbrand_27",
+                "title": "Ferragamo",
+                "logo": {
+                  "id": 140,
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/logos/ferragamo.png"
+                },
+                "url": {
+                  "url": "/brand/ferragamo"
+                },
+                "logo_height": 38,
+                "logo_width": ""
+              },
+              {
+                "_id": "fgbrand_28",
+                "title": "Gemology",
+                "logo": {
+                  "id": 142,
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/logos/gemology.png"
+                },
+                "url": {
+                  "url": "/brand/gemology"
+                },
+                "logo_height": 42,
+                "logo_width": ""
+              },
+              {
+                "_id": "fgbrand_29",
+                "title": "George Rech",
+                "logo": {
+                  "id": 143,
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/logos/george-rech.webp"
+                },
+                "url": {
+                  "url": "/brand/george-rech"
+                },
+                "logo_height": 38,
+                "logo_width": ""
+              },
+              {
+                "_id": "fgbrand_30",
+                "title": "Giorgio Armani",
+                "logo": {
+                  "id": 105,
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/logos/giorgio-armani.png"
+                },
+                "url": {
+                  "url": "/brand/giorgio-armani"
+                },
+                "logo_height": 44,
+                "logo_width": ""
+              },
+              {
+                "_id": "fgbrand_31",
+                "title": "Gucci",
+                "logo": {
+                  "id": 106,
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/logos/gucci.png"
+                },
+                "url": {
+                  "url": "/brand/gucci"
+                },
+                "logo_height": 38,
+                "logo_width": ""
+              },
+              {
+                "_id": "fgbrand_32",
+                "title": "Guess",
+                "logo": {
+                  "id": 144,
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/logos/guess.png"
+                },
+                "url": {
+                  "url": "/brand/guess"
+                },
+                "logo_height": 42,
+                "logo_width": ""
+              },
+              {
+                "_id": "fgbrand_33",
+                "title": "Guy Laroche",
+                "logo": {
+                  "id": 145,
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/logos/guy-laroche.webp"
+                },
+                "url": {
+                  "url": "/brand/guy-laroche"
+                },
+                "logo_height": 36,
+                "logo_width": ""
+              },
+              {
+                "_id": "fgbrand_34",
+                "title": "Hugo Boss",
+                "logo": {
+                  "id": 107,
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/logos/hugo-boss.png"
+                },
+                "url": {
+                  "url": "/brand/hugo-boss"
+                },
+                "logo_height": 42,
+                "logo_width": ""
+              },
+              {
+                "_id": "fgbrand_35",
+                "title": "Jeanne Arthes",
+                "logo": {
+                  "id": 146,
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/logos/jeanne-arthes.jpg"
+                },
+                "url": {
+                  "url": "/brand/jeanne-arthes"
+                },
+                "logo_height": 42,
+                "logo_width": ""
+              },
+              {
+                "_id": "fgbrand_36",
+                "title": "Jimmy Choo",
+                "logo": {
+                  "id": 147,
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/logos/jimmy-choo.png"
+                },
+                "url": {
+                  "url": "/brand/jimmy-choo"
+                },
+                "logo_height": 42,
+                "logo_width": ""
+              },
+              {
+                "_id": "fgbrand_37",
+                "title": "Kenneth Cole",
+                "logo": {
+                  "id": 148,
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/logos/kenneth-cole.png"
+                },
+                "url": {
+                  "url": "/brand/kenneth-cole"
+                },
+                "logo_height": 42,
+                "logo_width": ""
+              },
+              {
+                "_id": "fgbrand_38",
+                "title": "Lacoste",
+                "logo": {
+                  "id": 149,
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/logos/lacoste.png"
+                },
+                "url": {
+                  "url": "/brand/lacoste"
+                },
+                "logo_height": 42,
+                "logo_width": ""
+              },
+              {
+                "_id": "fgbrand_39",
+                "title": "Lakmé",
+                "logo": {
+                  "id": 150,
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/logos/lakme.png"
+                },
+                "url": {
+                  "url": "/brand/lakme"
+                },
+                "logo_height": 36,
+                "logo_width": ""
+              },
+              {
+                "_id": "fgbrand_40",
+                "title": "Lancôme",
+                "logo": {
+                  "id": 151,
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/logos/lancome.png"
+                },
+                "url": {
+                  "url": "/brand/lancome"
+                },
+                "logo_height": 42,
+                "logo_width": ""
+              },
+              {
+                "_id": "fgbrand_41",
+                "title": "Loreal",
+                "logo": {
+                  "id": 152,
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/logos/loreal.png"
+                },
+                "url": {
+                  "url": "/brand/loreal"
+                },
+                "logo_height": 38,
+                "logo_width": ""
+              },
+              {
+                "_id": "fgbrand_42",
+                "title": "MCM",
+                "logo": {
+                  "id": 155,
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/logos/mcm.png"
+                },
+                "url": {
+                  "url": "/brand/mcm"
+                },
+                "logo_height": 38,
+                "logo_width": ""
+              },
+              {
+                "_id": "fgbrand_43",
+                "title": "Mavala",
+                "logo": {
+                  "id": 153,
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/logos/mavala.png"
+                },
+                "url": {
+                  "url": "/brand/mavala"
+                },
+                "logo_height": 36,
+                "logo_width": ""
+              },
+              {
+                "_id": "fgbrand_44",
+                "title": "Max Mara",
+                "logo": {
+                  "id": 154,
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/logos/maxmara.png"
+                },
+                "url": {
+                  "url": "/brand/maxmara"
+                },
+                "logo_height": 42,
+                "logo_width": ""
+              },
+              {
+                "_id": "fgbrand_45",
+                "title": "Max&Co",
+                "logo": {
+                  "id": 108,
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/logos/max-and-co.png"
+                },
+                "url": {
+                  "url": "/brand/max-and-co"
+                },
+                "logo_height": 38,
+                "logo_width": ""
+              },
+              {
+                "_id": "fgbrand_46",
+                "title": "Michael Kors",
+                "logo": {
+                  "id": 156,
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/logos/michael-kors.png"
+                },
+                "url": {
+                  "url": "/brand/michael-kors"
+                },
+                "logo_height": 42,
+                "logo_width": ""
+              },
+              {
+                "_id": "fgbrand_47",
+                "title": "Moje",
+                "logo": {
+                  "id": 157,
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/logos/moje.png"
+                },
+                "url": {
+                  "url": "/brand/moje"
+                },
+                "logo_height": 42,
+                "logo_width": ""
+              },
+              {
+                "_id": "fgbrand_48",
+                "title": "Mont Blanc",
+                "logo": {
+                  "id": 158,
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/logos/mont-blanc.webp"
+                },
+                "url": {
+                  "url": "/brand/mont-blanc"
+                },
+                "logo_height": 42,
+                "logo_width": ""
+              },
+              {
+                "_id": "fgbrand_49",
+                "title": "Mugler",
+                "logo": {
+                  "id": 159,
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/logos/mugler.png"
+                },
+                "url": {
+                  "url": "/brand/mugler"
+                },
+                "logo_height": 42,
+                "logo_width": ""
+              },
+              {
+                "_id": "fgbrand_50",
+                "title": "Narciso Rodriguez",
+                "logo": {
+                  "id": 160,
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/logos/narciso-rodriguez.png"
+                },
+                "url": {
+                  "url": "/brand/narciso-rodriguez"
+                },
+                "logo_height": 42,
+                "logo_width": ""
+              },
+              {
+                "_id": "fgbrand_51",
+                "title": "Nean",
+                "logo": {
+                  "id": 161,
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/logos/nean.png"
+                },
+                "url": {
+                  "url": "/brand/nean"
+                },
+                "logo_height": 36,
+                "logo_width": ""
+              },
+              {
+                "_id": "fgbrand_52",
+                "title": "Nean.com",
+                "logo": {
+                  "id": 109,
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/logos/nean-com.png"
+                },
+                "url": {
+                  "url": "/brand/nean-com"
+                },
+                "logo_height": 36,
+                "logo_width": ""
+              },
+              {
+                "_id": "fgbrand_53",
+                "title": "Oscar",
+                "logo": {
+                  "id": 162,
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/logos/oscar.png"
+                },
+                "url": {
+                  "url": "/brand/oscar"
+                },
+                "logo_height": 42,
+                "logo_width": ""
+              },
+              {
+                "_id": "fgbrand_54",
+                "title": "Pascal Morabito",
+                "logo": {
+                  "id": 163,
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/logos/pascal-morabito.png"
+                },
+                "url": {
+                  "url": "/brand/pascal-morabito"
+                },
+                "logo_height": 38,
+                "logo_width": ""
+              },
+              {
+                "_id": "fgbrand_55",
+                "title": "Paul & Shark",
+                "logo": {
+                  "id": 164,
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/logos/paul-shark.png"
+                },
+                "url": {
+                  "url": "/brand/paul-shark"
+                },
+                "logo_height": 42,
+                "logo_width": ""
+              },
+              {
+                "_id": "fgbrand_56",
+                "title": "Persona by Marina Rinaldi",
+                "logo": {
+                  "id": 110,
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/logos/persona-marina-rinaldi.png"
+                },
+                "url": {
+                  "url": "/brand/persona-marina-rinaldi"
+                },
+                "logo_height": 38,
+                "logo_width": ""
+              },
+              {
+                "_id": "fgbrand_57",
+                "title": "Prada",
+                "logo": {
+                  "id": 111,
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/logos/prada.png"
+                },
+                "url": {
+                  "url": "/brand/prada"
+                },
+                "logo_height": 42,
+                "logo_width": ""
+              },
+              {
+                "_id": "fgbrand_58",
+                "title": "Puma",
+                "logo": {
+                  "id": 165,
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/logos/puma.png"
+                },
+                "url": {
+                  "url": "/brand/puma"
+                },
+                "logo_height": 36,
+                "logo_width": ""
+              },
+              {
+                "_id": "fgbrand_59",
+                "title": "Ralph Lauren",
+                "logo": {
+                  "id": 166,
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/logos/ralph-lauren.png"
+                },
+                "url": {
+                  "url": "/brand/ralph-lauren"
+                },
+                "logo_height": 36,
+                "logo_width": ""
+              },
+              {
+                "_id": "fgbrand_60",
+                "title": "Saint Laurent",
+                "logo": {
+                  "id": 115,
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/logos/ysl.png"
+                },
+                "url": {
+                  "url": "/brand/ysl"
+                },
+                "logo_height": 42,
+                "logo_width": ""
+              },
+              {
+                "_id": "fgbrand_61",
+                "title": "Sandro",
+                "logo": {
+                  "id": 112,
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/logos/sandro.png"
+                },
+                "url": {
+                  "url": "/brand/sandro"
+                },
+                "logo_height": 44,
+                "logo_width": ""
+              },
+              {
+                "_id": "fgbrand_62",
+                "title": "Shiseido",
+                "logo": {
+                  "id": 167,
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/logos/shiseido.png"
+                },
+                "url": {
+                  "url": "/brand/shiseido"
+                },
+                "logo_height": 42,
+                "logo_width": ""
+              },
+              {
+                "_id": "fgbrand_63",
+                "title": "Signature",
+                "logo": {
+                  "id": 168,
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/logos/signature.png"
+                },
+                "url": {
+                  "url": "/brand/signature"
+                },
+                "logo_height": 42,
+                "logo_width": ""
+              },
+              {
+                "_id": "fgbrand_64",
+                "title": "Skechers",
+                "logo": {
+                  "id": 169,
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/logos/skechers.png"
+                },
+                "url": {
+                  "url": "/brand/skechers"
+                },
+                "logo_height": 44,
+                "logo_width": ""
+              },
+              {
+                "_id": "fgbrand_65",
+                "title": "Suntique",
+                "logo": {
+                  "id": 170,
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/logos/suntique.png"
+                },
+                "url": {
+                  "url": "/brand/suntique"
+                },
+                "logo_height": 44,
+                "logo_width": ""
+              },
+              {
+                "_id": "fgbrand_66",
+                "title": "The Face Shop",
+                "logo": {
+                  "id": 171,
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/logos/the-face-shop.png"
+                },
+                "url": {
+                  "url": "/brand/the-face-shop"
+                },
+                "logo_height": 38,
+                "logo_width": ""
+              },
+              {
+                "_id": "fgbrand_67",
+                "title": "Trussardi",
+                "logo": {
+                  "id": 172,
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/logos/trussardi.png"
+                },
+                "url": {
+                  "url": "/brand/trussardi"
+                },
+                "logo_height": 42,
+                "logo_width": ""
+              },
+              {
+                "_id": "fgbrand_68",
+                "title": "Valentino",
+                "logo": {
+                  "id": 113,
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/logos/valentino.png"
+                },
+                "url": {
+                  "url": "/brand/valentino"
+                },
+                "logo_height": 42,
+                "logo_width": ""
+              },
+              {
+                "_id": "fgbrand_69",
+                "title": "Versace",
+                "logo": {
+                  "id": 173,
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/logos/versace.png"
+                },
+                "url": {
+                  "url": "/brand/versace"
+                },
+                "logo_height": 38,
+                "logo_width": ""
+              },
+              {
+                "_id": "fgbrand_70",
+                "title": "Viktor&Rolf",
+                "logo": {
+                  "id": 174,
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/logos/viktor-rolf.png"
+                },
+                "url": {
+                  "url": "/brand/viktor-rolf"
+                },
+                "logo_height": 38,
+                "logo_width": ""
+              },
+              {
+                "_id": "fgbrand_71",
+                "title": "Vince Camuto",
+                "logo": {
+                  "id": 175,
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/logos/vince-camuto.png"
+                },
+                "url": {
+                  "url": "/brand/vince-camuto"
+                },
+                "logo_height": 38,
+                "logo_width": ""
+              },
+              {
+                "_id": "fgbrand_72",
+                "title": "Weekend Max Mara",
+                "logo": {
+                  "id": 176,
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/logos/weekend-maxmara.svg"
+                },
+                "url": {
+                  "url": "/brand/weekend-maxmara"
+                },
+                "logo_height": 36,
+                "logo_width": ""
+              },
+              {
+                "_id": "fgbrand_73",
+                "title": "YSL Beauty",
+                "logo": {
+                  "id": 178,
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/logos/ysl-beauty.png"
+                },
+                "url": {
+                  "url": "/brand/ysl-beauty"
+                },
+                "logo_height": 42,
+                "logo_width": ""
+              },
+              {
+                "_id": "fgbrand_74",
+                "title": "Your Vegan",
+                "logo": {
+                  "id": 177,
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/logos/your-vegan.png"
+                },
+                "url": {
+                  "url": "/brand/your-vegan"
+                },
+                "logo_height": 42,
+                "logo_width": ""
+              }
+            ]
+          },
+          "elements": []
+        }
+      ]
+    },
+    {
+      "id": "0000078_atelier_contact",
+      "elType": "container",
+      "isInner": false,
+      "settings": {
+        "_title": "FG Atelier Contact Section",
+        "content_width": "full",
+        "flex_direction": "column",
+        "padding": {
+          "unit": "px",
+          "top": "0",
+          "right": "0",
+          "bottom": "0",
+          "left": "0",
+          "isLinked": true
+        },
+        "padding_tablet": {
+          "unit": "px",
+          "top": "0",
+          "right": "0",
+          "bottom": "0",
+          "left": "0",
+          "isLinked": true
+        },
+        "padding_mobile": {
+          "unit": "px",
+          "top": "0",
+          "right": "0",
+          "bottom": "0",
+          "left": "0",
+          "isLinked": true
+        },
+        "css_classes": "fg-contact-section-wrap",
+        "_element_id": "contact"
+      },
+      "elements": [
+        {
+          "id": "0000078_widget",
+          "elType": "widget",
+          "widgetType": "fg-atelier-contact",
+          "settings": {
+            "_title": "FG Atelier Contact Section",
+            "atelier_title": "Visit The Atelier",
+            "atelier_text": "Fashion Gate Mall, Damascus Boulevard\nDamascus, Syria",
+            "hours_title": "Opening Hours",
+            "hours_text": "Mon. – Sun.\n11:00 AM – 9:00 PM",
+            "email_title": "Email Us",
+            "email_text": "support@fashiongatemall.com",
+            "form_cursive": "Write to us",
+            "form_title": "Send A Message",
+            "form_sub": "A personal advisor will be in touch within 24 hours.",
+            "modal_title": "Get in touch",
+            "btn_text": "SEND MESSAGE"
+          },
+          "elements": []
+        }
+      ]
+    },
+    {
+      "id": "000006b",
+      "elType": "container",
+      "isInner": false,
+      "settings": {
+        "_title": "FG Premium Footer",
+        "content_width": "full",
+        "flex_direction": "column",
+        "padding": {
+          "unit": "px",
+          "top": "0",
+          "right": "0",
+          "bottom": "0",
+          "left": "0",
+          "isLinked": true
+        },
+        "padding_tablet": {
+          "unit": "px",
+          "top": "0",
+          "right": "0",
+          "bottom": "0",
+          "left": "0",
+          "isLinked": true
+        },
+        "padding_mobile": {
+          "unit": "px",
+          "top": "0",
+          "right": "0",
+          "bottom": "0",
+          "left": "0",
+          "isLinked": true
+        },
+        "flex_gap": {
+          "column": "0",
+          "row": "0",
+          "unit": "px"
+        },
+        "html_tag": "div",
+        "css_classes": "fg-site-footer-wrapper"
+      },
+      "elements": [
+        {
+          "id": "0000068_site_footer",
+          "elType": "widget",
+          "widgetType": "fg-site-footer",
+          "settings": {
+            "_title": "FG Luxury Site Footer",
+            "brand_title": "Fashion Gate",
+            "boulevard_text": "BOULEVARD DAMASCUS",
+            "monogram": {
+              "url": "http://localhost:8080/wp-content/plugins/fashiongate-elementor-experience/assets/media/fg-mark-white.png"
+            },
+            "desc": "Syria's first luxury department destination. Integrating fine apparel, curated beauty, and bespoke boutique shopping under a modern architectural vision.",
+            "updates_title": "Bespoke Updates",
+            "subscribe_desc": "Subscribe to receive private invitations, seasonal collection launches, and atelier journal notes.",
+            "placeholder": "Email address",
+            "copyright": "All rights reserved."
+          },
+          "elements": []
+        }
+      ]
+    }
+  ],
+  "page_settings": {
+    "template": "elementor_canvas",
+    "hide_title": "yes"
+  }
+}

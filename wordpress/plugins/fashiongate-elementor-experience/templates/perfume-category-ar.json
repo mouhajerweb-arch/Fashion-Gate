@@ -1,0 +1,122 @@
+{
+  "version": "0.4",
+  "title": "FG Perfume Category — AR",
+  "type": "container",
+  "content": [
+    {
+      "id": "000005a",
+      "elType": "container",
+      "isInner": false,
+      "settings": {
+        "_title": "FG Perfume Category",
+        "content_width": "full",
+        "flex_direction": "column",
+        "padding": {
+          "unit": "px",
+          "top": "60",
+          "right": "60",
+          "bottom": "60",
+          "left": "60",
+          "isLinked": true
+        },
+        "padding_tablet": {
+          "unit": "px",
+          "top": "40",
+          "right": "40",
+          "bottom": "40",
+          "left": "40",
+          "isLinked": true
+        },
+        "padding_mobile": {
+          "unit": "px",
+          "top": "24",
+          "right": "24",
+          "bottom": "24",
+          "left": "24",
+          "isLinked": true
+        },
+        "flex_gap": {
+          "column": "24",
+          "row": "24",
+          "unit": "px"
+        },
+        "_element_id": "perfume"
+      },
+      "elements": [
+        {
+          "id": "0000059",
+          "elType": "widget",
+          "widgetType": "fg-luxury-cards",
+          "settings": {
+            "title": "03 / العطور الفاخرة والنادرة",
+            "eyebrow": "▪ دار العطور",
+            "body": "اكتشف عطوراً استثنائية ونادرة صُممت بأيدي أشهر العطارين العالميين.",
+            "cards": [
+              {
+                "_id": "0000056",
+                "title": "عود ملكي وعنبر دمشقي",
+                "label": "عطر خالص",
+                "image": {
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/hero-unisex-perfume.jpg",
+                  "id": ""
+                },
+                "hover_image": {
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/lookbook-scent.png",
+                  "id": ""
+                },
+                "body": "عود معتق فاخر امتزج بالعنبر الذهبي والتوابل.",
+                "link": {
+                  "url": "#register"
+                }
+              },
+              {
+                "_id": "0000057",
+                "title": "ورد دمشقي ومسك مخملي",
+                "label": "أو دي بارفان",
+                "image": {
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/lookbook-scent.png",
+                  "id": ""
+                },
+                "hover_image": {
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/hero-unisex-perfume.jpg",
+                  "id": ""
+                },
+                "body": "نفحات زهرية حسية مغلفة بمسك الكشمير الأبيض.",
+                "link": {
+                  "url": "#register"
+                }
+              },
+              {
+                "_id": "0000058",
+                "title": "فانيليا مدخنة وأرز",
+                "label": "مجموعة خاصة",
+                "image": {
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/hero-look-06.jpg",
+                  "id": ""
+                },
+                "hover_image": {
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/hero-unisex-perfume.jpg",
+                  "id": ""
+                },
+                "body": "فانيليا مدغشقر الدافئة مع خشب الأرز الأطلسي.",
+                "link": {
+                  "url": "#register"
+                }
+              }
+            ],
+            "cta": "اكتشف مجموعة العطور",
+            "link": {
+              "url": "#register"
+            },
+            "tag": "h2"
+          },
+          "elements": []
+        }
+      ]
+    }
+  ],
+  "page_settings": {
+    "template": "elementor_canvas",
+    "hide_title": "yes"
+  }
+}

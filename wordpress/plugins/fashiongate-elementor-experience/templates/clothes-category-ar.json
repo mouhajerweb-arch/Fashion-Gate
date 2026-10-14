@@ -1,0 +1,139 @@
+{
+  "version": "0.4",
+  "title": "FG Clothes Category — AR",
+  "type": "container",
+  "content": [
+    {
+      "id": "0000050",
+      "elType": "container",
+      "isInner": false,
+      "settings": {
+        "_title": "FG Clothes Category",
+        "content_width": "full",
+        "flex_direction": "column",
+        "padding": {
+          "unit": "px",
+          "top": "60",
+          "right": "60",
+          "bottom": "60",
+          "left": "60",
+          "isLinked": true
+        },
+        "padding_tablet": {
+          "unit": "px",
+          "top": "40",
+          "right": "40",
+          "bottom": "40",
+          "left": "40",
+          "isLinked": true
+        },
+        "padding_mobile": {
+          "unit": "px",
+          "top": "24",
+          "right": "24",
+          "bottom": "24",
+          "left": "24",
+          "isLinked": true
+        },
+        "flex_gap": {
+          "column": "24",
+          "row": "24",
+          "unit": "px"
+        },
+        "_element_id": "clothes"
+      },
+      "elements": [
+        {
+          "id": "000004f",
+          "elType": "widget",
+          "widgetType": "fg-luxury-cards",
+          "settings": {
+            "title": "01 / الأزياء والملابس الراقية",
+            "eyebrow": "▪ الأزياء والكوتور",
+            "body": "استكشف القصّات العصريّة والأقمشة الفاخرة والتفصيل الأوروبي الراقي المختار لدمشق.",
+            "cards": [
+              {
+                "_id": "000004b",
+                "title": "فساتين وسهرة كوتور",
+                "label": "كوتور",
+                "image": {
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/hero-look-01.jpg",
+                  "id": ""
+                },
+                "hover_image": {
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/hero-woman-wide.png",
+                  "id": ""
+                },
+                "body": "حرير شيفون وتطريز يدوي وتصاميم أنيقة.",
+                "link": {
+                  "url": "#register"
+                }
+              },
+              {
+                "_id": "000004c",
+                "title": "سترات وتفصيل فاخر",
+                "label": "تفصيل",
+                "image": {
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/blazer.png",
+                  "id": ""
+                },
+                "hover_image": {
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/hero-look-05.jpg",
+                  "id": ""
+                },
+                "body": "أكتاف محددة وأقمشة صوف إيطالية فاخرة.",
+                "link": {
+                  "url": "#register"
+                }
+              },
+              {
+                "_id": "000004d",
+                "title": "معاطف وتوليفات خارجية",
+                "label": "معاطف",
+                "image": {
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/lookbook-trench.png",
+                  "id": ""
+                },
+                "hover_image": {
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/autumn-edit.png",
+                  "id": ""
+                },
+                "body": "معاطف أنيقة بتفاصيل حزام راقية.",
+                "link": {
+                  "url": "#register"
+                }
+              },
+              {
+                "_id": "000004e",
+                "title": "حقائب جلدية توقيعية",
+                "label": "إكسسوارات",
+                "image": {
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/lookbook-tote.png",
+                  "id": ""
+                },
+                "hover_image": {
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/signature-accents.png",
+                  "id": ""
+                },
+                "body": "جلد طبيعي فاخر مع تفاصيل ذهبية.",
+                "link": {
+                  "url": "#register"
+                }
+              }
+            ],
+            "cta": "اكتشف مجموعة الأزياء",
+            "link": {
+              "url": "#register"
+            },
+            "tag": "h2"
+          },
+          "elements": []
+        }
+      ]
+    }
+  ],
+  "page_settings": {
+    "template": "elementor_canvas",
+    "hide_title": "yes"
+  }
+}

@@ -1,0 +1,121 @@
+{
+  "version": "0.4",
+  "title": "FG Final Lead CTA — AR",
+  "type": "container",
+  "content": [
+    {
+      "id": "0000067",
+      "elType": "container",
+      "isInner": false,
+      "settings": {
+        "_title": "FG Final Lead CTA",
+        "content_width": "full",
+        "flex_direction": "column",
+        "padding": {
+          "unit": "px",
+          "top": "80",
+          "right": "80",
+          "bottom": "80",
+          "left": "80",
+          "isLinked": true
+        },
+        "padding_tablet": {
+          "unit": "px",
+          "top": "40",
+          "right": "40",
+          "bottom": "40",
+          "left": "40",
+          "isLinked": true
+        },
+        "padding_mobile": {
+          "unit": "px",
+          "top": "24",
+          "right": "24",
+          "bottom": "24",
+          "left": "24",
+          "isLinked": true
+        },
+        "flex_gap": {
+          "column": "24",
+          "row": "24",
+          "unit": "px"
+        },
+        "_element_id": "register"
+      },
+      "elements": [
+        {
+          "id": "0000066",
+          "elType": "widget",
+          "widgetType": "fg-lead-experience",
+          "settings": {
+            "title": "اكتشف فاشن غيت بطريقتك.",
+            "body": "خطط لزيارتك الخاصة أو اطلب معاينات حصرية للتشكيلات وتواصل مع فريق خدمة العملاء الفاخرة.",
+            "fields": [
+              {
+                "_id": "0000060",
+                "key": "name",
+                "label": "الاسم الكامل",
+                "type": "text",
+                "required": "yes",
+                "options": ""
+              },
+              {
+                "_id": "0000061",
+                "key": "email",
+                "label": "البريد الإلكتروني",
+                "type": "email",
+                "required": "yes",
+                "options": ""
+              },
+              {
+                "_id": "0000062",
+                "key": "phone",
+                "label": "رقم الهاتف",
+                "type": "tel",
+                "required": "",
+                "options": ""
+              },
+              {
+                "_id": "0000063",
+                "key": "interest",
+                "label": "الاهتمام الرئيسي",
+                "type": "select",
+                "required": "yes",
+                "options": "الأزياء والملابس\nالعناية بالبشرة والجمال\nالعطور الفاخرة\nزيارة عامة"
+              },
+              {
+                "_id": "0000064",
+                "key": "message",
+                "label": "طلبك / رسالتك",
+                "type": "textarea",
+                "required": "yes",
+                "options": ""
+              },
+              {
+                "_id": "0000065",
+                "key": "consent",
+                "label": "أوافق على التواصل معي من قبل خدمة العملاء الفاخرة.",
+                "type": "checkbox",
+                "required": "yes",
+                "options": ""
+              }
+            ],
+            "campaign": "fashiongate-v2-luxury-landing",
+            "cta": "حجز زيارة",
+            "success": "شكراً لك. تم استلام طلبك من قبل فريق خدمة العملاء الفاخرة.",
+            "error": "تعذّر إرسال الطلب. يرجى المحاولة مجدداً.",
+            "privacy": {
+              "url": "https://www.fashiongatemall.com/privacy/ar"
+            },
+            "privacy_label": "سياسة الخصوصية"
+          },
+          "elements": []
+        }
+      ]
+    }
+  ],
+  "page_settings": {
+    "template": "elementor_canvas",
+    "hide_title": "yes"
+  }
+}

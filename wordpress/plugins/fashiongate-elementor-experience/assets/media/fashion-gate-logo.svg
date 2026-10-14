@@ -1,0 +1,14 @@
+<svg width="480" height="60" viewBox="0 0 480 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    .brand-title {
+      font-family: "Cormorant Garamond", "Didot", "Bodoni MT", "Cinzel", "Georgia", serif;
+      font-size: 36px;
+      font-weight: 500;
+      letter-spacing: 0.22em;
+      fill: #161616;
+      text-anchor: middle;
+      dominant-baseline: central;
+    }
+  </style>
+  <text x="50%" y="50%" class="brand-title">FASHION GATE</text>
+</svg>

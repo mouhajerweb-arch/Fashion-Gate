@@ -1,0 +1,86 @@
+{
+  "version": "0.4",
+  "title": "FG Brand Quote Statement — AR",
+  "type": "container",
+  "content": [
+    {
+      "id": "000005f",
+      "elType": "container",
+      "isInner": false,
+      "settings": {
+        "_title": "FG Brand Quote Statement",
+        "content_width": "full",
+        "flex_direction": "column",
+        "padding": {
+          "unit": "px",
+          "top": "80",
+          "right": "80",
+          "bottom": "80",
+          "left": "80",
+          "isLinked": true
+        },
+        "padding_tablet": {
+          "unit": "px",
+          "top": "40",
+          "right": "40",
+          "bottom": "40",
+          "left": "40",
+          "isLinked": true
+        },
+        "padding_mobile": {
+          "unit": "px",
+          "top": "24",
+          "right": "24",
+          "bottom": "24",
+          "left": "24",
+          "isLinked": true
+        },
+        "flex_gap": {
+          "column": "24",
+          "row": "24",
+          "unit": "px"
+        },
+        "css_classes": "fg-quote-box",
+        "_element_id": "quote"
+      },
+      "elements": [
+        {
+          "id": "000005d",
+          "elType": "widget",
+          "widgetType": "fg-reveal-heading",
+          "settings": {
+            "reveal_text": "“الأناقة ليست مجرد ما ترتديه، بل كيف تعيش العالم.”",
+            "tag": "h2",
+            "split": "lines",
+            "fg_animation": "text-reveal",
+            "fg_trigger": "viewport",
+            "fg_duration": 0.9,
+            "fg_delay": 0,
+            "fg_stagger": 0.09,
+            "fg_ease": "power2.out",
+            "fg_start": "top 85%",
+            "fg_end": "bottom top",
+            "fg_desktop": "yes",
+            "fg_tablet": "yes",
+            "fg_mobile": "",
+            "fg_reduced": "none"
+          },
+          "elements": []
+        },
+        {
+          "id": "000005e",
+          "elType": "widget",
+          "widgetType": "text-editor",
+          "settings": {
+            "editor": "<p>— فاشن غيت · بوليفارد دمشق</p>"
+          },
+          "elements": []
+        }
+      ]
+    }
+  ],
+  "page_settings": {
+    "template": "elementor_canvas",
+    "hide_title": "yes"
+  }
+}

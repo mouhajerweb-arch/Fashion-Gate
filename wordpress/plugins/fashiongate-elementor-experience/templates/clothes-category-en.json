@@ -1,0 +1,139 @@
+{
+  "version": "0.4",
+  "title": "FG Clothes Category — EN",
+  "type": "container",
+  "content": [
+    {
+      "id": "000001a",
+      "elType": "container",
+      "isInner": false,
+      "settings": {
+        "_title": "FG Clothes Category",
+        "content_width": "full",
+        "flex_direction": "column",
+        "padding": {
+          "unit": "px",
+          "top": "60",
+          "right": "60",
+          "bottom": "60",
+          "left": "60",
+          "isLinked": true
+        },
+        "padding_tablet": {
+          "unit": "px",
+          "top": "40",
+          "right": "40",
+          "bottom": "40",
+          "left": "40",
+          "isLinked": true
+        },
+        "padding_mobile": {
+          "unit": "px",
+          "top": "24",
+          "right": "24",
+          "bottom": "24",
+          "left": "24",
+          "isLinked": true
+        },
+        "flex_gap": {
+          "column": "24",
+          "row": "24",
+          "unit": "px"
+        },
+        "_element_id": "clothes"
+      },
+      "elements": [
+        {
+          "id": "0000019",
+          "elType": "widget",
+          "widgetType": "fg-luxury-cards",
+          "settings": {
+            "title": "01 / CLOTHES",
+            "eyebrow": "▪ READY-TO-WEAR & COUTURE",
+            "body": "Explore fashion-forward silhouettes, luxury fabrics, and contemporary European tailoring curated for Damascus.",
+            "cards": [
+              {
+                "_id": "0000015",
+                "title": "Evening Couture & Gowns",
+                "label": "COUTURE",
+                "image": {
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/hero-look-01.jpg",
+                  "id": ""
+                },
+                "hover_image": {
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/hero-woman-wide.png",
+                  "id": ""
+                },
+                "body": "Silk chiffon, hand embroidery, and dramatic floor-length silhouettes.",
+                "link": {
+                  "url": "#register"
+                }
+              },
+              {
+                "_id": "0000016",
+                "title": "Tailored Jackets & Blazers",
+                "label": "TAILORING",
+                "image": {
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/blazer.png",
+                  "id": ""
+                },
+                "hover_image": {
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/hero-look-05.jpg",
+                  "id": ""
+                },
+                "body": "Structured shoulders and premium Italian wool blends.",
+                "link": {
+                  "url": "#register"
+                }
+              },
+              {
+                "_id": "0000017",
+                "title": "Designer Trench & Outerwear",
+                "label": "OUTERWEAR",
+                "image": {
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/lookbook-trench.png",
+                  "id": ""
+                },
+                "hover_image": {
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/autumn-edit.png",
+                  "id": ""
+                },
+                "body": "Timeless double-breasted coats with refined belt accents.",
+                "link": {
+                  "url": "#register"
+                }
+              },
+              {
+                "_id": "0000018",
+                "title": "Signature Leather Totes",
+                "label": "ACCESSORIES",
+                "image": {
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/lookbook-tote.png",
+                  "id": ""
+                },
+                "hover_image": {
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/signature-accents.png",
+                  "id": ""
+                },
+                "body": "Full-grain calfskin with brushed gold hardware.",
+                "link": {
+                  "url": "#register"
+                }
+              }
+            ],
+            "cta": "EXPLORE CLOTHES COLLECTION",
+            "link": {
+              "url": "#register"
+            },
+            "tag": "h2"
+          },
+          "elements": []
+        }
+      ]
+    }
+  ],
+  "page_settings": {
+    "template": "elementor_canvas",
+    "hide_title": "yes"
+  }
+}

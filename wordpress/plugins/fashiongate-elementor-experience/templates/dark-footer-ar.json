@@ -1,0 +1,86 @@
+{
+  "version": "0.4",
+  "title": "FG Premium Footer — AR",
+  "type": "container",
+  "content": [
+    {
+      "id": "000006b",
+      "elType": "container",
+      "isInner": false,
+      "settings": {
+        "_title": "FG Premium Footer",
+        "content_width": "full",
+        "flex_direction": "column",
+        "padding": {
+          "unit": "px",
+          "top": "64",
+          "right": "64",
+          "bottom": "64",
+          "left": "64",
+          "isLinked": true
+        },
+        "padding_tablet": {
+          "unit": "px",
+          "top": "40",
+          "right": "40",
+          "bottom": "40",
+          "left": "40",
+          "isLinked": true
+        },
+        "padding_mobile": {
+          "unit": "px",
+          "top": "24",
+          "right": "24",
+          "bottom": "24",
+          "left": "24",
+          "isLinked": true
+        },
+        "flex_gap": {
+          "column": "24",
+          "row": "24",
+          "unit": "px"
+        },
+        "html_tag": "footer",
+        "css_classes": "fg-light-footer"
+      },
+      "elements": [
+        {
+          "id": "0000068",
+          "elType": "widget",
+          "widgetType": "heading",
+          "settings": {
+            "title": "فاشن غيت",
+            "header_size": "h2",
+            "__globals__": {
+              "title_color": "globals/colors?id=fg_text",
+              "typography_typography": "globals/typography?id=fg_display_ar"
+            }
+          },
+          "elements": []
+        },
+        {
+          "id": "0000069",
+          "elType": "widget",
+          "widgetType": "text-editor",
+          "settings": {
+            "editor": "<p>بوليفارد دمشق · سوريا | الوجهة الأولى للأزياء الفاخرة</p>"
+          },
+          "elements": []
+        },
+        {
+          "id": "000006a",
+          "elType": "widget",
+          "widgetType": "text-editor",
+          "settings": {
+            "editor": "<p>\n      <div class=\"fg-footer-links\">\n        <a href=\"#clothes\">النساء</a>\n        <a href=\"#clothes\">الرجال</a>\n        <a href=\"#skincare\">الجمال</a>\n        <a href=\"#perfume\">العطور</a>\n        <a href=\"#brands\">العلامات التجارية</a>\n        <a href=\"#register\">الزيارة والتواصل</a>\n      </div>\n      <div class=\"fg-footer-copy\">© 2026 فاشن غيت. جميع الحقوق محفوظة.</div>\n    </p>"
+          },
+          "elements": []
+        }
+      ]
+    }
+  ],
+  "page_settings": {
+    "template": "elementor_canvas",
+    "hide_title": "yes"
+  }
+}

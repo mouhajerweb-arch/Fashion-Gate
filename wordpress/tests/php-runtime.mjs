@@ -1,0 +1,10 @@
+import { PHP } from '@php-wasm/universal';
+import { loadNodeRuntime } from '@php-wasm/node';
+import fs from 'node:fs';
+const php=new PHP(await loadNodeRuntime('8.3',{emscriptenOptions:{processId:1}}));
+php.writeFile('/Leads.php',fs.readFileSync('wordpress/plugins/fashiongate-elementor-experience/includes/Leads.php'));
+const result=await php.run({code:fs.readFileSync('wordpress/tests/leads-runtime.php','utf8')});
+console.log(result.text);
+if(result.errors) console.error(result.errors);
+if(result.exitCode) process.exitCode=1;
+php.exit();

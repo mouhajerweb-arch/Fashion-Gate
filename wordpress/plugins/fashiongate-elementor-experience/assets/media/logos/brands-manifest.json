@@ -1,0 +1,114 @@
+[
+  {
+    "id": "weekend-maxmara",
+    "title": "Weekend Max Mara",
+    "titleAr": "ويكند ماكس مارا",
+    "filename": "weekend-maxmara.png",
+    "url": "http://localhost:8080/wp-content/plugins/fashiongate-elementor-experience/assets/media/logos/weekend-maxmara.png",
+    "size": 16815
+  },
+  {
+    "id": "max-and-co",
+    "title": "Max&Co",
+    "titleAr": "ماكس آند كو",
+    "filename": "max-and-co.png",
+    "url": "http://localhost:8080/wp-content/plugins/fashiongate-elementor-experience/assets/media/logos/max-and-co.png",
+    "size": 19968
+  },
+  {
+    "id": "persona-marina-rinaldi",
+    "title": "Persona by Marina Rinaldi",
+    "titleAr": "بيرسونا من مارينا رينالدي",
+    "filename": "persona-marina-rinaldi.png",
+    "url": "http://localhost:8080/wp-content/plugins/fashiongate-elementor-experience/assets/media/logos/persona-marina-rinaldi.png",
+    "size": 15970
+  },
+  {
+    "id": "nean-com",
+    "title": "Nean.com",
+    "titleAr": "نيان دوت كوم",
+    "filename": "nean-com.png",
+    "url": "http://localhost:8080/wp-content/plugins/fashiongate-elementor-experience/assets/media/logos/nean-com.png",
+    "size": 11920
+  },
+  {
+    "id": "acler",
+    "title": "Acler",
+    "titleAr": "أكلر",
+    "filename": "acler.png",
+    "url": "http://localhost:8080/wp-content/plugins/fashiongate-elementor-experience/assets/media/logos/acler.png",
+    "size": 13237
+  },
+  {
+    "id": "almais",
+    "title": "Almais",
+    "titleAr": "ألمايس",
+    "filename": "almais.png",
+    "url": "http://localhost:8080/wp-content/plugins/fashiongate-elementor-experience/assets/media/logos/almais.png",
+    "size": 27091
+  },
+  {
+    "id": "elie-saab",
+    "title": "Elie Saab",
+    "titleAr": "إيلي صعب",
+    "filename": "elie-saab.png",
+    "url": "http://localhost:8080/wp-content/plugins/fashiongate-elementor-experience/assets/media/logos/elie-saab.png",
+    "size": 17006
+  },
+  {
+    "id": "prada",
+    "title": "Prada",
+    "titleAr": "برادا",
+    "filename": "prada.png",
+    "url": "http://localhost:8080/wp-content/plugins/fashiongate-elementor-experience/assets/media/logos/prada.png",
+    "size": 30970
+  },
+  {
+    "id": "gucci",
+    "title": "Gucci",
+    "titleAr": "غوتشي",
+    "filename": "gucci.png",
+    "url": "http://localhost:8080/wp-content/plugins/fashiongate-elementor-experience/assets/media/logos/gucci.png",
+    "size": 10442
+  },
+  {
+    "id": "ysl",
+    "title": "Saint Laurent",
+    "titleAr": "سان لوران",
+    "filename": "ysl.png",
+    "url": "http://localhost:8080/wp-content/plugins/fashiongate-elementor-experience/assets/media/logos/ysl.png",
+    "size": 16233
+  },
+  {
+    "id": "giorgio-armani",
+    "title": "Giorgio Armani",
+    "titleAr": "جورجيو أرماني",
+    "filename": "giorgio-armani.png",
+    "url": "http://localhost:8080/wp-content/plugins/fashiongate-elementor-experience/assets/media/logos/giorgio-armani.png",
+    "size": 51564
+  },
+  {
+    "id": "valentino",
+    "title": "Valentino",
+    "titleAr": "فالنتينو",
+    "filename": "valentino.png",
+    "url": "http://localhost:8080/wp-content/plugins/fashiongate-elementor-experience/assets/media/logos/valentino.png",
+    "size": 11605
+  },
+  {
+    "id": "sandro",
+    "title": "Sandro",
+    "titleAr": "ساندرو",
+    "filename": "sandro.png",
+    "url": "http://localhost:8080/wp-content/plugins/fashiongate-elementor-experience/assets/media/logos/sandro.png",
+    "size": 25620
+  },
+  {
+    "id": "hugo-boss",
+    "title": "Hugo Boss",
+    "titleAr": "هوغو بوس",
+    "filename": "hugo-boss.png",
+    "url": "http://localhost:8080/wp-content/plugins/fashiongate-elementor-experience/assets/media/logos/hugo-boss.png",
+    "size": 21692
+  }
+]

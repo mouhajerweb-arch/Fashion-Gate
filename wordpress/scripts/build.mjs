@@ -1,0 +1,16 @@
+import fs from 'node:fs/promises';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { createRequire } from 'node:module';
+const require = createRequire(import.meta.url);
+const sharp = require('../../node_modules/sharp');
+const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const plugin = path.join(root, 'plugins/fashiongate-elementor-experience');
+await fs.mkdir(path.join(plugin, 'assets/vendor'), { recursive: true });
+for (const name of ['gsap.min.js','ScrollTrigger.min.js']) await fs.copyFile(path.join(root, 'node_modules/gsap/dist', name), path.join(plugin, 'assets/vendor', name));
+await fs.copyFile(path.join(root, 'node_modules/gsap/README.md'), path.join(plugin, 'assets/vendor/GSAP-README.md'));
+await fs.mkdir(path.join(plugin,'assets/media'),{recursive:true});
+await sharp(path.join(root,'../public/brand/hero-woman-wide.png')).resize({width:1600,withoutEnlargement:true}).webp({quality:82}).toFile(path.join(plugin,'assets/media/hero-desktop.webp'));
+await sharp(path.join(root,'../public/brand/hero-look-01.jpg')).resize({width:700,withoutEnlargement:true}).webp({quality:82}).toFile(path.join(plugin,'assets/media/hero-mobile.webp'));
+await import('./templates.mjs');
+console.log('Built local GSAP assets and editable Elementor template library.');

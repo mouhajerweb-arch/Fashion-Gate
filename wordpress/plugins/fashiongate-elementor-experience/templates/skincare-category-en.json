@@ -1,0 +1,122 @@
+{
+  "version": "0.4",
+  "title": "FG Skin Care Category — EN",
+  "type": "container",
+  "content": [
+    {
+      "id": "000001f",
+      "elType": "container",
+      "isInner": false,
+      "settings": {
+        "_title": "FG Skin Care Category",
+        "content_width": "full",
+        "flex_direction": "column",
+        "padding": {
+          "unit": "px",
+          "top": "60",
+          "right": "60",
+          "bottom": "60",
+          "left": "60",
+          "isLinked": true
+        },
+        "padding_tablet": {
+          "unit": "px",
+          "top": "40",
+          "right": "40",
+          "bottom": "40",
+          "left": "40",
+          "isLinked": true
+        },
+        "padding_mobile": {
+          "unit": "px",
+          "top": "24",
+          "right": "24",
+          "bottom": "24",
+          "left": "24",
+          "isLinked": true
+        },
+        "flex_gap": {
+          "column": "24",
+          "row": "24",
+          "unit": "px"
+        },
+        "_element_id": "skincare"
+      },
+      "elements": [
+        {
+          "id": "000001e",
+          "elType": "widget",
+          "widgetType": "fg-luxury-cards",
+          "settings": {
+            "title": "02 / SKIN CARE",
+            "eyebrow": "▪ BEAUTY & RADIANCE RITUALS",
+            "body": "Experience high-performance dermatological serums, botanical creams, and bespoke beauty treatments.",
+            "cards": [
+              {
+                "_id": "000001b",
+                "title": "Damascus Rose Youth Elixir",
+                "label": "SERUM",
+                "image": {
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/jasmine-oil.png",
+                  "id": ""
+                },
+                "hover_image": {
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/luxury-beauty.png",
+                  "id": ""
+                },
+                "body": "Pure distilled Damask rose extracts for intense skin hydration.",
+                "link": {
+                  "url": "#register"
+                }
+              },
+              {
+                "_id": "000001c",
+                "title": "Velvet Replenishing Cream",
+                "label": "MOISTURIZER",
+                "image": {
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/luxury-beauty.png",
+                  "id": ""
+                },
+                "hover_image": {
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/hero-look-04.jpg",
+                  "id": ""
+                },
+                "body": "Rich botanical butter infusing skin with luminescent glow.",
+                "link": {
+                  "url": "#register"
+                }
+              },
+              {
+                "_id": "000001d",
+                "title": "Celestial Night Repair Oil",
+                "label": "NIGHT CARE",
+                "image": {
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/lookbook-scent.png",
+                  "id": ""
+                },
+                "hover_image": {
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/jasmine-oil.png",
+                  "id": ""
+                },
+                "body": "Concentrated peptide & antioxidant elixir for nocturnal recovery.",
+                "link": {
+                  "url": "#register"
+                }
+              }
+            ],
+            "cta": "EXPLORE SKIN CARE COLLECTION",
+            "link": {
+              "url": "#register"
+            },
+            "tag": "h2"
+          },
+          "elements": []
+        }
+      ]
+    }
+  ],
+  "page_settings": {
+    "template": "elementor_canvas",
+    "hide_title": "yes"
+  }
+}

@@ -1,0 +1,86 @@
+{
+  "version": "0.4",
+  "title": "FG Announcement Marquee Bar — AR",
+  "type": "container",
+  "content": [
+    {
+      "id": "000003b",
+      "elType": "container",
+      "isInner": false,
+      "settings": {
+        "_title": "FG Announcement Marquee Bar",
+        "content_width": "full",
+        "flex_direction": "column",
+        "padding": {
+          "unit": "px",
+          "top": "0",
+          "right": "0",
+          "bottom": "0",
+          "left": "0",
+          "isLinked": true
+        },
+        "padding_tablet": {
+          "unit": "px",
+          "top": "40",
+          "right": "40",
+          "bottom": "40",
+          "left": "40",
+          "isLinked": true
+        },
+        "padding_mobile": {
+          "unit": "px",
+          "top": "24",
+          "right": "24",
+          "bottom": "24",
+          "left": "24",
+          "isLinked": true
+        },
+        "flex_gap": {
+          "column": "24",
+          "row": "24",
+          "unit": "px"
+        },
+        "_element_id": "fg-header-marquee"
+      },
+      "elements": [
+        {
+          "id": "000003a",
+          "elType": "widget",
+          "widgetType": "fg-announcement-bar",
+          "settings": {
+            "show_announcement": "yes",
+            "speed": 45,
+            "messages": [
+              {
+                "_id": "0000037",
+                "text": "أحدث تشكيلات الأزياء الراقية متوفرة الآن في فاشن غيت · بوليفارد دمشق",
+                "link": {
+                  "url": "#clothes"
+                }
+              },
+              {
+                "_id": "0000038",
+                "text": "تفضلوا بزيارتنا في فاشن غيت - وجهة الموضة الاستثنائية بدمشق",
+                "link": {
+                  "url": "#brands"
+                }
+              },
+              {
+                "_id": "0000039",
+                "text": "عطور ونفحات استثنائية من دور العطور العالمية والجمال الفاخر",
+                "link": {
+                  "url": "#perfume"
+                }
+              }
+            ]
+          },
+          "elements": []
+        }
+      ]
+    }
+  ],
+  "page_settings": {
+    "template": "elementor_canvas",
+    "hide_title": "yes"
+  }
+}

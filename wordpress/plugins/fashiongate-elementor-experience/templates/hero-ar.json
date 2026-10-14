@@ -1,0 +1,125 @@
+{
+  "version": "0.4",
+  "title": "FG Luxury Hero — AR",
+  "type": "container",
+  "content": [
+    {
+      "id": "0000043",
+      "elType": "container",
+      "isInner": false,
+      "settings": {
+        "_title": "FG Luxury Hero",
+        "content_width": "full",
+        "flex_direction": "column",
+        "padding": {
+          "unit": "px",
+          "top": "0",
+          "right": "0",
+          "bottom": "0",
+          "left": "0",
+          "isLinked": true
+        },
+        "padding_tablet": {
+          "unit": "px",
+          "top": "40",
+          "right": "40",
+          "bottom": "40",
+          "left": "40",
+          "isLinked": true
+        },
+        "padding_mobile": {
+          "unit": "px",
+          "top": "24",
+          "right": "24",
+          "bottom": "24",
+          "left": "24",
+          "isLinked": true
+        },
+        "flex_gap": {
+          "column": "24",
+          "row": "24",
+          "unit": "px"
+        },
+        "_element_id": "fg-hero"
+      },
+      "elements": [
+        {
+          "id": "0000042",
+          "elType": "widget",
+          "widgetType": "fg-animated-hero",
+          "settings": {
+            "title": "فـاشـن غـيـت مـول",
+            "subtitle": "دمشق، سورية",
+            "eyebrow": "▪ فاشن غيت · دمشق",
+            "body": "اكتشف الأزياء الراقية ومستحضرات التجميل والعطور الاستثنائية في أرقى وجهة موضة بدمشق.",
+            "tag": "h1",
+            "image": {
+              "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/hero-woman-wide.png",
+              "id": ""
+            },
+            "mobile_image": {
+              "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/hero-look-01.jpg",
+              "id": ""
+            },
+            "alt": "حملة فاشن غيت الإعلانية",
+            "cta": "اكتشف الأزياء",
+            "link": {
+              "url": "#clothes"
+            },
+            "secondary_cta": "خطط لزيارتك",
+            "secondary_link": {
+              "url": "#register"
+            },
+            "bottom_nav": [
+              {
+                "_id": "000003e",
+                "label": "النساء",
+                "link": {
+                  "url": "#clothes"
+                }
+              },
+              {
+                "_id": "000003f",
+                "label": "الرجال",
+                "link": {
+                  "url": "#clothes"
+                }
+              },
+              {
+                "_id": "0000040",
+                "label": "الجمال",
+                "link": {
+                  "url": "#skincare"
+                }
+              },
+              {
+                "_id": "0000041",
+                "label": "العطور",
+                "link": {
+                  "url": "#perfume"
+                }
+              }
+            ],
+            "fg_animation": "mask-up",
+            "fg_trigger": "load",
+            "fg_duration": 0.9,
+            "fg_delay": 0,
+            "fg_stagger": 0.09,
+            "fg_ease": "power2.out",
+            "fg_start": "top 85%",
+            "fg_end": "bottom top",
+            "fg_desktop": "yes",
+            "fg_tablet": "yes",
+            "fg_mobile": "",
+            "fg_reduced": "none"
+          },
+          "elements": []
+        }
+      ]
+    }
+  ],
+  "page_settings": {
+    "template": "elementor_canvas",
+    "hide_title": "yes"
+  }
+}

@@ -1,0 +1,86 @@
+{
+  "version": "0.4",
+  "title": "FG Premium Footer — EN",
+  "type": "container",
+  "content": [
+    {
+      "id": "0000035",
+      "elType": "container",
+      "isInner": false,
+      "settings": {
+        "_title": "FG Premium Footer",
+        "content_width": "full",
+        "flex_direction": "column",
+        "padding": {
+          "unit": "px",
+          "top": "64",
+          "right": "64",
+          "bottom": "64",
+          "left": "64",
+          "isLinked": true
+        },
+        "padding_tablet": {
+          "unit": "px",
+          "top": "40",
+          "right": "40",
+          "bottom": "40",
+          "left": "40",
+          "isLinked": true
+        },
+        "padding_mobile": {
+          "unit": "px",
+          "top": "24",
+          "right": "24",
+          "bottom": "24",
+          "left": "24",
+          "isLinked": true
+        },
+        "flex_gap": {
+          "column": "24",
+          "row": "24",
+          "unit": "px"
+        },
+        "html_tag": "footer",
+        "css_classes": "fg-light-footer"
+      },
+      "elements": [
+        {
+          "id": "0000032",
+          "elType": "widget",
+          "widgetType": "heading",
+          "settings": {
+            "title": "FASHION GATE",
+            "header_size": "h2",
+            "__globals__": {
+              "title_color": "globals/colors?id=fg_text",
+              "typography_typography": "globals/typography?id=fg_display_en"
+            }
+          },
+          "elements": []
+        },
+        {
+          "id": "0000033",
+          "elType": "widget",
+          "widgetType": "text-editor",
+          "settings": {
+            "editor": "<p>Boulevard Damascus · Syria | Premier Luxury Fashion Destination</p>"
+          },
+          "elements": []
+        },
+        {
+          "id": "0000034",
+          "elType": "widget",
+          "widgetType": "text-editor",
+          "settings": {
+            "editor": "<p>\n      <div class=\"fg-footer-links\">\n        <a href=\"#clothes\">Women</a>\n        <a href=\"#clothes\">Men</a>\n        <a href=\"#skincare\">Beauty</a>\n        <a href=\"#perfume\">Perfume</a>\n        <a href=\"#brands\">Brands</a>\n        <a href=\"#register\">Visit & Contact</a>\n      </div>\n      <div class=\"fg-footer-copy\">© 2026 Fashion Gate. All Rights Reserved.</div>\n    </p>"
+          },
+          "elements": []
+        }
+      ]
+    }
+  ],
+  "page_settings": {
+    "template": "elementor_canvas",
+    "hide_title": "yes"
+  }
+}

@@ -1,0 +1,86 @@
+{
+  "version": "0.4",
+  "title": "FG Announcement Marquee Bar — EN",
+  "type": "container",
+  "content": [
+    {
+      "id": "0000005",
+      "elType": "container",
+      "isInner": false,
+      "settings": {
+        "_title": "FG Announcement Marquee Bar",
+        "content_width": "full",
+        "flex_direction": "column",
+        "padding": {
+          "unit": "px",
+          "top": "0",
+          "right": "0",
+          "bottom": "0",
+          "left": "0",
+          "isLinked": true
+        },
+        "padding_tablet": {
+          "unit": "px",
+          "top": "40",
+          "right": "40",
+          "bottom": "40",
+          "left": "40",
+          "isLinked": true
+        },
+        "padding_mobile": {
+          "unit": "px",
+          "top": "24",
+          "right": "24",
+          "bottom": "24",
+          "left": "24",
+          "isLinked": true
+        },
+        "flex_gap": {
+          "column": "24",
+          "row": "24",
+          "unit": "px"
+        },
+        "_element_id": "fg-header-marquee"
+      },
+      "elements": [
+        {
+          "id": "0000004",
+          "elType": "widget",
+          "widgetType": "fg-announcement-bar",
+          "settings": {
+            "show_announcement": "yes",
+            "speed": 45,
+            "messages": [
+              {
+                "_id": "0000001",
+                "text": "NEW COLLECTIONS HAVE ARRIVED · VISIT FASHION GATE AT BOULEVARD DAMASCUS",
+                "link": {
+                  "url": "#clothes"
+                }
+              },
+              {
+                "_id": "0000002",
+                "text": "SPECIAL SEASONAL HIGHLIGHTS & EXCLUSIVE LUXURY BRANDS",
+                "link": {
+                  "url": "#brands"
+                }
+              },
+              {
+                "_id": "0000003",
+                "text": "DISCOVER PRIVATE PERFUME BLENDS & HAUTE BEAUTY RITUALS",
+                "link": {
+                  "url": "#perfume"
+                }
+              }
+            ]
+          },
+          "elements": []
+        }
+      ]
+    }
+  ],
+  "page_settings": {
+    "template": "elementor_canvas",
+    "hide_title": "yes"
+  }
+}

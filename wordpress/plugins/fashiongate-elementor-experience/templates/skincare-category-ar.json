@@ -1,0 +1,122 @@
+{
+  "version": "0.4",
+  "title": "FG Skin Care Category — AR",
+  "type": "container",
+  "content": [
+    {
+      "id": "0000055",
+      "elType": "container",
+      "isInner": false,
+      "settings": {
+        "_title": "FG Skin Care Category",
+        "content_width": "full",
+        "flex_direction": "column",
+        "padding": {
+          "unit": "px",
+          "top": "60",
+          "right": "60",
+          "bottom": "60",
+          "left": "60",
+          "isLinked": true
+        },
+        "padding_tablet": {
+          "unit": "px",
+          "top": "40",
+          "right": "40",
+          "bottom": "40",
+          "left": "40",
+          "isLinked": true
+        },
+        "padding_mobile": {
+          "unit": "px",
+          "top": "24",
+          "right": "24",
+          "bottom": "24",
+          "left": "24",
+          "isLinked": true
+        },
+        "flex_gap": {
+          "column": "24",
+          "row": "24",
+          "unit": "px"
+        },
+        "_element_id": "skincare"
+      },
+      "elements": [
+        {
+          "id": "0000054",
+          "elType": "widget",
+          "widgetType": "fg-luxury-cards",
+          "settings": {
+            "title": "02 / العناية بالبشرة والجمال",
+            "eyebrow": "▪ طقوس الجمال الفاخر",
+            "body": "تعرّف على سيرومات عالية الأداء وكريمات نباتية وطقوس جمال مخصصة للبشرة.",
+            "cards": [
+              {
+                "_id": "0000051",
+                "title": "إكسير ورد دمشق للشباب",
+                "label": "سيروم",
+                "image": {
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/jasmine-oil.png",
+                  "id": ""
+                },
+                "hover_image": {
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/luxury-beauty.png",
+                  "id": ""
+                },
+                "body": "خلاصة الورد الدمشقي المقطر لترطيب عميق.",
+                "link": {
+                  "url": "#register"
+                }
+              },
+              {
+                "_id": "0000052",
+                "title": "كريم المخمل المغذي",
+                "label": "مرطب",
+                "image": {
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/luxury-beauty.png",
+                  "id": ""
+                },
+                "hover_image": {
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/hero-look-04.jpg",
+                  "id": ""
+                },
+                "body": "زبدة نباتية غنية تمنح البشرة إشراقة مخملية.",
+                "link": {
+                  "url": "#register"
+                }
+              },
+              {
+                "_id": "0000053",
+                "title": "زيت الإصلاح الليلي",
+                "label": "عناية ليلية",
+                "image": {
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/lookbook-scent.png",
+                  "id": ""
+                },
+                "hover_image": {
+                  "url": "https://www.fashiongatemall.com/landing/wp-content/plugins/fashiongate-elementor-experience/assets/media/jasmine-oil.png",
+                  "id": ""
+                },
+                "body": "ببتيدات بتركيز عالٍ ومضادات أكسدة للتجديد الليلي.",
+                "link": {
+                  "url": "#register"
+                }
+              }
+            ],
+            "cta": "اكتشف مجموعة العناية بالبشرة",
+            "link": {
+              "url": "#register"
+            },
+            "tag": "h2"
+          },
+          "elements": []
+        }
+      ]
+    }
+  ],
+  "page_settings": {
+    "template": "elementor_canvas",
+    "hide_title": "yes"
+  }
+}

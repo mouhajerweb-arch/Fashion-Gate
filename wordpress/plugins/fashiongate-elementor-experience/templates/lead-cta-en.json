@@ -1,0 +1,121 @@
+{
+  "version": "0.4",
+  "title": "FG Final Lead CTA — EN",
+  "type": "container",
+  "content": [
+    {
+      "id": "0000031",
+      "elType": "container",
+      "isInner": false,
+      "settings": {
+        "_title": "FG Final Lead CTA",
+        "content_width": "full",
+        "flex_direction": "column",
+        "padding": {
+          "unit": "px",
+          "top": "80",
+          "right": "80",
+          "bottom": "80",
+          "left": "80",
+          "isLinked": true
+        },
+        "padding_tablet": {
+          "unit": "px",
+          "top": "40",
+          "right": "40",
+          "bottom": "40",
+          "left": "40",
+          "isLinked": true
+        },
+        "padding_mobile": {
+          "unit": "px",
+          "top": "24",
+          "right": "24",
+          "bottom": "24",
+          "left": "24",
+          "isLinked": true
+        },
+        "flex_gap": {
+          "column": "24",
+          "row": "24",
+          "unit": "px"
+        },
+        "_element_id": "register"
+      },
+      "elements": [
+        {
+          "id": "0000030",
+          "elType": "widget",
+          "widgetType": "fg-lead-experience",
+          "settings": {
+            "title": "DISCOVER FASHION GATE YOUR WAY.",
+            "body": "Plan your private VIP visit, request exclusive collection previews, or speak with our client concierge.",
+            "fields": [
+              {
+                "_id": "000002a",
+                "key": "name",
+                "label": "Full Name",
+                "type": "text",
+                "required": "yes",
+                "options": ""
+              },
+              {
+                "_id": "000002b",
+                "key": "email",
+                "label": "Email Address",
+                "type": "email",
+                "required": "yes",
+                "options": ""
+              },
+              {
+                "_id": "000002c",
+                "key": "phone",
+                "label": "Phone Number",
+                "type": "tel",
+                "required": "",
+                "options": ""
+              },
+              {
+                "_id": "000002d",
+                "key": "interest",
+                "label": "Primary Interest",
+                "type": "select",
+                "required": "yes",
+                "options": "Clothes & Ready-to-Wear\nSkin Care & Beauty\nHaute Parfumerie\nGeneral VIP Visit"
+              },
+              {
+                "_id": "000002e",
+                "key": "message",
+                "label": "Personal Request / Message",
+                "type": "textarea",
+                "required": "yes",
+                "options": ""
+              },
+              {
+                "_id": "000002f",
+                "key": "consent",
+                "label": "I agree to be contacted by Fashion Gate VIP Concierge.",
+                "type": "checkbox",
+                "required": "yes",
+                "options": ""
+              }
+            ],
+            "campaign": "fashiongate-v2-luxury-landing",
+            "cta": "BOOK YOUR VISIT",
+            "success": "Thank you. Your request has been received by our VIP Concierge team.",
+            "error": "Unable to send request. Please try again.",
+            "privacy": {
+              "url": "https://www.fashiongatemall.com/privacy/en"
+            },
+            "privacy_label": "Privacy Policy"
+          },
+          "elements": []
+        }
+      ]
+    }
+  ],
+  "page_settings": {
+    "template": "elementor_canvas",
+    "hide_title": "yes"
+  }
+}
