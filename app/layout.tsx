@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter";
-import { Cairo, Cormorant_Garamond, EB_Garamond } from "next/font/google";
+import localFont from "next/font/local";
+import { Cormorant_Garamond, EB_Garamond } from "next/font/google";
 
-const cairo = Cairo({
-  subsets: ["arabic", "latin"],
-  weight: ["300", "400", "500", "600", "700", "800"],
+const cairo = localFont({
+  src: "./fonts/Cairo-VariableFont.ttf",
   variable: "--font-cairo",
   display: "swap",
 });
