@@ -100,6 +100,17 @@ export function resolvePath(href: string, lang: "ar" | "en") {
     return `/designers/${lang}${suffix}`;
   }
 
+  // Handle dining subroutes like dining/sera, dining/the-espresso-lab
+  if (cleanHref.startsWith("dining/")) {
+    const diningParts = cleanHref.split("/");
+    const lastPart = diningParts[diningParts.length - 1];
+    if (lastPart === "ar" || lastPart === "en") {
+      diningParts[diningParts.length - 1] = lang;
+      return `/${diningParts.join("/")}${suffix}`;
+    }
+    return `/${cleanHref}/${lang}${suffix}`;
+  }
+
   const categories = ["women", "men", "perfumes", "skincare", "beauty", "makeup", "fashion", "designers", "dining"];
   const parts = cleanHref.split("/");
   const firstPart = parts[0];
@@ -153,6 +164,7 @@ interface SiteSettings {
 
 interface SiteHeaderProps {
   settings?: SiteSettings;
+  initialHeaderSettings?: any;
   onLangToggleStart?: () => void;
 }
 
@@ -250,34 +262,161 @@ const brandLabels: Record<string, { en: string; ar: string }> = {
   "coach": { en: "Coach", ar: "كوتش" }
 };
 
-const categoriesConfig = [
+const defaultHeaderMenuItems = [
   {
-    title: { en: "Luxury Fashion & Haute Couture", ar: "الأزياء الفاخرة والراقية" },
-    brandIds: ["elie-saab", "gucci", "maxmara", "prada", "valentino", "ysl", "chloe"]
+    _key: "item-home",
+    label: { en: "Home", ar: "الرئيسية" },
+    href: "/",
+    dropdownItems: []
   },
   {
-    title: { en: "Contemporary & Premium Apparel", ar: "الملابس المعاصرة والمميزة" },
-    brandIds: ["nean-com", "acler", "weekend-maxmara", "persona-marina-rinaldi", "max-and-co", "editorial", "sandro", "giorgio-armani", "hugo-boss", "calvin-klein", "paul-shark", "almais"]
+    _key: "item-designers",
+    label: { en: "Designers", ar: "المصممون" },
+    href: "/brand/elie-saab",
+    designerCategories: [
+      {
+        title: { en: "Luxury Fashion & Haute Couture", ar: "الأزياء الفاخرة والراقية" },
+        brands: [
+          { slug: { current: "elie-saab" }, title: "Elie Saab" },
+          { slug: { current: "gucci" }, title: "Gucci" },
+          { slug: { current: "maxmara" }, title: "Max Mara" },
+          { slug: { current: "prada" }, title: "Prada" },
+          { slug: { current: "valentino" }, title: "Valentino" },
+          { slug: { current: "ysl" }, title: "YSL" }
+        ]
+      },
+      {
+        title: { en: "Contemporary & Premium Apparel", ar: "الملابس المعاصرة والمميزة" },
+        brands: [
+          { slug: { current: "calvin-klein" }, title: "Calvin Klein" },
+          { slug: { current: "hugo-boss" }, title: "Hugo Boss" },
+          { slug: { current: "giorgio-armani" }, title: "Giorgio Armani" },
+          { slug: { current: "paul-shark" }, title: "Paul & Shark" },
+          { slug: { current: "sandro" }, title: "Sandro" },
+          { slug: { current: "editorial" }, title: "Editorial" }
+        ]
+      },
+      {
+        title: { en: "Independent & Creative Design", ar: "التصميم المستقل والإبداعي" },
+        brands: [{ slug: { current: "moje" }, title: "Moje" }]
+      },
+      {
+        title: { en: "Footwear & Athletic Lifestyle", ar: "الأحذية والأنشطة الرياضية" },
+        brands: [
+          { slug: { current: "adidas" }, title: "Adidas" },
+          { slug: { current: "skechers" }, title: "Skechers" }
+        ]
+      },
+      {
+        title: { en: "Fine Jewelry & Luxury Timepieces", ar: "المجوهرات الراقية والساعات الفاخرة" },
+        brands: [{ slug: { current: "cartier" }, title: "Cartier" }]
+      },
+      {
+        title: { en: "Premium Beauty & Skincare", ar: "العناية بالبشرة والجمال الفاخر" },
+        brands: [{ slug: { current: "lancome" }, title: "Lancôme" }]
+      },
+      {
+        title: { en: "Luxury Accessories & Leather Goods", ar: "الإكسسوارات الفاخرة والمنتجات الجلدية" },
+        brands: [
+          { slug: { current: "jimmy-choo" }, title: "Jimmy Choo" },
+          { slug: { current: "coach" }, title: "Coach" }
+        ]
+      }
+    ],
+    dropdownItems: []
   },
   {
-    title: { en: "Independent & Creative Design", ar: "التصميم المستقل والإبداعي" },
-    brandIds: ["moje", "almais"]
+    _key: "item-fashion",
+    label: { en: "Fashion", ar: "الأزياء" },
+    href: "/category/fashion",
+    dropdownItems: [
+      {
+        _key: "fashion-women",
+        label: { en: "Women", ar: "النساء" },
+        href: "/category/fashion?sub=women"
+      },
+      {
+        _key: "fashion-men",
+        label: { en: "Men", ar: "الرجال" },
+        href: "/category/fashion?sub=men"
+      }
+    ]
   },
   {
-    title: { en: "Footwear & Athletic Lifestyle", ar: "الأحذية والأنشطة الرياضية" },
-    brandIds: ["adidas", "puma", "emporio-armani-ea7", "skechers"]
+    _key: "item-perfumes",
+    label: { en: "Perfumes", ar: "العطور" },
+    href: "/category/perfumes",
+    dropdownItems: [
+      {
+        _key: "perfumes-women",
+        label: { en: "Women", ar: "النساء" },
+        href: "/category/perfumes?sub=women"
+      },
+      {
+        _key: "perfumes-men",
+        label: { en: "Men", ar: "الرجال" },
+        href: "/category/perfumes?sub=men"
+      },
+      {
+        _key: "perfumes-unisex",
+        label: { en: "Unisex", ar: "للجنسين" },
+        href: "/category/perfumes?sub=unisex"
+      }
+    ]
   },
   {
-    title: { en: "Fine Jewelry & Luxury Timepieces", ar: "المجوهرات الراقية والساعات الفاخرة" },
-    brandIds: ["cartier"]
+    _key: "item-beauty",
+    label: { en: "Beauty", ar: "الجمال" },
+    href: "/category/beauty",
+    dropdownItems: [
+      {
+        _key: "beauty-skincare",
+        label: { en: "Skincare", ar: "العناية بالبشرة" },
+        href: "/category/skincare",
+        subItems: [
+          { _key: "beauty-skincare-women", label: { en: "Women", ar: "النساء" }, href: "/category/skincare?sub=women" },
+          { _key: "beauty-skincare-men", label: { en: "Men", ar: "الرجال" }, href: "/category/skincare?sub=men" }
+        ]
+      },
+      {
+        _key: "beauty-makeup",
+        label: { en: "Make up", ar: "المكياج" },
+        href: "/category/makeup",
+        subItems: [
+          { _key: "beauty-makeup-women", label: { en: "Women", ar: "النساء" }, href: "/category/makeup?sub=women" },
+          { _key: "beauty-makeup-men", label: { en: "Men", ar: "الرجال" }, href: "/category/makeup?sub=men" }
+        ]
+      }
+    ]
   },
   {
-    title: { en: "Premium Beauty & Skincare", ar: "العناية بالبشرة والجمال الفاخر" },
-    brandIds: ["loreal", "gucci", "prada", "ysl", "giorgio-armani", "lancome", "valentino", "elie-saab", "atelier-rebul"]
+    _key: "item-dining",
+    label: { en: "Dining", ar: "المطاعم" },
+    href: "/dining",
+    dropdownItems: [
+      {
+        _key: "dining-sera",
+        label: { en: "Restaurant (SERA)", ar: "مطعم سيرا" },
+        href: "/dining/sera"
+      },
+      {
+        _key: "dining-espresso-lab",
+        label: { en: "Café (The Espresso Lab)", ar: "ذا اسبريسو لاب" },
+        href: "/dining/the-espresso-lab"
+      }
+    ]
   },
   {
-    title: { en: "Luxury Accessories & Leather Goods", ar: "الإكسسوارات الفاخرة والمنتجات الجلدية" },
-    brandIds: ["jimmy-choo", "coach", "cartier", "chloe"]
+    _key: "item-about",
+    label: { en: "About Us", ar: "من نحن" },
+    href: "/about",
+    dropdownItems: []
+  },
+  {
+    _key: "item-contact",
+    label: { en: "Contact Us", ar: "اتصل بنا" },
+    href: "/contact",
+    dropdownItems: []
   }
 ];
 
@@ -846,7 +985,7 @@ function SearchOption({
   );
 }
 
-export default function SiteHeader({ settings, onLangToggleStart }: SiteHeaderProps) {
+export default function SiteHeader({ settings, initialHeaderSettings, onLangToggleStart }: SiteHeaderProps) {
   const params = useParams();
   const pathname = usePathname();
   const router = useRouter();
@@ -864,25 +1003,28 @@ export default function SiteHeader({ settings, onLangToggleStart }: SiteHeaderPr
   // Dropdown states for mega-menus
   const [activeDropdown, setActiveDropdown] = useState<number | null>(null);
   const [hoveredFashionCategory, setHoveredFashionCategory] = useState<"women-fashion" | "men-fashion" | null>(null);
-  const [beautyHoveredSub, setBeautyHoveredSub] = useState<"skincare" | "makeup" | null>(null);
+  const [beautyHoveredSub, setBeautyHoveredSub] = useState<string | null>(null);
   const [sanityBrands, setSanityBrands] = useState<any[]>([]);
-  const [headerMenuItems, setHeaderMenuItems] = useState<any[]>([]);
+  const [headerMenuItems, setHeaderMenuItems] = useState<any[]>(() => initialHeaderSettings?.menuItems || []);
   const [expandedMobileItem, setExpandedMobileItem] = useState<number | null>(null);
 
   // Sanity header settings states
-  const [logoTitle, setLogoTitle] = useState<{ en?: string; ar?: string } | null>(null);
-  const [logoImageUrl, setLogoImageUrl] = useState<string | null>(null);
-  const [showSearch, setShowSearch] = useState<boolean>(true);
-  const [searchPlaceholder, setSearchPlaceholder] = useState<{ en?: string; ar?: string } | null>(null);
-  const [showLanguageSwitcher, setShowLanguageSwitcher] = useState<boolean>(true);
-  const [showUserProfile, setShowUserProfile] = useState<boolean>(true);
+  const [logoTitle, setLogoTitle] = useState<{ en?: string; ar?: string } | null>(() => initialHeaderSettings?.logoTitle || null);
+  const [logoSubtitle, setLogoSubtitle] = useState<{ en?: string; ar?: string } | null>(() => initialHeaderSettings?.logoSubtitle || null);
+  const [logoLayout, setLogoLayout] = useState<string>(() => initialHeaderSettings?.logoLayout || "stacked");
+  const [logoImageUrl, setLogoImageUrl] = useState<string | null>(() => initialHeaderSettings?.logoImage?.asset?.url || null);
+  const [showSearch, setShowSearch] = useState<boolean>(() => initialHeaderSettings?.showSearch !== undefined ? initialHeaderSettings.showSearch : true);
+  const [searchPlaceholder, setSearchPlaceholder] = useState<{ en?: string; ar?: string } | null>(() => initialHeaderSettings?.searchPlaceholder || null);
+  const [showLanguageSwitcher, setShowLanguageSwitcher] = useState<boolean>(() => initialHeaderSettings?.showLanguageSwitcher !== undefined ? initialHeaderSettings.showLanguageSwitcher : true);
+  const [languageSwitcherStyle, setLanguageSwitcherStyle] = useState<string>(() => initialHeaderSettings?.languageSwitcherStyle || "flag_and_text");
+  const [showUserProfile, setShowUserProfile] = useState<boolean>(() => initialHeaderSettings?.showUserProfile !== undefined ? initialHeaderSettings.showUserProfile : true);
   const [userName, setUserName] = useState<string | null>(null);
   const [showUserMenu, setShowUserMenu] = useState<boolean>(false);
-  const [searchDepartmentsHeading, setSearchDepartmentsHeading] = useState<{ en?: string; ar?: string } | null>(null);
-  const [searchSuggestedBrandsHeading, setSearchSuggestedBrandsHeading] = useState<{ en?: string; ar?: string } | null>(null);
-  const [searchMatchingHeading, setSearchMatchingHeading] = useState<{ en?: string; ar?: string } | null>(null);
-  const [searchDepartments, setSearchDepartments] = useState<any[] | null>(null);
-  const [searchSuggestedBrands, setSearchSuggestedBrands] = useState<any[] | null>(null);
+  const [searchDepartmentsHeading, setSearchDepartmentsHeading] = useState<{ en?: string; ar?: string } | null>(() => initialHeaderSettings?.searchDepartmentsHeading || null);
+  const [searchSuggestedBrandsHeading, setSearchSuggestedBrandsHeading] = useState<{ en?: string; ar?: string } | null>(() => initialHeaderSettings?.searchSuggestedBrandsHeading || null);
+  const [searchMatchingHeading, setSearchMatchingHeading] = useState<{ en?: string; ar?: string } | null>(() => initialHeaderSettings?.searchMatchingHeading || null);
+  const [searchDepartments, setSearchDepartments] = useState<any[] | null>(() => initialHeaderSettings?.searchDepartments || null);
+  const [searchSuggestedBrands, setSearchSuggestedBrands] = useState<any[] | null>(() => initialHeaderSettings?.searchSuggestedBrands || null);
 
   useEffect(() => {
     const cookiesList = document.cookie.split(";");
@@ -924,6 +1066,8 @@ export default function SiteHeader({ settings, onLangToggleStart }: SiteHeaderPr
         // Fetch header settings
         const headerData = await sanityClient.fetch(`*[_type == "header"][0] {
           logoTitle { en, ar },
+          logoSubtitle { en, ar },
+          logoLayout,
           logoImage {
             asset-> {
               _id,
@@ -933,6 +1077,7 @@ export default function SiteHeader({ settings, onLangToggleStart }: SiteHeaderPr
           showSearch,
           searchPlaceholder { en, ar },
           showLanguageSwitcher,
+          languageSwitcherStyle,
           showUserProfile,
           searchDepartmentsHeading { en, ar },
           searchSuggestedBrandsHeading { en, ar },
@@ -948,8 +1093,19 @@ export default function SiteHeader({ settings, onLangToggleStart }: SiteHeaderPr
             slug
           },
           menuItems[] {
+            _key,
             label { en, ar },
             href,
+            dropdownItems[] {
+              _key,
+              label { en, ar },
+              href,
+              subItems[] {
+                _key,
+                label { en, ar },
+                href
+              }
+            },
             designerCategories[]-> {
               _id,
               title { en, ar },
@@ -965,10 +1121,13 @@ export default function SiteHeader({ settings, onLangToggleStart }: SiteHeaderPr
         }`);
         if (headerData) {
           if (headerData.logoTitle) setLogoTitle(headerData.logoTitle);
+          if (headerData.logoSubtitle) setLogoSubtitle(headerData.logoSubtitle);
+          if (headerData.logoLayout) setLogoLayout(headerData.logoLayout);
           if (headerData.logoImage?.asset?.url) setLogoImageUrl(headerData.logoImage.asset.url);
           if (headerData.showSearch !== undefined) setShowSearch(headerData.showSearch);
           if (headerData.searchPlaceholder) setSearchPlaceholder(headerData.searchPlaceholder);
           if (headerData.showLanguageSwitcher !== undefined) setShowLanguageSwitcher(headerData.showLanguageSwitcher);
+          if (headerData.languageSwitcherStyle) setLanguageSwitcherStyle(headerData.languageSwitcherStyle);
           if (headerData.showUserProfile !== undefined) setShowUserProfile(headerData.showUserProfile);
           if (headerData.searchDepartmentsHeading) setSearchDepartmentsHeading(headerData.searchDepartmentsHeading);
           if (headerData.searchSuggestedBrandsHeading) setSearchSuggestedBrandsHeading(headerData.searchSuggestedBrandsHeading);
@@ -992,7 +1151,53 @@ export default function SiteHeader({ settings, onLangToggleStart }: SiteHeaderPr
     return pathname.includes(`/${pathSegment}/`) || pathname.endsWith(`/${pathSegment}`) || pathname.includes(`/${pathSegment}?`) || pathname.includes(`/${pathSegment}#`);
   };
 
-  const isMenuItemActive = (item: any, isDesigners: boolean, isBeauty: boolean) => {
+  const brandText = useMemo(() => {
+    const rawTitle = lang === "ar" ? logoTitle?.ar || "فاشن غيت" : logoTitle?.en || "FASHION GATE";
+    const explicitSubtitle = lang === "ar" ? logoSubtitle?.ar : logoSubtitle?.en;
+
+    if (explicitSubtitle !== undefined && explicitSubtitle !== null && explicitSubtitle.trim() !== "") {
+      return {
+        primary: rawTitle,
+        secondary: explicitSubtitle.trim()
+      };
+    }
+
+    // Intelligent auto-separation if no explicit subtitle is provided
+    if (lang === "ar") {
+      if (rawTitle.includes("مول")) {
+        const cleaned = rawTitle.replace(/مول/g, "").trim();
+        return {
+          primary: cleaned || "فاشن غيت",
+          secondary: "مـــــول"
+        };
+      }
+      return {
+        primary: rawTitle,
+        secondary: "مـــــول"
+      };
+    } else {
+      const upper = rawTitle.toUpperCase();
+      if (upper.includes("MALL")) {
+        const cleaned = rawTitle.replace(/MALL/gi, "").trim();
+        return {
+          primary: cleaned || "FASHION GATE",
+          secondary: "MALL"
+        };
+      }
+      if (upper === "FASHION GATE") {
+        return {
+          primary: "FASHION GATE",
+          secondary: "MALL"
+        };
+      }
+      return {
+        primary: rawTitle,
+        secondary: ""
+      };
+    }
+  }, [logoTitle, logoSubtitle, lang]);
+
+  const isMenuItemActive = (item: any, isDesigners: boolean, isBeauty?: boolean) => {
     if (!activeSectionPath) return false;
     if (isDesigners && isDesignersPage) return true;
 
@@ -1006,6 +1211,7 @@ export default function SiteHeader({ settings, onLangToggleStart }: SiteHeaderPr
     if (cleanHref === "/") return cleanPath === "/";
     if (cleanHref.startsWith("/category/")) return cleanPath.startsWith(cleanHref);
     if (cleanHref.startsWith("/brand/")) return cleanPath.startsWith("/brand/");
+    if (cleanHref.startsWith("/dining")) return cleanPath.startsWith("/dining") || cleanPath.startsWith("/category/dining");
     if (isDesigners) return cleanPath === "/designers" || cleanPath.startsWith("/designers/");
     return cleanPath === cleanHref || cleanPath.startsWith(cleanHref);
   };
@@ -1153,36 +1359,94 @@ export default function SiteHeader({ settings, onLangToggleStart }: SiteHeaderPr
               flexShrink: 1
             }}
           >
-             <Stack direction="row" gap={{ xs: 0.4, sm: 1.2, md: lang === "ar" ? 0 : 1   }} alignItems="center" sx={{ minWidth: 0 }}>
+             <Stack 
+               direction="row" 
+               gap={{ xs: 0.8, sm: 1.2, md: 1.5 }} 
+               alignItems="center" 
+               sx={{ minWidth: 0 }}
+             >
                <Box 
                  component="img" 
                  src={logoImageUrl || "/brand/logo.png"} 
                  alt="Fashion Gate" 
                  sx={{ 
-                   height: { xs: 32, sm: 34, md: 36 }, 
+                   height: { xs: 30, sm: 34, md: 38 }, 
                    width: "auto",
                    objectFit: "contain",
-                   flexShrink: 0
+                   flexShrink: 0,
+                   filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.35))"
                  }} 
                />
-               <Typography 
-                 sx={{ 
-                   fontFamily: "var(--heading-font)", 
-                   fontWeight: 600, 
-                   fontSize: { xs: 17.5, sm: 15, md: 19 }, 
-                   lineHeight: 1, 
-                   textTransform: "uppercase", 
-                   color: "#ffffff",
-                   letterSpacing: lang === "ar" ? 0 : "0.08em",
-                   whiteSpace: "nowrap",
-                   display: "block",
-                   transform: lang === "ar" ? "scale(1.25)" : "none",
-                   transformOrigin: lang === "ar" ? "right center" : "left center",
-                   mr: lang === "ar" ? { xs: 0.8, sm: 0, md: 1.5} : 0
-                 }}
-               >
-                 {stretchArabicText(lang === "ar" ? logoTitle?.ar || "فاشن غيت" : logoTitle?.en || "FASHION GATE", 1)}
-               </Typography>
+               {logoLayout === "inline" || !brandText.secondary ? (
+                 <Typography 
+                   sx={{ 
+                     fontFamily: "var(--heading-font)", 
+                     fontWeight: 600, 
+                     fontSize: { xs: 14.5, sm: 16, md: 18.5 }, 
+                     lineHeight: 1.1, 
+                     textTransform: "uppercase", 
+                     color: "#ffffff",
+                     letterSpacing: lang === "ar" ? 0 : "0.08em",
+                     whiteSpace: "nowrap",
+                     display: "block",
+                     textShadow: "0 1px 3px rgba(0,0,0,0.5)"
+                   }}
+                 >
+                   {lang === "ar" ? stretchArabicText(brandText.primary, 1) : brandText.primary}
+                 </Typography>
+               ) : (
+                 <Box 
+                   sx={{ 
+                     display: "flex", 
+                     flexDirection: "column", 
+                     justifyContent: "center",
+                     alignItems: "flex-start",
+                     textAlign: lang === "ar" ? "right" : "left",
+                     minWidth: 0,
+                     lineHeight: 1
+                   }}
+                 >
+                   <Typography 
+                     component="span"
+                     sx={{ 
+                       fontFamily: "var(--heading-font)", 
+                       fontWeight: 600, 
+                       fontSize: { xs: 16, sm: 19, md: 21 }, 
+                       lineHeight: 1.15, 
+                       textTransform: "uppercase", 
+                       color: "#ffffff",
+                       letterSpacing: lang === "ar" ? "0.01em" : "0.08em",
+                       whiteSpace: "nowrap",
+                       display: "block",
+                       textAlign: lang === "ar" ? "right" : "left",
+                       width: "100%",
+                       textShadow: "0 1px 2px rgba(0,0,0,0.6)"
+                     }}
+                   >
+                     {lang === "ar" ? stretchArabicText(brandText.primary, 1) : brandText.primary}
+                   </Typography>
+                   <Typography 
+                     component="span"
+                     sx={{ 
+                       fontFamily: lang === "ar" ? '"Cairo", sans-serif' : 'var(--heading-font), serif', 
+                       fontWeight: 500, 
+                       fontSize: { xs: 9, sm: 12.5, md: 13 }, 
+                       lineHeight: 1, 
+                       textTransform: "uppercase", 
+                       color: "#ffffff",
+                       letterSpacing: lang === "ar" ? 0 : "0.32em",
+                       whiteSpace: "nowrap",
+                       display: "block",
+                       textAlign: lang === "ar" ? "right" : "left",
+                       width: "100%",
+                       mt: { xs: 0.25, sm: 0.35 },
+                       opacity: 0.95
+                     }}
+                   >
+                     {brandText.secondary}
+                   </Typography>
+                 </Box>
+               )}
              </Stack>
           </Box>
 
@@ -1212,6 +1476,7 @@ export default function SiteHeader({ settings, onLangToggleStart }: SiteHeaderPr
                 <LanguageSwitcher 
                   currentLang={lang} 
                   onToggleStart={onLangToggleStart} 
+                  styleVariant={languageSwitcherStyle}
                 />
               </Box>
             )}
@@ -1331,132 +1596,44 @@ export default function SiteHeader({ settings, onLangToggleStart }: SiteHeaderPr
           }}
         >
           {(() => {
-            const fallbackMenuItems = [
-              { label: { en: "Home", ar: "الرئيسية" }, href: "/" },
-              { 
-                label: { en: "Designers", ar: "المصممون" }, 
-                href: "/brand/elie-saab",
-                designerCategories: [
-                  {
-                    title: { en: "Luxury Fashion & Haute Couture", ar: "الأزياء الفاخرة والراقية" },
-                    brands: [
-                      { slug: { current: "elie-saab" }, title: "Elie Saab" },
-                      { slug: { current: "gucci" }, title: "Gucci" },
-                      { slug: { current: "maxmara" }, title: "Max Mara" },
-                      { slug: { current: "prada" }, title: "Prada" },
-                      { slug: { current: "valentino" }, title: "Valentino" },
-                      { slug: { current: "ysl" }, title: "YSL" }
-                    ]
-                  },
-                  {
-                    title: { en: "Contemporary & Premium Apparel", ar: "الملابس المعاصرة والمميزة" },
-                    brands: [
-                      { slug: { current: "calvin-klein" }, title: "Calvin Klein" },
-                      { slug: { current: "hugo-boss" }, title: "Hugo Boss" },
-                      { slug: { current: "giorgio-armani" }, title: "Giorgio Armani" },
-                      { slug: { current: "paul-shark" }, title: "Paul & Shark" },
-                      { slug: { current: "sandro" }, title: "Sandro" },
-                      { slug: { current: "editorial" }, title: "Editorial" }
-                    ]
-                  },
-                  {
-                    title: { en: "Independent & Creative Design", ar: "التصميم المستقل والإبداعي" },
-                    brands: [{ slug: { current: "moje" }, title: "Moje" }]
-                  },
-                  {
-                    title: { en: "Footwear & Athletic Lifestyle", ar: "الأحذية والأنشطة الرياضية" },
-                    brands: [
-                      { slug: { current: "adidas" }, title: "Adidas" },
-                      { slug: { current: "skechers" }, title: "Skechers" }
-                    ]
-                  },
-                  {
-                    title: { en: "Fine Jewelry & Luxury Timepieces", ar: "المجوهرات الراقية والساعات الفاخرة" },
-                    brands: [{ slug: { current: "cartier" }, title: "Cartier" }]
-                  },
-                  {
-                    title: { en: "Premium Beauty & Skincare", ar: "العناية بالبشرة والجمال الفاخر" },
-                    brands: [{ slug: { current: "lancome" }, title: "Lancôme" }]
-                  },
-                  {
-                    title: { en: "Luxury Accessories & Leather Goods", ar: "الإكسسوارات الفاخرة والمنتجات الجلدية" },
-                    brands: [
-                      { slug: { current: "jimmy-choo" }, title: "Jimmy Choo" },
-                      { slug: { current: "coach" }, title: "Coach" }
-                    ]
-                  }
-                ]
-              },
-              { 
-                label: { en: "Fashion", ar: "الأزياء" }, 
-                href: "/category/fashion",
-                designerCategories: [
-                  {
-                    title: { en: "Contemporary & Premium Apparel", ar: "الملابس المعاصرة والمميزة" },
-                    brands: [
-                      { slug: { current: "calvin-klein" }, title: "Calvin Klein" },
-                      { slug: { current: "hugo-boss" }, title: "Hugo Boss" },
-                      { slug: { current: "giorgio-armani" }, title: "Giorgio Armani" },
-                      { slug: { current: "paul-shark" }, title: "Paul & Shark" },
-                      { slug: { current: "sandro" }, title: "Sandro" },
-                      { slug: { current: "editorial" }, title: "Editorial" }
-                    ]
-                  }
-                ]
-              },
-              { 
-                label: { en: "Perfumes", ar: "العطور" }, 
-                href: "/category/perfumes",
-                designerCategories: [
-                  {
-                    title: { en: "Premium Beauty & Skincare", ar: "العناية بالبشرة والجمال الفاخر" },
-                    brands: [{ slug: { current: "lancome" }, title: "Lancôme" }]
-                  }
-                ]
-              },
-              { 
-                label: { en: "Beauty", ar: "الجمال" }, 
-                href: "/category/beauty",
-                designerCategories: [
-                  {
-                    title: { en: "Premium Beauty & Skincare", ar: "العناية بالبشرة والجمال الفاخر" },
-                    brands: [{ slug: { current: "lancome" }, title: "Lancôme" }]
-                  }
-                ]
-              },
-              { label: { en: "Dining", ar: "المطاعم" }, href: "/dining" },
-              { label: { en: "About Us", ar: "من نحن" }, href: "/about" },
-              { label: { en: "Contact Us", ar: "اتصل بنا" }, href: "/contact" }
-            ];
-
-            const activeMenuItems = headerMenuItems && headerMenuItems.length > 0 ? headerMenuItems : fallbackMenuItems;
+            const activeMenuItems = headerMenuItems && headerMenuItems.length > 0 ? headerMenuItems : defaultHeaderMenuItems;
 
             return activeMenuItems.map((item, idx) => {
-              const isFashion = item.href?.includes("/category/fashion");
-              const isPerfumes = item.href?.includes("/category/perfumes");
-              const isSkincare = item.href?.includes("/category/skincare");
-              const isBeauty = item.href?.includes("/category/beauty") || isSkincare || item.label?.en?.toLowerCase() === "beauty" || item.label?.en?.toLowerCase() === "skincare";
-              const isDining = item.href?.includes("/dining");
               const labelStr = lang === "ar" ? item.label?.ar || item.label?.en : item.label?.en || item.label?.ar;
               const normalizedLabel = `${item.label?.en || ""} ${item.label?.ar || ""} ${labelStr || ""}`.toLowerCase();
               const isDesigners = item.href?.includes("/designers") || item.href?.includes("designers") || normalizedLabel.includes("designer") || normalizedLabel.includes("مصمم");
-              const isCategoryDropdown = isBeauty || isDining || isFashion || isPerfumes || isSkincare;
-              const hasDropdown = isCategoryDropdown || (isDesigners && item.designerCategories && item.designerCategories.length > 0);
-              
-              const finalHref = isDesigners ? `/designers/${lang}` : resolvePath(item.href, lang);
 
-              const isCurrentActive = isMenuItemActive(item, isDesigners, isBeauty);
+              const hasCustomDropdown = Array.isArray(item.dropdownItems) && item.dropdownItems.length > 0;
+              const hasDesignerCategories = Array.isArray(item.designerCategories) && item.designerCategories.length > 0;
+              const hasDropdown = hasCustomDropdown || hasDesignerCategories;
+
+              const finalHref = isDesigners ? `/designers/${lang}` : resolvePath(item.href, lang);
+              const isCurrentActive = isMenuItemActive(item, isDesigners);
+
+              // Check if any dropdown item has subItems (nested flyout)
+              const hasSubDropdown = hasCustomDropdown && item.dropdownItems.some((d: any) => Array.isArray(d.subItems) && d.subItems.length > 0);
+              const activeSubItem = hasSubDropdown
+                ? item.dropdownItems.find((d: any, dIdx: number) => {
+                    const dropKey = d._key || `${idx}-${dIdx}`;
+                    return beautyHoveredSub === dropKey && Array.isArray(d.subItems) && d.subItems.length > 0;
+                  }) || (beautyHoveredSub ? null : item.dropdownItems.find((d: any) => Array.isArray(d.subItems) && d.subItems.length > 0))
+                : null;
 
               return (
                 <Box
-                  key={idx}
+                  key={item._key || idx}
                   onMouseEnter={() => hasDropdown && handleMenuHover(idx)}
-                  onMouseLeave={() => hasDropdown && handleMenuHover(null)}
+                  onMouseLeave={() => {
+                    if (hasDropdown) {
+                      handleMenuHover(null);
+                      setBeautyHoveredSub(null);
+                    }
+                  }}
                   sx={{ display: "inline-block", height: "100%", position: "relative" }}
-                  >
-                    <Button
-                    component={isDesigners || !hasDropdown || isCategoryDropdown ? Link : "button"}
-                    href={isDesigners || !hasDropdown || isCategoryDropdown ? finalHref : undefined}
+                >
+                  <Button
+                    component={Link}
+                    href={finalHref}
                     className={`luxury-link${isCurrentActive ? " luxury-link-active" : ""}`}
                     onClick={(e: React.MouseEvent) => {
                       if (isDesigners) {
@@ -1464,10 +1641,6 @@ export default function SiteHeader({ settings, onLangToggleStart }: SiteHeaderPr
                         e.stopPropagation();
                         setActiveDropdown(null);
                         router.push(finalHref);
-                        return;
-                      }
-                      if (hasDropdown && !isCategoryDropdown && !isDesigners) {
-                        e.preventDefault();
                       }
                     }}
                     sx={{
@@ -1497,7 +1670,7 @@ export default function SiteHeader({ settings, onLangToggleStart }: SiteHeaderPr
                           onMouseEnter={() => setActiveDropdown(idx)}
                           onMouseLeave={() => { setActiveDropdown(null); setBeautyHoveredSub(null); }}
                           sx={
-                            (!isCategoryDropdown && item.designerCategories.length > 2)
+                            hasDesignerCategories && item.designerCategories.length > 2
                               ? {
                                   position: "fixed",
                                   top: { xs: 118, lg: 154 },
@@ -1513,13 +1686,13 @@ export default function SiteHeader({ settings, onLangToggleStart }: SiteHeaderPr
                                   textAlign: lang === "ar" ? "right" : "left",
                                   color: "#111111"
                                 }
-                              : isBeauty
+                              : hasSubDropdown
                               ? {
                                   position: "absolute",
                                   top: "100%",
                                   left: lang === "ar" ? "auto" : 0,
                                   right: lang === "ar" ? 0 : "auto",
-                                  width: beautyHoveredSub === "skincare" ? "300px" : "165px",
+                                  width: activeSubItem ? "315px" : "175px",
                                   bgcolor: "#ffffff",
                                   border: "1px solid rgba(0,0,0,0.1)",
                                   borderTop: "3px solid #CB6116",
@@ -1547,138 +1720,99 @@ export default function SiteHeader({ settings, onLangToggleStart }: SiteHeaderPr
                                 }
                           }
                         >
-                          {isCategoryDropdown ? (
-                            <Stack spacing={2} sx={{ width: "100%" }}>
-                              {isDining ? (
-                                [
-                                  { label: lang === "ar" ? "مطعم فيلامور" : "RESTAURANT (VILAMORE)", href: `/dining/vilamore/${lang}` },
-                                  { label: lang === "ar" ? "ذا اسبريسو لاب" : "CAFE (THE ESPRESSO LAB)", href: `/dining/the-espresso-lab/${lang}` }
-                                ].map((opt) => (
-                                  <Typography
-                                    key={opt.label}
-                                    component={Link}
-                                    href={opt.href}
-                                    onClick={() => setActiveDropdown(null)}
-                                    sx={{
-                                      color: "#333333",
-                                      textDecoration: "uppercase",
-                                      fontSize: 12.5,
-                                      fontWeight: 600,
-                                      fontFamily: '"Cairo", sans-serif',
-                                      "&:hover": { color: "#CB6116", transform: lang === "ar" ? "translateX(-4px)" : "translateX(4px)" },
-                                      transition: "all 0.2s ease"
-                                    }}
-                                  >
-                                    {opt.label}
-                                  </Typography>
-                                ))
-                              ) : isBeauty ? (
-                                <Box
-                                  onMouseLeave={() => setBeautyHoveredSub(null)}
-                                  sx={{
-                                    display: "flex",
-                                    flexDirection: lang === "ar" ? "row-reverse" : "row",
-                                    width: "100%"
-                                  }}
-                                >
-                                  {/* Left Main Categories */}
-                                  <Box
-                                    sx={{
-                                      width: "165px",
-                                      bgcolor: "#ffffff",
-                                      borderRight: "none",
-                                      borderLeft: "none",
-                                      py: 1.5
-                                    }}
-                                  >
-                                    {/* Skincare item */}
-                                    <Box
-                                      onMouseEnter={() => setBeautyHoveredSub("skincare")}
-                                      component={Link}
-                                      href={`/category/skincare/${lang}`}
-                                      onClick={() => { setActiveDropdown(null); setBeautyHoveredSub(null); }}
-                                      sx={{
-                                        display: "flex",
-                                        alignItems: "center",
-                                        justifyContent: "space-between",
-                                        px: 2.2,
-                                        py: 1.2,
-                                        textDecoration: "none",
-                                        color: beautyHoveredSub === "skincare" ? "#CB6116" : "#333333",
-                                        bgcolor: "transparent",
-                                        fontWeight: 600,
-                                        fontSize: 12.5,
-                                        textTransform: "uppercase",
-                                        letterSpacing: lang === "ar" ? 0 : "0.05em",
-                                        fontFamily: '"Cairo", sans-serif',
-                                        "&:hover": {
-                                          color: "#CB6116",
-                                          transform: lang === "ar" ? "translateX(-4px)" : "translateX(4px)"
-                                        },
-                                        transition: "all 0.2s ease"
-                                      }}
-                                    >
-                                      <span style={{ fontWeight: 600 }}>{lang === "ar" ? "العناية بالبشرة" : "SKINCARE"}</span>
-                                    </Box>
+                          {hasCustomDropdown ? (
+                            hasSubDropdown ? (
+                              <Box
+                                onMouseLeave={() => setBeautyHoveredSub(null)}
+                                sx={{
+                                  display: "flex",
+                                  flexDirection: lang === "ar" ? "row-reverse" : "row",
+                                  width: "100%"
+                                }}
+                              >
+                                {/* Left main column */}
+                                <Box sx={{ width: "175px", bgcolor: "#ffffff", py: 1.5 }}>
+                                  {item.dropdownItems.map((dropItem: any, dIdx: number) => {
+                                    const dropLabel = lang === "ar" ? dropItem.label?.ar || dropItem.label?.en : dropItem.label?.en || dropItem.label?.ar;
+                                    const dropKey = dropItem._key || `${idx}-${dIdx}`;
+                                    const hasSubs = Array.isArray(dropItem.subItems) && dropItem.subItems.length > 0;
+                                    const isHovered = beautyHoveredSub
+                                      ? beautyHoveredSub === dropKey
+                                      : (activeSubItem ? (activeSubItem._key || `${idx}-0`) === dropKey : dIdx === 0);
 
-                                    {/* Make up item */}
-                                    <Box
-                                      onMouseEnter={() => setBeautyHoveredSub("makeup")}
-                                      component={Link}
-                                      href={`/category/makeup/${lang}`}
-                                      onClick={() => { setActiveDropdown(null); setBeautyHoveredSub(null); }}
-                                      sx={{
-                                        display: "flex",
-                                        alignItems: "center",
-                                        justifyContent: "space-between",
-                                        px: 2.2,
-                                        py: 1.2,
-                                        textDecoration: "none",
-                                        color: beautyHoveredSub === "makeup" ? "#CB6116" : "#333333",
-                                        bgcolor: "transparent",
-                                        fontWeight: 600,
-                                        fontSize: 12.5,
-                                        textTransform: "uppercase",
-                                        letterSpacing: lang === "ar" ? 0 : "0.05em",
-                                        fontFamily: '"Cairo", sans-serif',
-                                        "&:hover": {
-                                          color: "#CB6116",
-                                          transform: lang === "ar" ? "translateX(-4px)" : "translateX(4px)"
-                                        },
-                                        transition: "all 0.2s ease"
-                                      }}
-                                    >
-                                      <span style={{ fontWeight: 600 }}>{lang === "ar" ? "المكياج" : "MAKE UP"}</span>
-                                    </Box>
-                                  </Box>
+                                    return (
+                                      <Box
+                                        key={dropKey}
+                                        onMouseEnter={() => setBeautyHoveredSub(dropKey)}
+                                        component={Link}
+                                        href={resolvePath(dropItem.href, lang)}
+                                        onClick={() => { setActiveDropdown(null); setBeautyHoveredSub(null); }}
+                                        sx={{
+                                          display: "flex",
+                                          alignItems: "center",
+                                          justifyContent: "space-between",
+                                          px: 2.2,
+                                          py: 1.2,
+                                          textDecoration: "none",
+                                          color: isHovered ? "#CB6116" : "#333333",
+                                          bgcolor: "transparent",
+                                          fontWeight: 600,
+                                          fontSize: 12.5,
+                                          textTransform: "capitalize",
+                                          fontFamily: '"Cairo", sans-serif',
+                                          "&:hover": {
+                                            color: "#CB6116",
+                                            transform: lang === "ar" ? "translateX(-4px)" : "translateX(4px)"
+                                          },
+                                          transition: "all 0.2s ease"
+                                        }}
+                                      >
+                                        <span>{dropLabel}</span>
+                                        {hasSubs && (
+                                          <Box
+                                            component="span"
+                                            sx={{
+                                              fontSize: 10,
+                                              opacity: isHovered ? 1 : 0.45,
+                                              color: isHovered ? "#CB6116" : "inherit",
+                                              transform: isHovered ? (lang === "ar" ? "translateX(-2px)" : "translateX(2px)") : "none",
+                                              transition: "all 0.2s ease"
+                                            }}
+                                          >
+                                            {lang === "ar" ? "◀" : "▶"}
+                                          </Box>
+                                        )}
+                                      </Box>
+                                    );
+                                  })}
+                                </Box>
 
-                                  {beautyHoveredSub === "skincare" && (
-                                    <Box sx={{ width: "135px", flexShrink: 0, p: 1.2, bgcolor: "#ffffff", display: "flex", flexDirection: "column", justifyContent: "center" }}>
-                                      <AnimatePresence mode="wait">
-                                        <MotionBox
-                                          key="skincare-sub-bold"
-                                          initial={{ opacity: 0, x: lang === "ar" ? -6 : 6 }}
-                                          animate={{ opacity: 1, x: 0 }}
-                                          exit={{ opacity: 0, x: lang === "ar" ? -6 : 6 }}
-                                          transition={{ duration: 0.14 }}
-                                        >
-                                          <Stack spacing={1.5}>
-                                            {[
-                                              { label: lang === "ar" ? "النساء" : "WOMEN", href: `/category/skincare/${lang}?sub=women` },
-                                              { label: lang === "ar" ? "الرجال" : "MEN", href: `/category/skincare/${lang}?sub=men` }
-                                            ].map((opt) => (
+                                {/* Flyout column for sub-items */}
+                                {activeSubItem && (
+                                  <Box sx={{ width: "140px", flexShrink: 0, p: 1.2, bgcolor: "#ffffff", display: "flex", flexDirection: "column", justifyContent: "center", borderLeft: lang === "ar" ? "none" : "1px solid rgba(0,0,0,0.06)", borderRight: lang === "ar" ? "1px solid rgba(0,0,0,0.06)" : "none" }}>
+                                    <AnimatePresence mode="wait">
+                                      <MotionBox
+                                        key={beautyHoveredSub || "active-sub"}
+                                        initial={{ opacity: 0, x: lang === "ar" ? -6 : 6 }}
+                                        animate={{ opacity: 1, x: 0 }}
+                                        exit={{ opacity: 0, x: lang === "ar" ? -6 : 6 }}
+                                        transition={{ duration: 0.14 }}
+                                      >
+                                        <Stack spacing={1.5}>
+                                          {activeSubItem.subItems.map((sub: any, sIdx: number) => {
+                                            const subLabel = lang === "ar" ? sub.label?.ar || sub.label?.en : sub.label?.en || sub.label?.ar;
+                                            return (
                                               <Typography
-                                                key={opt.label}
+                                                key={sub._key || sIdx}
                                                 component={Link}
-                                                href={opt.href}
+                                                href={resolvePath(sub.href, lang)}
                                                 onClick={() => { setActiveDropdown(null); setBeautyHoveredSub(null); }}
                                                 sx={{
                                                   color: "#333333",
                                                   textDecoration: "none",
                                                   fontSize: 12.5,
                                                   fontWeight: 600,
-                                                  textTransform: "uppercase",
-                                                  letterSpacing: "0.05em",
+                                                  textTransform: "capitalize",
                                                   fontFamily: '"Cairo", sans-serif',
                                                   px: 1,
                                                   py: 0.5,
@@ -1690,65 +1824,44 @@ export default function SiteHeader({ settings, onLangToggleStart }: SiteHeaderPr
                                                   }
                                                 }}
                                               >
-                                                {opt.label}
+                                                {subLabel}
                                               </Typography>
-                                            ))}
-                                          </Stack>
-                                        </MotionBox>
-                                      </AnimatePresence>
-                                    </Box>
-                                  )}
-                                </Box>
-                              ) : (isFashion || isSkincare) ? (
-                                [
-                                  { label: lang === "ar" ? "النساء" : "WOMEN", href: `/category/${isFashion ? "fashion" : "skincare"}/${lang}?sub=women` },
-                                  { label: lang === "ar" ? "الرجال" : "MEN", href: `/category/${isFashion ? "fashion" : "skincare"}/${lang}?sub=men` }
-                                ].map((opt) => (
-                                  <Typography
-                                    key={opt.label}
-                                    component={Link}
-                                    href={opt.href}
-                                    onClick={() => setActiveDropdown(null)}
-                                    sx={{
-                                      color: "#333333",
-                                      textDecoration: "none",
-                                      fontSize: 12.5,
-                                      fontWeight: 600,
-                                      fontFamily: '"Cairo", sans-serif',
-                                      "&:hover": { color: "#CB6116", transform: lang === "ar" ? "translateX(-4px)" : "translateX(4px)" },
-                                      transition: "all 0.2s ease"
-                                    }}
-                                  >
-                                    {opt.label}
-                                  </Typography>
-                                ))
-                              ) : (
-                                [
-                                  { label: lang === "ar" ? "النساء" : "WOMEN", href: `/category/perfumes/${lang}?sub=women` },
-                                  { label: lang === "ar" ? "الرجال" : "MEN", href: `/category/perfumes/${lang}?sub=men` },
-                                  { label: lang === "ar" ? "للجنسين" : "UNISEX", href: `/category/perfumes/${lang}?sub=unisex` }
-                                ].map((opt) => (
-                                  <Typography
-                                    key={opt.label}
-                                    component={Link}
-                                    href={opt.href}
-                                    onClick={() => setActiveDropdown(null)}
-                                    sx={{
-                                      color: "#333333",
-                                      textDecoration: "none",
-                                      fontSize: 12.5,
-                                      fontWeight: 600,
-                                      fontFamily: '"Cairo", sans-serif',
-                                      "&:hover": { color: "#CB6116", transform: lang === "ar" ? "translateX(-4px)" : "translateX(4px)" },
-                                      transition: "all 0.2s ease"
-                                    }}
-                                  >
-                                    {opt.label}
-                                  </Typography>
-                                ))
-                              )}
-                            </Stack>
-                          ) : item.designerCategories.length > 2 ? (
+                                            );
+                                          })}
+                                        </Stack>
+                                      </MotionBox>
+                                    </AnimatePresence>
+                                  </Box>
+                                )}
+                              </Box>
+                            ) : (
+                              <Stack spacing={2} sx={{ width: "100%" }}>
+                                {item.dropdownItems.map((dropItem: any, dIdx: number) => {
+                                  const dropLabel = lang === "ar" ? dropItem.label?.ar || dropItem.label?.en : dropItem.label?.en || dropItem.label?.ar;
+                                  return (
+                                    <Typography
+                                      key={dropItem._key || dIdx}
+                                      component={Link}
+                                      href={resolvePath(dropItem.href, lang)}
+                                      onClick={() => setActiveDropdown(null)}
+                                      sx={{
+                                        color: "#333333",
+                                        textDecoration: "none",
+                                        fontSize: 12.5,
+                                        fontWeight: 600,
+                                        textTransform: "capitalize",
+                                        fontFamily: '"Cairo", sans-serif',
+                                        "&:hover": { color: "#CB6116", transform: lang === "ar" ? "translateX(-4px)" : "translateX(4px)" },
+                                        transition: "all 0.2s ease"
+                                      }}
+                                    >
+                                      {dropLabel}
+                                    </Typography>
+                                  );
+                                })}
+                              </Stack>
+                            )
+                          ) : hasDesignerCategories && item.designerCategories.length > 2 ? (
                             (() => {
                               const categories = getDesignerMenuCategories(item.designerCategories);
                               return (
@@ -1762,11 +1875,11 @@ export default function SiteHeader({ settings, onLangToggleStart }: SiteHeaderPr
                                 </Box>
                               );
                             })()
-                          ) : (
+                          ) : hasDesignerCategories ? (
                             <Stack spacing={2.5} sx={{ width: "100%" }}>
                               {renderDesignerCategoryCards(getDesignerMenuCategories(item.designerCategories))}
                             </Stack>
-                          )}
+                          ) : null}
                         </MotionBox>
                       )}
                     </AnimatePresence>
@@ -1801,10 +1914,17 @@ export default function SiteHeader({ settings, onLangToggleStart }: SiteHeaderPr
           {/* Header Row */}
           <Stack direction="row" justifyContent="space-between" alignItems="center">
             <Stack direction="row" gap={1.2} alignItems="center">
-              <Box component="img" src={logoImageUrl || "/brand/logo.png"} alt="Fashion Gate" sx={{ height: 26, width: "auto" }} />
-              <Typography sx={{ fontFamily: "var(--heading-font)", fontSize: 16, color: "#fff", fontWeight: 700, letterSpacing: lang === "ar" ? 0 : "0.05em" }}>
-                {stretchArabicText(lang === "ar" ? logoTitle?.ar || "بوابة الأزياء" : logoTitle?.en || "FASHION GATE", 2)}
-              </Typography>
+              <Box component="img" src={logoImageUrl || "/brand/logo.png"} alt="Fashion Gate" sx={{ height: 28, width: "auto" }} />
+              <Box sx={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "flex-start", textAlign: lang === "ar" ? "right" : "left", lineHeight: 1 }}>
+                <Typography sx={{ fontFamily: "var(--heading-font)", fontSize: 16, color: "#fff", fontWeight: 600, letterSpacing: lang === "ar" ? "0.01em" : "0.08em", lineHeight: 1.15, textTransform: "uppercase", textAlign: lang === "ar" ? "right" : "left", width: "100%" }}>
+                  {lang === "ar" ? stretchArabicText(brandText.primary, 1) : brandText.primary}
+                </Typography>
+                {brandText.secondary && (
+                  <Typography sx={{ fontFamily: lang === "ar" ? '"Cairo", sans-serif' : 'var(--heading-font), serif', fontSize: 9, color: "#ffffff", fontWeight: 500, letterSpacing: lang === "ar" ? 0 : "0.32em", mt: 0.2, lineHeight: 1, textTransform: "uppercase", textAlign: lang === "ar" ? "right" : "left", width: "100%" }}>
+                    {brandText.secondary}
+                  </Typography>
+                )}
+              </Box>
             </Stack>
             <IconButton onClick={() => setOpen(false)} sx={{ color: "#fff", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 0 }}>
               <CloseIcon sx={{ fontSize: 16 }} />
@@ -1814,124 +1934,24 @@ export default function SiteHeader({ settings, onLangToggleStart }: SiteHeaderPr
           {/* Navigation Links */}
           <Stack spacing={3.2} sx={{ overflowY: "auto", py: 4, alignItems: "center" }}>
             {(() => {
-              const fallbackMenuItems = [
-                { label: { en: "Home", ar: "الرئيسية" }, href: "/" },
-                { 
-                  label: { en: "Designers", ar: "المصممون" }, 
-                  href: "/brand/elie-saab",
-                  designerCategories: [
-                    {
-                      title: { en: "Luxury Fashion & Haute Couture", ar: "الأزياء الفاخرة والراقية" },
-                      brands: [
-                        { slug: { current: "elie-saab" }, title: "Elie Saab" },
-                        { slug: { current: "gucci" }, title: "Gucci" },
-                        { slug: { current: "maxmara" }, title: "Max Mara" },
-                        { slug: { current: "prada" }, title: "Prada" },
-                        { slug: { current: "valentino" }, title: "Valentino" },
-                        { slug: { current: "ysl" }, title: "YSL" }
-                      ]
-                    },
-                    {
-                      title: { en: "Contemporary & Premium Apparel", ar: "الملابس المعاصرة والمميزة" },
-                      brands: [
-                        { slug: { current: "calvin-klein" }, title: "Calvin Klein" },
-                        { slug: { current: "hugo-boss" }, title: "Hugo Boss" },
-                        { slug: { current: "giorgio-armani" }, title: "Giorgio Armani" },
-                        { slug: { current: "paul-shark" }, title: "Paul & Shark" },
-                        { slug: { current: "sandro" }, title: "Sandro" },
-                        { slug: { current: "editorial" }, title: "Editorial" }
-                      ]
-                    },
-                    {
-                      title: { en: "Independent & Creative Design", ar: "التصميم المستقل والإبداعي" },
-                      brands: [{ slug: { current: "moje" }, title: "Moje" }]
-                    },
-                    {
-                      title: { en: "Footwear & Athletic Lifestyle", ar: "الأحذية والأنشطة الرياضية" },
-                      brands: [
-                        { slug: { current: "adidas" }, title: "Adidas" },
-                        { slug: { current: "skechers" }, title: "Skechers" }
-                      ]
-                    },
-                    {
-                      title: { en: "Fine Jewelry & Luxury Timepieces", ar: "المجوهرات الراقية والساعات الفاخرة" },
-                      brands: [{ slug: { current: "cartier" }, title: "Cartier" }]
-                    },
-                    {
-                      title: { en: "Premium Beauty & Skincare", ar: "العناية بالبشرة والجمال الفاخر" },
-                      brands: [{ slug: { current: "lancome" }, title: "Lancôme" }]
-                    },
-                    {
-                      title: { en: "Luxury Accessories & Leather Goods", ar: "الإكسسوارات الفاخرة والمنتجات الجلدية" },
-                      brands: [
-                        { slug: { current: "jimmy-choo" }, title: "Jimmy Choo" },
-                        { slug: { current: "coach" }, title: "Coach" }
-                      ]
-                    }
-                  ]
-                },
-                { 
-                  label: { en: "Fashion", ar: "الأزياء" }, 
-                  href: "/category/fashion",
-                  designerCategories: [
-                    {
-                      title: { en: "Contemporary & Premium Apparel", ar: "الملابس المعاصرة والمميزة" },
-                      brands: [
-                        { slug: { current: "calvin-klein" }, title: "Calvin Klein" },
-                        { slug: { current: "hugo-boss" }, title: "Hugo Boss" },
-                        { slug: { current: "giorgio-armani" }, title: "Giorgio Armani" },
-                        { slug: { current: "paul-shark" }, title: "Paul & Shark" },
-                        { slug: { current: "sandro" }, title: "Sandro" },
-                        { slug: { current: "editorial" }, title: "Editorial" }
-                      ]
-                    }
-                  ]
-                },
-                { 
-                  label: { en: "Perfumes", ar: "العطور" }, 
-                  href: "/category/perfumes",
-                  designerCategories: [
-                    {
-                      title: { en: "Premium Beauty & Skincare", ar: "العناية بالبشرة والجمال الفاخر" },
-                      brands: [{ slug: { current: "lancome" }, title: "Lancôme" }]
-                    }
-                  ]
-                },
-                { 
-                  label: { en: "Beauty", ar: "الجمال" }, 
-                  href: "/category/beauty",
-                  designerCategories: [
-                    {
-                      title: { en: "Premium Beauty & Skincare", ar: "العناية بالبشرة والجمال الفاخر" },
-                      brands: [{ slug: { current: "lancome" }, title: "Lancôme" }]
-                    }
-                  ]
-                },
-                { label: { en: "Dining", ar: "المطاعم" }, href: "/dining" },
-                { label: { en: "About Us", ar: "من نحن" }, href: "/about" },
-                { label: { en: "Contact Us", ar: "اتصل بنا" }, href: "/contact" }
-              ];
-              const activeMenuItems = headerMenuItems && headerMenuItems.length > 0 ? headerMenuItems : fallbackMenuItems;
+              const activeMenuItems = headerMenuItems && headerMenuItems.length > 0 ? headerMenuItems : defaultHeaderMenuItems;
 
               return activeMenuItems.map((item, idx) => {
-                const isFashion = item.href?.includes("/category/fashion");
-                const isPerfumes = item.href?.includes("/category/perfumes");
-                const isSkincare = item.href?.includes("/category/skincare");
-                const isBeauty = item.href?.includes("/category/beauty") || isSkincare || item.label?.en?.toLowerCase() === "beauty" || item.label?.en?.toLowerCase() === "skincare";
-                const isDining = item.href?.includes("/dining");
                 const labelStr = lang === "ar" ? item.label?.ar || item.label?.en : item.label?.en || item.label?.ar;
                 const normalizedLabel = `${item.label?.en || ""} ${item.label?.ar || ""} ${labelStr || ""}`.toLowerCase();
                 const isDesigners = item.href?.includes("/designers") || item.href?.includes("designers") || normalizedLabel.includes("designer") || normalizedLabel.includes("مصمم");
-                const isCategoryDropdown = isBeauty || isDining || isFashion || isPerfumes || isSkincare;
-                const hasDropdown = isCategoryDropdown || (isDesigners && item.designerCategories && item.designerCategories.length > 0);
-                
+
+                const hasCustomDropdown = Array.isArray(item.dropdownItems) && item.dropdownItems.length > 0;
+                const hasDesignerCategories = Array.isArray(item.designerCategories) && item.designerCategories.length > 0;
+                const hasDropdown = hasCustomDropdown || hasDesignerCategories;
+
                 const finalHref = isDesigners ? `/designers/${lang}` : resolvePath(item.href, lang);
 
                 const isExpanded = expandedMobileItem === idx;
-                const isCurrentActive = isMenuItemActive(item, isDesigners, isBeauty);
+                const isCurrentActive = isMenuItemActive(item, isDesigners);
 
                 return (
-                  <Stack key={idx} spacing={1.5} sx={{ width: "100%", alignItems: "center" }}>
+                  <Stack key={item._key || idx} spacing={1.5} sx={{ width: "100%", alignItems: "center" }}>
                     <MuiLink
                       component={isDesigners || !hasDropdown ? Link : "span"}
                       href={isDesigners || !hasDropdown ? finalHref : undefined}
@@ -1973,180 +1993,135 @@ export default function SiteHeader({ settings, onLangToggleStart }: SiteHeaderPr
                             style={{ overflow: "hidden", width: "100%" }}
                           >
                             <Stack spacing={2.5} sx={{ py: 2, px: 3, bgcolor: "rgba(255,255,255,0.03)", borderLeft: lang === "ar" ? "none" : "2px solid #CB6116", borderRight: lang === "ar" ? "2px solid #CB6116" : "none", width: "100%" }}>
-                              {isCategoryDropdown ? (
+                              {hasCustomDropdown ? (
                                 <Stack spacing={2} sx={{ width: "100%", alignItems: "center" }}>
-                                  {isDining ? (
-                                    [
-                                      { label: lang === "ar" ? "مطعم فيلامور" : "Restaurant (Vilamore)", href: `/dining/vilamore/${lang}` },
-                                      { label: lang === "ar" ? "ذا اسبريسو لاب" : "Café (The Espresso Lab)", href: `/dining/the-espresso-lab/${lang}` }
-                                    ].map((opt) => (
-                                      <MuiLink
-                                        key={opt.label}
-                                        component={Link}
-                                        href={opt.href}
-                                        onClick={() => setOpen(false)}
-                                        sx={{
-                                          color: "rgba(255,255,255,0.65)",
-                                          fontSize: 13,
-                                          textDecoration: "none",
-                                          fontFamily: '"Cairo", sans-serif',
-                                          "&:hover": { color: "#ffffff" }
-                                        }}
-                                      >
-                                        {opt.label}
-                                      </MuiLink>
-                                    ))
-                                  ) : isBeauty ? (
-                                    <Stack spacing={2} sx={{ width: "100%", alignItems: "center" }}>
-                                      <Box sx={{ textAlign: "center" }}>
-                                        <MuiLink
-                                          component={Link}
-                                          href={`/category/skincare/${lang}`}
-                                          onClick={() => setOpen(false)}
-                                          sx={{
-                                            color: "#CB6116",
-                                            fontSize: 13,
-                                            fontWeight: 700,
-                                            textTransform: "uppercase",
-                                            letterSpacing: lang === "ar" ? 0 : "0.1em",
-                                            textDecoration: "none",
-                                            display: "block",
-                                            mb: 0.8,
-                                            fontFamily: '"Cairo", sans-serif'
-                                          }}
-                                        >
-                                          {lang === "ar" ? "العناية بالبشرة" : "SKINCARE"}
-                                        </MuiLink>
-                                        {/* Skincare Men/Women links are commented for now; uncomment this stack later if needed.
-                                        <Stack spacing={0.8} sx={{ alignItems: "center" }}>
-                                          {[
-                                            { label: lang === "ar" ? "النساء" : "WOMEN", href: `/category/skincare/${lang}?sub=women` },
-                                            { label: lang === "ar" ? "الرجال" : "MEN", href: `/category/skincare/${lang}?sub=men` }
-                                          ].map((opt) => (
-                                            <MuiLink
-                                              key={opt.label}
-                                              component={Link}
-                                              href={opt.href}
-                                              onClick={() => setOpen(false)}
-                                              sx={{
-                                                color: "rgba(255,255,255,0.75)",
-                                                fontSize: 12.5,
-                                                textDecoration: "none",
-                                                fontFamily: '"Cairo", sans-serif',
-                                                "&:hover": { color: "#ffffff" }
-                                              }}
-                                            >
-                                              {opt.label}
-                                            </MuiLink>
-                                          ))}
-                                        </Stack>
-                                        */}
-                                      </Box>
+                                  {item.dropdownItems.map((dropItem: any, dIdx: number) => {
+                                    const dropLabel = lang === "ar" ? dropItem.label?.ar || dropItem.label?.en : dropItem.label?.en || dropItem.label?.ar;
+                                    const dropHref = resolvePath(dropItem.href, lang);
+                                    const hasSubs = Array.isArray(dropItem.subItems) && dropItem.subItems.length > 0;
 
-                                      <Box sx={{ textAlign: "center" }}>
-                                        <MuiLink
-                                          component={Link}
-                                          href={`/category/makeup/${lang}`}
-                                          onClick={() => setOpen(false)}
-                                          sx={{
-                                            color: "rgba(255,255,255,0.85)",
-                                            fontSize: 13,
-                                            fontWeight: 600,
-                                            textTransform: "uppercase",
-                                            letterSpacing: lang === "ar" ? 0 : "0.1em",
-                                            textDecoration: "none",
-                                            display: "block",
-                                            fontFamily: '"Cairo", sans-serif',
-                                            "&:hover": { color: "#CB6116" }
-                                          }}
-                                        >
-                                          {lang === "ar" ? "المكياج" : "MAKE UP"}
-                                        </MuiLink>
-                                      </Box>
-                                    </Stack>
-                                  ) : (isFashion || isSkincare) ? (
-                                    [
-                                      { label: lang === "ar" ? "النساء" : "WOMEN", href: `/category/${isFashion ? "fashion" : "skincare"}/${lang}?sub=women` },
-                                      { label: lang === "ar" ? "الرجال" : "MEN", href: `/category/${isFashion ? "fashion" : "skincare"}/${lang}?sub=men` }
-                                    ].map((opt) => (
+                                    if (hasSubs) {
+                                      return (
+                                        <Box key={dropItem._key || dIdx} sx={{ textAlign: "center", width: "100%" }}>
+                                          <MuiLink
+                                            component={Link}
+                                            href={dropHref}
+                                            onClick={() => setOpen(false)}
+                                            sx={{
+                                              color: "#CB6116",
+                                              fontSize: 13,
+                                              fontWeight: 700,
+                                              textTransform: "capitalize",
+                                              textDecoration: "none",
+                                              display: "block",
+                                              mb: 0.8,
+                                              fontFamily: '"Cairo", sans-serif'
+                                            }}
+                                          >
+                                            {dropLabel}
+                                          </MuiLink>
+                                          <Stack spacing={0.8} sx={{ alignItems: "center" }}>
+                                            {dropItem.subItems.map((sub: any, sIdx: number) => {
+                                              const subLabel = lang === "ar" ? sub.label?.ar || sub.label?.en : sub.label?.en || sub.label?.ar;
+                                              const subHref = resolvePath(sub.href, lang);
+                                              return (
+                                                <MuiLink
+                                                  key={sub._key || sIdx}
+                                                  component={Link}
+                                                  href={subHref}
+                                                  onClick={() => setOpen(false)}
+                                                  sx={{
+                                                    color: "rgba(255,255,255,0.75)",
+                                                    fontSize: 12.5,
+                                                    textDecoration: "none",
+                                                    fontFamily: '"Cairo", sans-serif',
+                                                    "&:hover": { color: "#ffffff" }
+                                                  }}
+                                                >
+                                                  {subLabel}
+                                                </MuiLink>
+                                              );
+                                            })}
+                                          </Stack>
+                                        </Box>
+                                      );
+                                    }
+
+                                    return (
                                       <MuiLink
-                                        key={opt.label}
+                                        key={dropItem._key || dIdx}
                                         component={Link}
-                                        href={opt.href}
+                                        href={dropHref}
                                         onClick={() => setOpen(false)}
                                         sx={{
-                                          color: "rgba(255,255,255,0.65)",
+                                          color: "rgba(255,255,255,0.75)",
                                           fontSize: 13,
                                           textDecoration: "none",
                                           fontFamily: '"Cairo", sans-serif',
                                           "&:hover": { color: "#ffffff" }
                                         }}
                                       >
-                                        {opt.label}
+                                        {dropLabel}
                                       </MuiLink>
-                                    ))
-                                  ) : (
-                                    [
-                                      { label: lang === "ar" ? "النساء" : "WOMEN", href: `/category/perfumes/${lang}?sub=women` },
-                                      { label: lang === "ar" ? "الرجال" : "MEN", href: `/category/perfumes/${lang}?sub=men` },
-                                      { label: lang === "ar" ? "للجنسين" : "UNISEX", href: `/category/perfumes/${lang}?sub=unisex` }
-                                    ].map((opt) => (
-                                      <MuiLink
-                                        key={opt.label}
-                                        component={Link}
-                                        href={opt.href}
-                                        onClick={() => setOpen(false)}
-                                        sx={{
-                                          color: "rgba(255,255,255,0.65)",
-                                          fontSize: 13,
-                                          textDecoration: "none",
-                                          fontFamily: '"Cairo", sans-serif',
-                                          "&:hover": { color: "#ffffff" }
-                                        }}
-                                      >
-                                        {opt.label}
-                                      </MuiLink>
-                                    ))
-                                  )}
+                                    );
+                                  })}
                                 </Stack>
-                              ) : (
-                                item.designerCategories.map((cat: any, catIdx: number) => {
-                                  const catTitle = lang === "ar" ? cat.title?.ar || cat.title?.en : cat.title?.en || cat.title?.ar;
-                                  if (!cat.brands || cat.brands.length === 0) return null;
-                                  
-                                  return (
-                                    <Stack key={catIdx} spacing={1.2} sx={{ textAlign: lang === "ar" ? "right" : "left" }}>
-                                      <Typography sx={{ color: "#CB6116", fontSize: 11, fontWeight: 700, letterSpacing: lang === "ar" ? 0 : "0.1em", textTransform: "uppercase", fontFamily: '"Cairo", sans-serif' }}>
-                                        {catTitle}
-                                      </Typography>
-                                      <Box sx={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 1 }}>
-                                        {cat.brands.map((brand: any, brandIdx: number) => {
-                                          const brandTitle = lang === "ar" ? resolveBrandTitleAr(brand.title, brand.titleAr) : brand.title || brand.titleAr;
-                                          const brandHref = `/brand/${brand.slug?.current || brand.slug}/${lang}`;
-                                          
-                                          return (
-                                            <MuiLink
-                                              key={brandIdx}
-                                              component={Link}
-                                              href={brandHref}
-                                              onClick={() => setOpen(false)}
-                                              sx={{
-                                                color: "rgba(255,255,255,0.65)",
-                                                fontSize: 13,
-                                                textDecoration: "none",
-                                                fontFamily: '"Cairo", sans-serif',
-                                                "&:hover": { color: "#ffffff" }
-                                              }}
-                                            >
-                                              {brandTitle}
-                                            </MuiLink>
-                                          );
-                                        })}
-                                      </Box>
-                                    </Stack>
-                                  );
-                                })
-                              )}
+                              ) : hasDesignerCategories ? (
+                                Array.isArray(item.designerCategories) && item.designerCategories.length > 0 && typeof item.designerCategories[0] === "object" && item.designerCategories[0].title ? (
+                                  item.designerCategories.map((cat: any, catIdx: number) => {
+                                    const catTitle = lang === "ar" ? cat.title?.ar || cat.title?.en : cat.title?.en || cat.title?.ar;
+                                    if (!cat.brands || cat.brands.length === 0) return null;
+                                    
+                                    return (
+                                      <Stack key={catIdx} spacing={1.2} sx={{ textAlign: lang === "ar" ? "right" : "left", width: "100%" }}>
+                                        <Typography sx={{ color: "#CB6116", fontSize: 11, fontWeight: 700, letterSpacing: lang === "ar" ? 0 : "0.1em", textTransform: "uppercase", fontFamily: '"Cairo", sans-serif' }}>
+                                          {catTitle}
+                                        </Typography>
+                                        <Box sx={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 1 }}>
+                                          {cat.brands.map((brand: any, brandIdx: number) => {
+                                            const brandTitle = lang === "ar" ? resolveBrandTitleAr(brand.title, brand.titleAr) : brand.title || brand.titleAr;
+                                            const brandHref = `/brand/${brand.slug?.current || brand.slug}/${lang}`;
+                                            
+                                            return (
+                                              <MuiLink
+                                                key={brandIdx}
+                                                component={Link}
+                                                href={brandHref}
+                                                onClick={() => setOpen(false)}
+                                                sx={{
+                                                  color: "rgba(255,255,255,0.65)",
+                                                  fontSize: 13,
+                                                  textDecoration: "none",
+                                                  fontFamily: '"Cairo", sans-serif',
+                                                  "&:hover": { color: "#ffffff" }
+                                                }}
+                                              >
+                                                {brandTitle}
+                                              </MuiLink>
+                                            );
+                                          })}
+                                        </Box>
+                                      </Stack>
+                                    );
+                                  })
+                                ) : (
+                                  <MuiLink
+                                    component={Link}
+                                    href={`/designers/${lang}`}
+                                    onClick={() => setOpen(false)}
+                                    sx={{
+                                      color: "#CB6116",
+                                      fontSize: 13,
+                                      fontWeight: 700,
+                                      textTransform: "uppercase",
+                                      textDecoration: "none",
+                                      fontFamily: '"Cairo", sans-serif'
+                                    }}
+                                  >
+                                    {lang === "ar" ? "عرض جميع المصممين" : "VIEW ALL DESIGNERS"}
+                                  </MuiLink>
+                                )
+                              ) : null}
                             </Stack>
                           </motion.div>
                         )}

@@ -20,14 +20,14 @@ export const restaurantPage = defineType({
       name: "restaurantId",
       title: "Restaurant ID",
       type: "string",
-      description: 'Must match the route name exactly (e.g. "vilamore" or "the-espresso-lab")',
+      description: 'Must match the route name exactly (e.g. "sera" or "the-espresso-lab")',
       validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: "title",
       title: "Document Title",
       type: "string",
-      description: "For internal admin organization (e.g. 'Vilamore Damascus')",
+      description: "For internal admin organization (e.g. 'SERA Damascus')",
     }),
 
     // --- 0. HEADER SECTION ---

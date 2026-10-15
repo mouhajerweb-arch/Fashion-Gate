@@ -169,6 +169,22 @@ export const contactPage = defineType({
       group: "form",
     }),
     defineField({
+      name: "formImagePosition",
+      title: "Form Image Position (Desktop)",
+      description: "CSS object-position percentage used for the modal and contact form image on desktop, e.g. 'center top', '50% 20%', or '20%'.",
+      type: "string",
+      initialValue: "center top",
+      group: "form",
+    }),
+    defineField({
+      name: "formImagePositionMobile",
+      title: "Form Image Position (Mobile)",
+      description: "CSS object-position percentage used for the modal and contact form image on mobile, e.g. '20%', 'center 20%', or '50% 25%'.",
+      type: "string",
+      initialValue: "center 20%",
+      group: "form",
+    }),
+    defineField({
       name: "formCursive",
       title: "Form Cursive Accent",
       description: "Cursive text above form title (e.g. 'write to us')",

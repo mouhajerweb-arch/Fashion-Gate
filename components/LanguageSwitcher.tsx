@@ -34,6 +34,7 @@ interface LanguageSwitcherProps {
   onToggleStart?: () => void;
   color?: string;
   hoverColor?: string;
+  styleVariant?: "flag_and_text" | "flag_only" | "text_only" | string;
 }
 
 export default function LanguageSwitcher({
@@ -41,6 +42,7 @@ export default function LanguageSwitcher({
   onToggleStart,
   color = "#ffffff",
   hoverColor = "#CB6116",
+  styleVariant = "flag_and_text",
 }: LanguageSwitcherProps) {
   const router = useRouter();
   const pathname = usePathname();
@@ -70,24 +72,29 @@ export default function LanguageSwitcher({
     }, 180);
   };
 
+  const showFlag = styleVariant !== "text_only";
+  const showText = styleVariant !== "flag_only";
+  const flagComponent = currentLang === "ar" ? <UnitedKingdomFlag /> : <SyriaFlag />;
+
   return (
     <Button 
       onClick={handleLangToggle}
-      startIcon={currentLang === "ar" ? <UnitedKingdomFlag /> : <SyriaFlag />}
+      startIcon={showFlag ? flagComponent : undefined}
+      aria-label={currentLang === "ar" ? "Switch to English" : "التبديل إلى العربية"}
       sx={{ 
         color: color, 
         textTransform: "uppercase", 
         fontSize: 12, 
         fontWeight: 600, 
         letterSpacing: "0.1em",
-        px: { xs: 0.6, sm: 1.5 },
+        px: { xs: 0.6, sm: 1.2 },
         py: 0.5,
         border: "none",
         borderRadius: 0,
         fontFamily: '"Cairo", sans-serif',
         display: "inline-flex",
         alignItems: "center",
-        gap: { xs: 0.4, sm: 1 },
+        gap: showFlag && showText ? { xs: 0.4, sm: 0.8 } : 0,
         minWidth: 0,
         "& .MuiButton-startIcon": {
           margin: 0,
@@ -100,7 +107,7 @@ export default function LanguageSwitcher({
         }
       }}
     >
-      {currentLang === "ar" ? "EN" : "AR"}
+      {showText && (currentLang === "ar" ? "EN" : "AR")}
     </Button>
   );
 }

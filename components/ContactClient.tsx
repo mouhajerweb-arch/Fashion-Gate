@@ -26,6 +26,30 @@ import { getLocalizedValue } from "@/lib/sanity";
 
 const MotionBox = motion.create(Box);
 
+function resolveImagePosition(pos: string | number | undefined | null, fallback: string): string {
+  if (pos === undefined || pos === null) return fallback;
+  const str = String(pos).trim();
+  if (!str) return fallback;
+
+  if (/^\d+(\.\d+)?%?$/.test(str)) {
+    const num = str.replace("%", "");
+    return `center ${num}%`;
+  }
+
+  if (/^\d+(\.\d+)?%?\s+\d+(\.\d+)?%?$/.test(str)) {
+    const parts = str.split(/\s+/).map((p) => (p.endsWith("%") ? p : `${p}%`));
+    return parts.join(" ");
+  }
+
+  if (/^(left|center|right)\s+\d+(\.\d+)?%?$/i.test(str)) {
+    const parts = str.split(/\s+/);
+    const y = parts[1].endsWith("%") ? parts[1] : `${parts[1]}%`;
+    return `${parts[0]} ${y}`;
+  }
+
+  return str;
+}
+
 /* Design tokens — pulled directly from the site's globals.css / HeroSection / BoulevardSection */
 const TK = {
   ivory: "#fbfaf8",
@@ -430,7 +454,10 @@ export default function ContactClient({ initialLang, initialData }: ContactClien
                       width: "100%",
                       height: "100%",
                       objectFit: "cover",
-                      objectPosition: "center top",
+                      objectPosition: {
+                        xs: resolveImagePosition(initialData?.formImagePositionMobile || initialData?.formImagePosition, initialData?.formImage?.hotspot ? `${Math.round(initialData.formImage.hotspot.x * 100)}% ${Math.round(initialData.formImage.hotspot.y * 100)}%` : "center 20%"),
+                        md: resolveImagePosition(initialData?.formImagePosition, initialData?.formImage?.hotspot ? `${Math.round(initialData.formImage.hotspot.x * 100)}% ${Math.round(initialData.formImage.hotspot.y * 100)}%` : "center top"),
+                      },
                       transition: "transform 0.8s cubic-bezier(0.25, 1, 0.5, 1)",
                     }}
                   />

@@ -228,7 +228,13 @@ export async function getContactPageData() {
     whatsappValue,
     whatsappLink,
     chatConcierge,
-    formImage { asset->{ url } },
+    formImage { 
+      asset->{ url },
+      hotspot,
+      crop
+    },
+    formImagePosition,
+    formImagePositionMobile,
     formCursive,
     formTitle,
     formSubtitle,
@@ -329,6 +335,9 @@ export async function getSanityBrand(slug: string) {
 export async function getFooterSettings() {
   try {
     return await sanityClient.fetch(`*[_type == "footerSettings"][0] {
+      logoImage { asset-> { _id, url } },
+      brandTitle { en, ar },
+      brandSubtitle { en, ar },
       description { en, ar },
       exploreTitle { en, ar },
       links[]{
@@ -1020,10 +1029,40 @@ export async function getHeaderSettings() {
   return sanityClient.fetch(`*[_type == "header"][0] {
     _id,
     title,
+    logoTitle { en, ar },
+    logoSubtitle { en, ar },
+    logoLayout,
+    logoImage { asset-> { _id, url } },
+    showSearch,
+    searchPlaceholder { en, ar },
+    showLanguageSwitcher,
+    languageSwitcherStyle,
+    showUserProfile,
     menuItems[] {
+      _key,
       label { en, ar },
       href,
-      dropdownType
+      dropdownItems[] {
+        _key,
+        label { en, ar },
+        href,
+        subItems[] {
+          _key,
+          label { en, ar },
+          href
+        }
+      },
+      designerCategories[]-> {
+        _id,
+        title { en, ar },
+        brands[]-> {
+          _id,
+          title,
+          titleAr,
+          slug,
+          isActive
+        }
+      }
     }
   }`);
 }
@@ -1031,7 +1070,7 @@ export async function getHeaderSettings() {
 
 export async function getRestaurantPageData(restaurantId: string) {
   try {
-    return await sanityClient.fetch(`*[_type == "restaurantPage" && (restaurantId == $restaurantId || (restaurantId == "The-Espresso-Lab-coffee" && $restaurantId == "the-espresso-lab") || (_id == "the-espresso-lab" && $restaurantId == "the-espresso-lab") || (_id == "arto-coffee" && $restaurantId == "the-espresso-lab") || _id == $restaurantId)][0] {
+    return await sanityClient.fetch(`*[_type == "restaurantPage" && (restaurantId == $restaurantId || ($restaurantId == "sera" && (restaurantId in ["sera", "SERA", "SERA Restaurant & Cafe"] || _id == "sera")) || (restaurantId == "The-Espresso-Lab-coffee" && $restaurantId == "the-espresso-lab") || (_id == "the-espresso-lab" && $restaurantId == "the-espresso-lab") || (_id == "arto-coffee" && $restaurantId == "the-espresso-lab") || _id == $restaurantId)][0] {
       restaurantId,
       title,
       headerLogo { asset->{ url } },

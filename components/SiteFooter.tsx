@@ -99,6 +99,20 @@ export default function SiteFooter() {
     });
   }, []);
 
+  const brandTitle = getLocalizedValue(
+    settings?.brandTitle,
+    lang,
+    lang === "ar" ? "فاشن غيت" : "Fashion Gate"
+  );
+
+  const brandSubtitle = getLocalizedValue(
+    settings?.brandSubtitle,
+    lang,
+    lang === "ar" ? "بوليفارد دمشق" : "Boulevard Damascus"
+  );
+
+  const logoImageUrl = settings?.logoImage?.asset?.url || "/brand/logo.png";
+
   const description = getLocalizedValue(
     settings?.description,
     lang,
@@ -265,14 +279,14 @@ export default function SiteFooter() {
                   borderRadius: 0
                 }}
               >
-                <Box component="img" src="/brand/logo.png" alt="Fashion Gate" sx={{ width: 28, height: "auto" }} />
+                <Box component="img" src={logoImageUrl} alt={brandTitle} sx={{ width: 28, height: "auto" }} />
               </Box>
               <Stack spacing={0.1} sx={{ textAlign: lang === "ar" ? "right" : "left" }}>
-                <Typography sx={{ fontFamily: "var(--heading-font)", fontSize: 20, fontWeight: 600, color: "#111111", lineHeight:lang === "ar" ?  1.3 : 1 }}>
-                  {stretchArabicText(lang === "ar" ? "فاشن غيت" : "Fashion Gate", 2)}
+                <Typography sx={{ fontFamily: "var(--heading-font)", fontSize: 20, fontWeight: 600, color: "#111111", lineHeight: lang === "ar" ? 1.3 : 1 }}>
+                  {stretchArabicText(brandTitle, 2)}
                 </Typography>
-                 <Typography sx={{ color: "primary.main", fontSize: 9, fontWeight: 800, letterSpacing: lang === "ar" ? 0 : "0.2em", textTransform: "uppercase" }}>
-                  {lang === "ar" ? "بوليفارد دمشق" : "Boulevard Damascus"}
+                <Typography sx={{ color: "primary.main", fontSize: 9, fontWeight: 800, letterSpacing: lang === "ar" ? 0 : "0.2em", textTransform: "uppercase" }}>
+                  {brandSubtitle}
                 </Typography>
               </Stack>
             </Stack>

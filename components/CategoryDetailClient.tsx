@@ -454,20 +454,20 @@ export default function CategoryDetailClient({
   const t = categoryTranslations[lang];
 
   const fallbackDiningData = useMemo(() => ({
-    description: "At Fashion Gate Mall Syria, exceptional food and drink is something we take incredibly seriously. That is why we are proud to offer a destination featuring VILAMORE RESTAURANT & CAFE and The Espresso Lab. We have carefully curated these establishments to provide an elevated culinary experience, ensuring that every visit offers both quality and variety. Whether you are looking for a refined meal or a perfect brew, our selection is designed to satisfy the most discerning tastes in a comfortable and sophisticated setting.",
+    description: "At Fashion Gate Mall Syria, exceptional food and drink is something we take incredibly seriously. That is why we are proud to offer a destination featuring SERA RESTAURANT & CAFE and The Espresso Lab. We have carefully curated these establishments to provide an elevated culinary experience, ensuring that every visit offers both quality and variety. Whether you are looking for a refined meal or a perfect brew, our selection is designed to satisfy the most discerning tastes in a comfortable and sophisticated setting.",
     places: [
       {
-        title: "VILAMORE RESTAURANT & CAFE",
-        description: "VILAMORE RESTAURANT & CAFE brings a celebrated blend of Syrian and Turkish culinary traditions to our guests, offering an authentic taste of the Levantine region in every bite. We are delighted to announce the grand opening of our newest destination at Fashion Gate Mall Syria. When visiting our new home in Syria, you will find warm lighting, sophisticated comfort, and a menu featuring traditional breakfasts, signature grilled specialties, and rich Mediterranean flavors. We invite you to join us for a beautiful dining experience that celebrates great food and genuine hospitality.",
-        image: "/brand/vilamore-bg.jpg",
-        logo: "/brand/vilamore-logo.png",
+        title: "SERA RESTAURANT & CAFE",
+        description: "SERA Restaurant & Cafe brings a celebrated blend of Italian culinary traditions to guests, offering an authentic taste of Italy in every bite. We are delighted to announce the grand opening of our newest destination at Fashion Gate Mall Syria. When visiting our new home in Syria, you will find warm lighting, sophisticated comfort, and a menu featuring traditional breakfasts, signature pasta, and authentic pizza specialties. We invite you to join us for a beautiful dining experience that celebrates great food and genuine hospitality.",
+        image: "/brand/sera-bg.jpg",
+        logo: "/brand/sera-logo.png",
         operatingHoursLabel: "Operating Hours",
         operatingHoursValue: "Daily TBC",
         contactUsLabel: "Contact Us",
         contactUsValue: "TBC",
         buttonText: "Explore Menu",
         redirectionType: "custom",
-        buttonPath: "/dining/vilamore",
+        buttonPath: "/dining/sera",
         showSecondaryButton: true,
         secondaryButtonText: "Book A Table",
         secondaryButtonPath: "https://wa.me/963119988"
@@ -1502,7 +1502,7 @@ export default function CategoryDetailClient({
                           </Typography>
                         </Box>
 
-                        {/* Vilamore Restaurant & Cafe Showcase */}
+                        {/* SERA Restaurant & Cafe Showcase */}
                         <Grid
                           container
                           spacing={{ xs: 0, md: 0 }}
@@ -1570,7 +1570,7 @@ export default function CategoryDetailClient({
                               <Box
                                 component="img"
                                 src={resolvedRestaurant.logo}
-                                alt="Vilamore Logo"
+                                alt="SERA Logo"
                                 sx={{
                                   maxHeight: { xs: 65, md: 80 },
                                   maxWidth: "280px",

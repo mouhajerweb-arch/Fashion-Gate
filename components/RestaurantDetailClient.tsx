@@ -47,18 +47,18 @@ const fadeInUp = {
 };
 
 export default function RestaurantDetailClient({ restaurantId, lang, initialSanityData }: RestaurantDetailClientProps) {
-  const isVilamore = restaurantId === "vilamore";
+  const isSera = restaurantId === "sera";
   const isAr = lang === "ar";
   const resolvedLogoUrl = initialSanityData?.headerLogo
     ? (typeof initialSanityData.headerLogo === 'string' ? initialSanityData.headerLogo : (initialSanityData.headerLogo.asset?.url || imageUrl(initialSanityData.headerLogo).url()))
-    : (isVilamore ? "/brand/vilamore-logo.png" : "/brand/the-espresso-lab-logo.png");
+    : (isSera ? "/brand/sera-logo.png" : "/brand/the-espresso-lab-logo.png");
   const accentColor = "#CB6116"; // Theme Orange
   const beigeBg = "#ECE4DE"; // Askim Warm Cream Beige
   const cardBg = "#FDFBF8"; // Soft cream paper card
   const charcoalText = "#2C2522"; // Warm charcoal instead of black
 
   // Tabs states
-  const [vilamoreActiveTab, setVilamoreActiveTab] = useState(0);
+  const [seraActiveTab, setSeraActiveTab] = useState(0);
   const [espressoActiveTab, setEspressoActiveTab] = useState(0);
 
   // Bespoke header states
@@ -78,7 +78,7 @@ export default function RestaurantDetailClient({ restaurantId, lang, initialSani
   const locationSectionRef = useRef<HTMLDivElement>(null);
 
   // Scroll references for horizontal scrollbars
-  const vilamoreScrollRef = useRef<HTMLDivElement>(null);
+  const seraScrollRef = useRef<HTMLDivElement>(null);
   const espressoScrollRef = useRef<HTMLDivElement>(null);
 
   // Parallax Scroll Hooks
@@ -110,24 +110,24 @@ export default function RestaurantDetailClient({ restaurantId, lang, initialSani
 
   const content = {
     en: {
-      vilamoreTitle: "Vilamore Restaurant & Café",
+      seraTitle: "SERA Restaurant & Café",
       espressoTitle: "The Espresso Lab",
       espressoHeroTitle: "THE ART OF BREWING",
       espressoHeroSub: "Dubai-sourced single origin roasts, extracted to perfection in Damascus.",
       espressoStory: "Sourced directly from Dubai roasters, The Espresso Lab represents the absolute pinnacle of premium coffee culture in Syria. Our beans are selected from micro-lots in Brazil, Ethiopia, and Colombia, roasted to highlight rich cocoa and floral notes, and brewed with state-of-the-art temperature controls.",
-      vilamoreHeroTitle: "WELCOME TO VILAMORE",
-      vilamoreHeroSub: "Your Premier Dining Destination in the Boulevard, Damascus",
-      discoverTitle: "Discover Vilamore",
-      discoverDesc: "Under the golden vaults of Fashion Gate Syria, Vilamore welcomes you to a refined journey of flavors. We marry traditional Levantine ingredients with ancestral clay-oven baking and slow-roasted Turkish grills to curate a dining story meant to be shared.",
+      seraHeroTitle: "WELCOME TO SERA",
+      seraHeroSub: "Your Premier Dining Destination in the Boulevard, Damascus",
+      discoverTitle: "Discover SERA",
+      discoverDesc: "Under the golden vaults of Fashion Gate Syria, SERA welcomes you to a refined journey of flavors. We marry traditional Levantine ingredients with ancestral clay-oven baking and slow-roasted Turkish grills to curate a dining story meant to be shared.",
       exploreSpace: "Explore Courtyard",
       viewMenu: "View Menu",
       location: "Location & Hours",
       hours: "Operating Hours",
       contact: "Direct Line",
-      vilamoreLocVal: "Ground Floor, Grand Promenade, Fashion Gate Syria",
+      seraLocVal: "Ground Floor, Grand Promenade, Fashion Gate Syria",
       espressoLocVal: "First Floor, Luxury Terrace, Fashion Gate Syria",
       hoursVal: "Daily 8:00 AM - 12:00 AM",
-      contactVal: "+963 11 9988 (Ext. Vilamore)",
+      contactVal: "+963 11 9988 (Ext. SERA)",
       espressoContactVal: "+963 11 9988 (Ext. Espresso Lab)",
       dubaiRef: "Dubai Management: Inspired by Askim, Boulevard Heights, Downtown Dubai.",
       menuHeader: "Our Culinary Menu",
@@ -136,7 +136,7 @@ export default function RestaurantDetailClient({ restaurantId, lang, initialSani
       menuTabs: ["Breakfast & Bakery", "Cold Mezza", "Hot Mezza & Pastries", "Charcoal Grills & Mains", "Levantine Desserts"],
       espressoMenuTabs: ["Specialty Coffee", "Specialty Beverages", "Decadent Desserts"],
       
-      // Why Choose Vilamore panels
+      // Why Choose SERA panels
       panel1Title: "A Tantalizing Mix of Levantine Grills",
       panel1Desc: "Enjoy our signature spiced kebabs, seasoned with authentic Levantine spices and grilled over cherry-wood charcoal embers, served with hot clay-oven flatbread.",
       panel1Label: "Our Food",
@@ -148,12 +148,12 @@ export default function RestaurantDetailClient({ restaurantId, lang, initialSani
       panel2Btn: "Explore Courtyard",
       
       panel3Title: "Preferred by Celebrities and the Elite",
-      panel3Desc: "Renowned for its exceptional dining atmosphere and traditional luxury, Vilamore attracts distinguished guests, offering a perfect blend of exquisite Levant hospitality, heritage, and sophistication.",
+      panel3Desc: "Renowned for its exceptional dining atmosphere and traditional luxury, SERA attracts distinguished guests, offering a perfect blend of exquisite Levant hospitality, heritage, and sophistication.",
       panel3Label: "Elite & Prestige",
       panel3Btn: "Learn More",
       
-      panel4Title: "Experience the Elegance of Vilamore's Warm and Luxurious Interior",
-      panel4Desc: "Step into Vilamore and immerse yourself in a space designed for comfort and heritage. With spacious archways, warm low lighting, stone alcoves, and a luxurious yet family-friendly atmosphere.",
+      panel4Title: "Experience the Elegance of SERA's Warm and Luxurious Interior",
+      panel4Desc: "Step into SERA and immerse yourself in a space designed for comfort and heritage. With spacious archways, warm low lighting, stone alcoves, and a luxurious yet family-friendly atmosphere.",
       panel4Label: "Family Luxury",
       panel4Btn: "Discover More",
 
@@ -186,24 +186,24 @@ export default function RestaurantDetailClient({ restaurantId, lang, initialSani
       }
     },
     ar: {
-      vilamoreTitle: "مطعم ومقهى فيلامور",
+      seraTitle: "مطعم ومقهى سيرا",
       espressoTitle: "ذا اسبريسو لاب",
       espressoHeroTitle: "فن تحضير القهوة المختصة",
       espressoHeroSub: "حبوب بن برازيلية مستوردة من دبي ومحضرة يدوياً بدقة عالية في دمشق.",
       espressoStory: "يستورد ذا اسبريسو لاب حبوب البن الفاخرة مباشرة من محامص دبي، ليمثل قمة ثقافة القهوة في سوريا. نختار حبوبنا من مزارع البرازيل وإثيوبيا وكولومبيا لتقديم فنجان غني بالنكهات والروائح العطرة.",
-      vilamoreHeroTitle: "مرحباً بكم في فيلامور",
-      vilamoreHeroSub: "وجهتكم الفاخرة لتناول الطعام في البوليفارد، دمشق",
-      discoverTitle: "اكتشف فيلامور",
-      discoverDesc: "تحت قباب فاشن غيت سوريا الذهبية، يرحب بكم فيلامور في رحلة نكهات استثنائية. نجمع بين المكونات الشامية التقليدية ومخبوزات الأفران الطينية والمشويات التركية المحضرة على الفحم لنروي قصة كرم ضيافة فريدة.",
+      seraHeroTitle: "مرحباً بكم في سيرا",
+      seraHeroSub: "وجهتكم الفاخرة لتناول الطعام في البوليفارد، دمشق",
+      discoverTitle: "اكتشف سيرا",
+      discoverDesc: "تحت قباب فاشن غيت سوريا الذهبية، يرحب بكم سيرا في رحلة نكهات استثنائية. نجمع بين المكونات الشامية التقليدية ومخبوزات الأفران الطينية والمشويات التركية المحضرة على الفحم لنروي قصة كرم ضيافة فريدة.",
       exploreSpace: "اكتشف الجلسات",
       viewMenu: "قائمة المأكولات",
       location: "الموقع وأوقات العمل",
       hours: "أوقات العمل",
       contact: "خط الاتصال المباشر",
-      vilamoreLocVal: "الطابق الأرضي، الممشى الرئيسي، فاشن غيت مول سوريا",
+      seraLocVal: "الطابق الأرضي، الممشى الرئيسي، فاشن غيت مول سوريا",
       espressoLocVal: "الطابق الأول، التراس الفاخر، فاشن غيت مول سوريا",
       hoursVal: "يومياً من 8:00 صباحاً حتى 12:00 منتصف الليل",
-      contactVal: "+963 11 9988 (تحويلة فيلامور)",
+      contactVal: "+963 11 9988 (تحويلة سيرا)",
       espressoContactVal: "+963 11 9988 (تحويلة ذا اسبريسو لاب)",
       dubaiRef: "إدارة دبي: مستوحى من مطعم عاصكم، بوليفارد هايتس، وسط مدينة دبي.",
       menuHeader: "قائمتنا الشامية العريقة",
@@ -212,7 +212,7 @@ export default function RestaurantDetailClient({ restaurantId, lang, initialSani
       menuTabs: ["الفطور والمخبوزات", "المزة والمقبلات الباردة", "المزة الساخنة والمعجنات", "المشويات الشامية والأطباق الرئيسية", "الحلويات الشرقية"],
       espressoMenuTabs: ["القهوة المختصة", "المشروبات الخاصة", "الحلويات الفاخرة"],
       
-      // Why Choose Vilamore panels
+      // Why Choose SERA panels
       panel1Title: "مزيج يداعب الحواس من المشاوي الشامية",
       panel1Desc: "استمتع بأسياخ الكباب المتبلة ببهارات الشام العريقة، والمشوية على جمر خشب الكرز، تقدم مع خبز التنور الساخن مباشرة من فرن الطين.",
       panel1Label: "مأكولاتنا",
@@ -220,16 +220,16 @@ export default function RestaurantDetailClient({ restaurantId, lang, initialSani
       
       panel2Title: "عراقة العقود وأجواء التراس الساحرة",
       panel2Desc: "يقع تراسنا الخارجي في الممشى الرئيسي ليقدم تجربة استثنائية مع أقراص الياسمين الدمشقي الفواح، خرير المياه العذب، وأجواء عائلية راقية تلائم جميع مناسباتكم.",
-      panel2Label: "تراس فيلامور",
+      panel2Label: "تراس سيرا",
       panel2Btn: "اكتشف الجلسات",
       
       panel3Title: "ملتقى النخبة والمشاهير في قلب دمشق",
-      panel3Desc: "يشتهر فيلامور بضيافته الرفيعة وفخامته الأصيلة، حيث يستقطب كبار الزوار والشخصيات المرموقة، ليقدم لهم مزيجاً ساحراً من حسن الاستقبال السوري العريق والرقي المعاصر.",
+      panel3Desc: "يشتهر سيرا بضيافته الرفيعة وفخامته الأصيلة، حيث يستقطب كبار الزوار والشخصيات المرموقة، ليقدم لهم مزيجاً ساحراً من حسن الاستقبال السوري العريق والرقي المعاصر.",
       panel3Label: "النخبة والتميز",
       panel3Btn: "اقرأ المزيد",
       
       panel4Title: "فخامة التصميم الداخلي ودفء اللقاءات العائلية",
-      panel4Desc: "ادخل إلى عالم فيلامور الواسع المصمم ليوفر الراحة والخصوصية؛ عقود حجرية دمشقية، إضاءة دافئة خافتة، وجلسات عائلية مريحة تحيي عبق التراث السوري العريق.",
+      panel4Desc: "ادخل إلى عالم سيرا الواسع المصمم ليوفر الراحة والخصوصية؛ عقود حجرية دمشقية، إضاءة دافئة خافتة، وجلسات عائلية مريحة تحيي عبق التراث السوري العريق.",
       panel4Label: "الفخامة العائلية",
       panel4Btn: "اكتشف المزيد",
 
@@ -244,7 +244,7 @@ export default function RestaurantDetailClient({ restaurantId, lang, initialSani
       langToggleText: "English",
       storyHeading: "قصة الياسمين والجمر",
       heritageTitle: "عراقة النكهة الأصيلة",
-      experienceTitle: "تجربة فيلامور الاستثنائية",
+      experienceTitle: "تجربة سيرا الاستثنائية",
       footerAddress: "فاشن غيت، دمشق، سوريا",
       narrativeSubtitle: "أصالة المذاق الشامي",
 
@@ -274,8 +274,8 @@ export default function RestaurantDetailClient({ restaurantId, lang, initialSani
     ...baseT,
     // Hero Section
     narrativeSubtitle: initialSanityData?.heroSub ? getVal(initialSanityData.heroSub, baseT.narrativeSubtitle) : baseT.narrativeSubtitle,
-    heroTitle: initialSanityData?.heroTitle ? getVal(initialSanityData.heroTitle, isAr ? "فيلامور" : "VILAMORE") : (isAr ? "فيلامور" : "VILAMORE"),
-    vilamoreHeroSub: initialSanityData?.heroSub ? getVal(initialSanityData.heroSub, baseT.vilamoreHeroSub) : baseT.vilamoreHeroSub,
+    heroTitle: initialSanityData?.heroTitle ? getVal(initialSanityData.heroTitle, isAr ? "سيرا" : "SERA") : (isAr ? "سيرا" : "SERA"),
+    seraHeroSub: initialSanityData?.heroSub ? getVal(initialSanityData.heroSub, baseT.seraHeroSub) : baseT.seraHeroSub,
     quoteAesthetic: initialSanityData?.heroQuote ? getVal(initialSanityData.heroQuote, baseT.quoteAesthetic) : baseT.quoteAesthetic,
     
     // About Section
@@ -320,26 +320,26 @@ export default function RestaurantDetailClient({ restaurantId, lang, initialSani
   // Dynamic media resolvers
   const resolvedHeroBgImg = initialSanityData?.heroBgImage 
     ? (typeof initialSanityData.heroBgImage === 'string' ? initialSanityData.heroBgImage : (initialSanityData.heroBgImage.asset?.url || imageUrl(initialSanityData.heroBgImage).url()))
-    : (isVilamore ? "/brand/vilamore-bg.jpg" : "/brand/the-espresso-lab-bg.jpg");
+    : (isSera ? "/brand/sera-bg.jpg" : "/brand/the-espresso-lab-bg.jpg");
   const resolvedHeroBgType = initialSanityData?.heroBgType || "image";
   const resolvedHeroBgVideo = initialSanityData?.heroBgVideoUrl;
 
   const resolvedCollageImg1 = initialSanityData?.aboutImages?.[0]
     ? (typeof initialSanityData.aboutImages[0] === 'string' ? initialSanityData.aboutImages[0] : (initialSanityData.aboutImages[0].asset?.url || imageUrl(initialSanityData.aboutImages[0]).url()))
-    : (isVilamore ? "/brand/vilamore-bg.jpg" : "/brand/the-espresso-lab-bg.jpg");
+    : (isSera ? "/brand/sera-bg.jpg" : "/brand/the-espresso-lab-bg.jpg");
   const resolvedCollageImg2 = initialSanityData?.aboutImages?.[1]
     ? (typeof initialSanityData.aboutImages[1] === 'string' ? initialSanityData.aboutImages[1] : (initialSanityData.aboutImages[1].asset?.url || imageUrl(initialSanityData.aboutImages[1]).url()))
-    : (isVilamore ? "/brand/vilamore-kebab.jpg" : "/brand/the-espresso-lab-flatwhite.jpg");
+    : (isSera ? "/brand/sera-kebab.jpg" : "/brand/the-espresso-lab-flatwhite.jpg");
   const resolvedCollageImg3 = initialSanityData?.aboutImages?.[2]
     ? (typeof initialSanityData.aboutImages[2] === 'string' ? initialSanityData.aboutImages[2] : (initialSanityData.aboutImages[2].asset?.url || imageUrl(initialSanityData.aboutImages[2]).url()))
-    : (isVilamore ? "/brand/hero-woman.jpg" : "/brand/the-espresso-lab-bg.jpg");
+    : (isSera ? "/brand/hero-woman.jpg" : "/brand/the-espresso-lab-bg.jpg");
 
   const resolvedPanel1Img = initialSanityData?.panels?.[0]?.image
     ? (typeof initialSanityData.panels[0].image === 'string' ? initialSanityData.panels[0].image : (initialSanityData.panels[0].image.asset?.url || imageUrl(initialSanityData.panels[0].image).url()))
-    : "/brand/vilamore-kebab.jpg";
+    : "/brand/sera-kebab.jpg";
   const resolvedPanel2Img = initialSanityData?.panels?.[1]?.image
     ? (typeof initialSanityData.panels[1].image === 'string' ? initialSanityData.panels[1].image : (initialSanityData.panels[1].image.asset?.url || imageUrl(initialSanityData.panels[1].image).url()))
-    : "/brand/vilamore-bg.jpg";
+    : "/brand/sera-bg.jpg";
   const resolvedPanel3Img = initialSanityData?.panels?.[2]?.image
     ? (typeof initialSanityData.panels[2].image === 'string' ? initialSanityData.panels[2].image : (initialSanityData.panels[2].image.asset?.url || imageUrl(initialSanityData.panels[2].image).url()))
     : "/brand/hero-woman.jpg";
@@ -388,13 +388,13 @@ export default function RestaurantDetailClient({ restaurantId, lang, initialSani
     }
     return [
       { title: isAr ? "العودة للرئيسية" : "Back to Mall Home", action: () => { window.location.href = lang === "ar" ? "/ar" : "/en"; } },
-      { title: isAr ? (isVilamore ? "بداية الصفحة" : "الرئيسية") : (isVilamore ? "Restaurant Home" : "Café Home"), action: () => handleScrollToSection(heroSectionRef) },
-      { title: isAr ? (isVilamore ? "قصتنا وعراقتنا" : "معايير التحميص") : (isVilamore ? "Our Story & Jasmine" : "Our Roastery Standards"), action: () => handleScrollToSection(philosophySectionRef) },
-      { title: isAr ? (isVilamore ? "قائمة التذوق" : "قائمة القهوة") : (isVilamore ? "Our Tasting Menu" : "Our Brew Menu"), action: () => handleScrollToSection(menuSectionRef) },
-      { title: isAr ? (isVilamore ? "الجلسات والأجواء" : "الأجواء والتقطير") : (isVilamore ? "Ambiance Space" : "Ambiance Space"), action: () => handleScrollToSection(terraceSectionRef) },
+      { title: isAr ? (isSera ? "بداية الصفحة" : "الرئيسية") : (isSera ? "Restaurant Home" : "Café Home"), action: () => handleScrollToSection(heroSectionRef) },
+      { title: isAr ? (isSera ? "قصتنا وعراقتنا" : "معايير التحميص") : (isSera ? "Our Story & Jasmine" : "Our Roastery Standards"), action: () => handleScrollToSection(philosophySectionRef) },
+      { title: isAr ? (isSera ? "قائمة التذوق" : "قائمة القهوة") : (isSera ? "Our Tasting Menu" : "Our Brew Menu"), action: () => handleScrollToSection(menuSectionRef) },
+      { title: isAr ? (isSera ? "الجلسات والأجواء" : "الأجواء والتقطير") : (isSera ? "Ambiance Space" : "Ambiance Space"), action: () => handleScrollToSection(terraceSectionRef) },
       { title: isAr ? "الموقع والاتصال" : "Location & Contact", action: () => handleScrollToSection(locationSectionRef) }
     ];
-  }, [initialSanityData?.headerLinks, isAr, isVilamore, lang, heroSectionRef, philosophySectionRef, menuSectionRef, terraceSectionRef, locationSectionRef]);
+  }, [initialSanityData?.headerLinks, isAr, isSera, lang, heroSectionRef, philosophySectionRef, menuSectionRef, terraceSectionRef, locationSectionRef]);
 
   const scrollTerrace = (direction: "left" | "right", ref: React.RefObject<HTMLDivElement | null>) => {
     if (ref.current) {
@@ -407,9 +407,9 @@ export default function RestaurantDetailClient({ restaurantId, lang, initialSani
   };
 
   // Get active menu items lists helper
-  const getVilamoreActiveMenuList = () => {
+  const getSeraActiveMenuList = () => {
     if (initialSanityData?.menus && initialSanityData.menus.length > 0) {
-      const filtered = initialSanityData.menus.filter((item: any) => item.categoryIndex === vilamoreActiveTab);
+      const filtered = initialSanityData.menus.filter((item: any) => item.categoryIndex === seraActiveTab);
       if (filtered.length > 0) {
         return filtered.map((item: any) => ({
           name: getVal(item.name, ""),
@@ -423,10 +423,10 @@ export default function RestaurantDetailClient({ restaurantId, lang, initialSani
     }
 
     const menus = t.menus;
-    if (vilamoreActiveTab === 0) return menus.breakfast;
-    if (vilamoreActiveTab === 1) return menus.coldMezza;
-    if (vilamoreActiveTab === 2) return menus.hotMezza;
-    if (vilamoreActiveTab === 3) return menus.grills;
+    if (seraActiveTab === 0) return menus.breakfast;
+    if (seraActiveTab === 1) return menus.coldMezza;
+    if (seraActiveTab === 2) return menus.hotMezza;
+    if (seraActiveTab === 3) return menus.grills;
     return menus.desserts;
   };
 
@@ -451,7 +451,7 @@ export default function RestaurantDetailClient({ restaurantId, lang, initialSani
     return menus.espressoDesserts;
   };
 
-  const activeMenuList = getVilamoreActiveMenuList();
+  const activeMenuList = getSeraActiveMenuList();
   const activeEspressoMenuList = getEspressoActiveMenuList();
 
   // Helper to highlight key words in Orange (#CB6116)
@@ -484,14 +484,14 @@ export default function RestaurantDetailClient({ restaurantId, lang, initialSani
 
   // Words list to color in orange
   const highlightsList = [
-    "Jasmine", "Embers", "Levantine", "Damascus", "Syrian", "Turkish", "Heritage", "Courtyard", "Flavors", "Hearts",
-    "ياسمين دمشق", "الياسمين الدمشقي", "الجمر", "الشام", "الضيافة", "العائلة", "التنور", "المذاق", "القلوب", "فيلامور",
+    "Jasmine", "Embers", "Levantine", "Damascus", "Syrian", "Turkish", "Heritage", "Courtyard", "Flavors", "Hearts", "SERA",
+    "ياسمين دمشق", "الياسمين الدمشقي", "الجمر", "الشام", "الضيافة", "العائلة", "التنور", "المذاق", "القلوب", "سيرا",
     "دقة", "فخامة", "تراث"
   ];
 
-  // 1. VILAMORE DESIGN: ELEGANT PORTFOLIO WITH LIGHT THEME & BOLD ORANGE ACCENTS
-  if (isVilamore) {
-    const vilamoreTheme = createTheme({
+  // 1. SERA DESIGN: ELEGANT PORTFOLIO WITH LIGHT THEME & BOLD ORANGE ACCENTS
+  if (isSera) {
+    const seraTheme = createTheme({
       palette: {
         primary: { main: accentColor },
         background: { default: beigeBg, paper: cardBg },
@@ -504,7 +504,7 @@ export default function RestaurantDetailClient({ restaurantId, lang, initialSani
 
 
     const oppositeLang = isAr ? "en" : "ar";
-    const oppositeLangPath = `/dining/vilamore/${oppositeLang}`;
+    const oppositeLangPath = `/dining/sera/${oppositeLang}`;
 
     const backHref = useMemo(() => {
       const rawLink = initialSanityData?.backButtonLink || "/dining";
@@ -532,9 +532,9 @@ export default function RestaurantDetailClient({ restaurantId, lang, initialSani
       },
       { 
         number: "02", 
-        name: isAr ? "حمص فيلامور المخملي" : "Vilamore Velvet Hummus",
+        name: isAr ? "حمص سيرا المخملي" : "SERA Velvet Hummus",
         desc: isAr ? "حمص محلي مطحون مخفوق مع طحينة السمسم، عصير ليمون، زيت زيتون بكر ممتاز، ومزين بالصنوبر المحمص." : "Pureed local chickpeas whipped with sesame tahini paste, lemon juice, extra virgin olive oil, finished with toasted pine nuts.",
-        image: "/brand/vilamore-bg.jpg",
+        image: "/brand/sera-bg.jpg",
         sub: isAr ? "مزة باردة" : "Cold Mezza",
         tag: isAr ? "نباتي" : "Vegan",
         quote: isAr ? "«نعومة الحمص المخملي الممزوج بزيت الزيتون المعصور على البارد تروي حكاية زيتوننا الشامي»" : "“The silkiness of whipped chickpeas finished with cold-pressed olive oil tells the tale of Levant olive orchards.”"
@@ -550,9 +550,9 @@ export default function RestaurantDetailClient({ restaurantId, lang, initialSani
       },
       { 
         number: "04", 
-        name: isAr ? "كباب فيلامور المتبل" : "Vilamore Spiced Kebab",
+        name: isAr ? "كباب سيرا المتبل" : "SERA Spiced Kebab",
         desc: isAr ? "أسياخ لحم غنم مفروم متبل بالنعناع الطازج، البصل، والفلفل الحلبي، مشوية على الفحم وتقدم مع خبز الفحم." : "Charcoal-grilled minced lamb skewers seasoned with fresh mint, onion, and Aleppo pepper, served on fire-cooked flatbread with bulgur.",
-        image: "/brand/vilamore-kebab.jpg",
+        image: "/brand/sera-kebab.jpg",
         sub: isAr ? "على الجمر" : "Charcoal Grill",
         tag: isAr ? "الطلب الأكثر" : "Must Try",
         quote: isAr ? "«نشوي أسياخ الكباب على جمر السنديان ببطء لتكتسب تلك النكهة المدخنة التي تأسر القلوب»" : "“We grill our skewers slowly over oak wood embers to capture the deep smoky aroma that captures hearts.”"
@@ -569,7 +569,7 @@ export default function RestaurantDetailClient({ restaurantId, lang, initialSani
     ];
 
     return (
-      <ThemeProvider theme={vilamoreTheme}>
+      <ThemeProvider theme={seraTheme}>
         <Box sx={{ bgcolor: beigeBg, color: charcoalText, minHeight: "100vh", pb: 0, overflowX: "hidden", position: "relative" }}>
           
           {/* ==================== BESPOKE HEADER (ASKIM STYLE) ==================== */}
@@ -1096,7 +1096,7 @@ export default function RestaurantDetailClient({ restaurantId, lang, initialSani
                     textShadow: "0 2px 12px rgba(0,0,0,0.85), 0 1px 4px rgba(0,0,0,0.85)"
                   }}
                 >
-                  {highlightText(t.vilamoreHeroSub, highlightsList)}
+                  {highlightText(t.seraHeroSub, highlightsList)}
                 </Typography>
 
                 <Box
@@ -1133,7 +1133,7 @@ export default function RestaurantDetailClient({ restaurantId, lang, initialSani
               sx={{
                 position: "absolute",
                 inset: 0,
-                backgroundImage: 'url("/brand/vilamore-kebab.jpg")',
+                backgroundImage: 'url("/brand/sera-kebab.jpg")',
                 backgroundSize: "cover",
                 backgroundPosition: "center center"
               }}
@@ -1174,7 +1174,7 @@ export default function RestaurantDetailClient({ restaurantId, lang, initialSani
                       fontSize: "0.85rem"
                     }}
                   >
-                    {isAr ? "تجربة فيلامور" : "VILAMORE EXPERIENCE"}
+                    {isAr ? "تجربة سيرا" : "SERA EXPERIENCE"}
                   </Typography>
 
                   <Typography
@@ -1354,7 +1354,7 @@ export default function RestaurantDetailClient({ restaurantId, lang, initialSani
                           overflow: "hidden"
                         }}
                       >
-                        <Box component="img" src={resolvedCollageImg1} alt="Vilamore Courtyard" sx={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                        <Box component="img" src={resolvedCollageImg1} alt="SERA Courtyard" sx={{ width: "100%", height: "100%", objectFit: "cover" }} />
                       </Box>
 
                       {/* Photo 2: Overlay Foreground (overlapping, tilted 4deg) */}
@@ -1401,7 +1401,7 @@ export default function RestaurantDetailClient({ restaurantId, lang, initialSani
                           overflow: "hidden"
                         }}
                       >
-                        <Box component="img" src={resolvedCollageImg3} alt="Vilamore Ambiance Detail" sx={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                        <Box component="img" src={resolvedCollageImg3} alt="SERA Ambiance Detail" sx={{ width: "100%", height: "100%", objectFit: "cover" }} />
                       </Box>
                     </motion.div>
                   </Box>
@@ -1411,7 +1411,7 @@ export default function RestaurantDetailClient({ restaurantId, lang, initialSani
           </Box>
 
 
-          {/* ==================== 4. WHY CHOOSE VILAMORE PORTFOLIO PANELS ==================== */}
+          {/* ==================== 4. WHY CHOOSE SERA PORTFOLIO PANELS ==================== */}
           <Box sx={{ bgcolor: cardBg, py: { xs: 12, md: 18 }, borderY: "1.5px solid rgba(44,37,34,0.06)" }}>
             <Container maxWidth="lg">
               
@@ -1749,11 +1749,11 @@ export default function RestaurantDetailClient({ restaurantId, lang, initialSani
                 }}
               >
                 {t.menuTabs.map((tab: string, idx: number) => {
-                  const isActive = vilamoreActiveTab === idx;
+                  const isActive = seraActiveTab === idx;
                   return (
                     <Box
                       key={idx}
-                      onClick={() => setVilamoreActiveTab(idx)}
+                      onClick={() => setSeraActiveTab(idx)}
                       sx={{
                         px: { xs: 2.5, sm: 4 },
                         py: 1.6,
@@ -1783,7 +1783,7 @@ export default function RestaurantDetailClient({ restaurantId, lang, initialSani
               {/* Grid of Dishes with smooth fade in */}
               <AnimatePresence mode="wait">
                 <Box
-                  key={vilamoreActiveTab}
+                  key={seraActiveTab}
                   component={motion.div}
                   initial={{ opacity: 0, y: 15 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -1795,7 +1795,7 @@ export default function RestaurantDetailClient({ restaurantId, lang, initialSani
                     gap: 4
                   }}
                 >
-                  {getVilamoreActiveMenuList().map((item: any, index: number) => {
+                  {getSeraActiveMenuList().map((item: any, index: number) => {
                     return (
                       <Box
                         key={index}
@@ -2018,7 +2018,7 @@ export default function RestaurantDetailClient({ restaurantId, lang, initialSani
 
                 <Stack direction="row" spacing={1.5}>
                   <Button
-                    onClick={() => scrollTerrace("left", vilamoreScrollRef)}
+                    onClick={() => scrollTerrace("left", seraScrollRef)}
                     sx={{
                       border: `2px solid ${accentColor}`,
                       color: accentColor,
@@ -2032,7 +2032,7 @@ export default function RestaurantDetailClient({ restaurantId, lang, initialSani
                     {isAr ? <ChevronRightIcon /> : <ChevronLeftIcon />}
                   </Button>
                   <Button
-                    onClick={() => scrollTerrace("right", vilamoreScrollRef)}
+                    onClick={() => scrollTerrace("right", seraScrollRef)}
                     sx={{
                       border: `2px solid ${accentColor}`,
                       color: accentColor,
@@ -2049,7 +2049,7 @@ export default function RestaurantDetailClient({ restaurantId, lang, initialSani
               </Stack>
 
               <Box
-                ref={vilamoreScrollRef}
+                ref={seraScrollRef}
                 sx={{
                   display: "flex",
                   overflowX: "auto",
@@ -2064,12 +2064,12 @@ export default function RestaurantDetailClient({ restaurantId, lang, initialSani
               >
                 {[
                   {
-                    img: "/brand/vilamore-bg.jpg",
+                    img: "/brand/sera-bg.jpg",
                     title: isAr ? "تراس الياسمين المركزي" : "Central Jasmin Courtyard",
                     subtitle: isAr ? "النوافير التقليدية وأقواس الياسمين الفواح" : "Traditional fountains & jasmine arches"
                   },
                   {
-                    img: "/brand/vilamore-kebab.jpg",
+                    img: "/brand/sera-kebab.jpg",
                     title: isAr ? "فرن الطين التقليدي" : "Clay Oven baking pit",
                     subtitle: isAr ? "الخبز الطازج والشواء على نار حطب الزيتون" : "Slow pit wood roasting fire"
                   },
@@ -2137,7 +2137,7 @@ export default function RestaurantDetailClient({ restaurantId, lang, initialSani
                           {isAr ? "العنوان" : "Address"}
                         </Typography>
                         <Typography sx={{ fontSize: 15, color: "rgba(44,37,34,0.8)", lineHeight: 1.6 }}>
-                          {t.vilamoreLocVal}
+                          {t.seraLocVal}
                         </Typography>
                       </Box>
                     </Stack>

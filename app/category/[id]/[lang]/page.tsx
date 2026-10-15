@@ -62,8 +62,8 @@ export async function generateMetadata({ params }: PageProps) {
       ar: "ابحثي عن كريمات الأساس وأحمر الشفاه ومجموعات المكياج الفاخرة من أشهر الماركات العالمية في فاشن غيت مول دمشق." 
     },
     dining: { 
-      en: "Enjoy an elevated culinary experience at VILAMORE Syrian Restaurant & Cafe and The Espresso Lab at Fashion Gate Mall Damascus.", 
-      ar: "استمتع بتجربة طعام استثنائية في مطعم ومقهى فيلامور السوري وذا اسبريسو لاب في فاشن غيت مول دمشق." 
+      en: "Enjoy an elevated culinary experience at SERA Restaurant & Cafe and The Espresso Lab at Fashion Gate Mall Damascus.", 
+      ar: "استمتع بتجربة طعام استثنائية في مطعم ومقهى سيرا وذا اسبريسو لاب في فاشن غيت مول دمشق." 
     },
     women: { 
       en: "Browse the latest women's fashion trends, elegant dresses, and luxury apparel at Fashion Gate Mall Damascus.", 
