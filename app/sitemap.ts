@@ -53,7 +53,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   });
 
   // 3. Restaurant Pages
-  const diningSpots = ["vilamore", "the-espresso-lab"];
+  const diningSpots = ["sera", "the-espresso-lab"];
   diningSpots.forEach((spot) => {
     languages.forEach((lang) => {
       sitemapEntries.push({

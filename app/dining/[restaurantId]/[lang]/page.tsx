@@ -15,7 +15,7 @@ interface PageProps {
 
 export async function generateMetadata({ params }: PageProps) {
   const { restaurantId, lang } = await params;
-  if ((lang !== "en" && lang !== "ar") || (restaurantId !== "vilamore" && restaurantId !== "the-espresso-lab")) {
+  if ((lang !== "en" && lang !== "ar") || (restaurantId !== "sera" && restaurantId !== "the-espresso-lab")) {
     return {};
   }
 
@@ -23,12 +23,12 @@ export async function generateMetadata({ params }: PageProps) {
   const sanityData = await getRestaurantPageData(restaurantId);
 
   const fallbackMap: Record<string, { title: string; titleAr: string; desc: string; descAr: string; keywords: string[] }> = {
-    vilamore: {
-      title: "VILAMORE Restaurant & Cafe | Luxury Dining at Fashion Gate Mall",
-      titleAr: "مطعم ومقهى فيلامور | تجربة طعام فاخرة في فاشن غيت مول دمشق",
-      desc: "Experience Mediterranean & Levantine fine dining, gourmet breakfasts, and artisanal cuisine at VILAMORE Restaurant & Cafe in Fashion Gate Mall Syria.",
-      descAr: "استمتع بأفخر المأكولات المتوسطية والشرقية، والإفطار الفاخر، وتجربة الطعام الاستثنائية في مطعم ومقهى فيلامور بوليفارد دمشق.",
-      keywords: ["Vilamore Restaurant", "Vilamore Syria", "Luxury Dining Damascus", "مطعم فيلامور دمشق", "أرقى مطاعم سوريا"]
+    sera: {
+      title: "SERA Restaurant & Cafe | Luxury Dining at Fashion Gate Mall",
+      titleAr: "مطعم ومقهى سيرا | تجربة طعام فاخرة في فاشن غيت مول دمشق",
+      desc: "Experience authentic Italian specialties, traditional breakfasts, signature pasta, and artisanal pizza at SERA Restaurant & Cafe in Fashion Gate Mall Syria.",
+      descAr: "استمتع بأشهى الأطباق الإيطالية المميزة، والإفطار الفاخر، والباستا والبيتزا الإيطالية الأصيلة في مطعم ومقهى سيرا بوليفارد دمشق.",
+      keywords: ["SERA Restaurant", "SERA Syria", "Luxury Dining Damascus", "مطعم سيرا دمشق", "أرقى مطاعم سوريا"]
     },
     "the-espresso-lab": {
       title: "The Espresso Lab | Specialty Artisanal Roastery at Fashion Gate Mall",
@@ -39,7 +39,7 @@ export async function generateMetadata({ params }: PageProps) {
     }
   };
 
-  const fb = fallbackMap[restaurantId] || fallbackMap["vilamore"];
+  const fb = fallbackMap[restaurantId] || fallbackMap["sera"];
 
   return buildMetadataFromSeo({
     seoData: sanityData?.seo,
@@ -60,7 +60,7 @@ export default async function RestaurantPage({ params }: PageProps) {
     notFound();
   }
 
-  if (restaurantId !== "vilamore" && restaurantId !== "the-espresso-lab") {
+  if (restaurantId !== "sera" && restaurantId !== "the-espresso-lab") {
     notFound();
   }
 
@@ -70,7 +70,7 @@ export default async function RestaurantPage({ params }: PageProps) {
   const isAr = lang === "ar";
   const restName = restaurantId === "the-espresso-lab"
     ? (isAr ? "ذا اسبريسو لاب" : "The Espresso Lab")
-    : (isAr ? "مطعم ومقهى فيلامور" : "VILAMORE Restaurant & Cafe");
+    : (isAr ? "مطعم ومقهى سيرا" : "SERA Restaurant & Cafe");
 
   const restJsonLd = buildRestaurantJsonLd({
     id: restaurantId,

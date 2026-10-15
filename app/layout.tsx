@@ -30,7 +30,7 @@ import SmoothScroll from "@/components/SmoothScroll";
 import LoaderProvider from "@/components/LoaderProvider";
 import "./globals.css";
 
-import { getHomepageData, imageUrl } from "@/lib/sanity";
+import { getHomepageData, getHeaderSettings, imageUrl } from "@/lib/sanity";
 
 export const revalidate = 60;
 
@@ -75,9 +75,14 @@ import LayoutWrapper from "@/components/LayoutWrapper";
 
 export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   let initialSettings = null;
+  let initialHeaderSettings = null;
   try {
-    const data = await getHomepageData();
-    initialSettings = data?.settings || null;
+    const [homepageData, headerSettingsData] = await Promise.all([
+      getHomepageData(),
+      getHeaderSettings()
+    ]);
+    initialSettings = homepageData?.settings || null;
+    initialHeaderSettings = headerSettingsData || null;
   } catch (error) {
     console.error("Failed to fetch settings in RootLayout:", error);
   }
@@ -129,7 +134,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
           <CssBaseline />
           <LoaderProvider>
             <SmoothScroll />
-            <LayoutWrapper initialSettings={initialSettings}>
+            <LayoutWrapper initialSettings={initialSettings} initialHeaderSettings={initialHeaderSettings}>
               {children}
             </LayoutWrapper>
           </LoaderProvider>

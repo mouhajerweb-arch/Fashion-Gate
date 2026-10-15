@@ -13,7 +13,7 @@ export async function generateStaticParams() {
   return [
     { restaurantId: "ar" },
     { restaurantId: "en" },
-    { restaurantId: "vilamore" },
+    { restaurantId: "sera" },
     { restaurantId: "the-espresso-lab" }
   ];
 }

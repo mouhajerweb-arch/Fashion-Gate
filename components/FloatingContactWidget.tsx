@@ -27,6 +27,33 @@ const TK = {
   cursiveAr: '"DimaShekari", "Cairo", sans-serif',
 };
 
+function resolveImagePosition(pos: string | number | undefined | null, fallback: string): string {
+  if (pos === undefined || pos === null) return fallback;
+  const str = String(pos).trim();
+  if (!str) return fallback;
+
+  // Single number or percentage e.g. "25" or "25%"
+  if (/^\d+(\.\d+)?%?$/.test(str)) {
+    const num = str.replace("%", "");
+    return `center ${num}%`;
+  }
+
+  // Two numbers e.g. "50 25" or "50% 25"
+  if (/^\d+(\.\d+)?%?\s+\d+(\.\d+)?%?$/.test(str)) {
+    const parts = str.split(/\s+/).map((p) => (p.endsWith("%") ? p : `${p}%`));
+    return parts.join(" ");
+  }
+
+  // Named horizontal + vertical number e.g. "center 25" or "center 25%"
+  if (/^(left|center|right)\s+\d+(\.\d+)?%?$/i.test(str)) {
+    const parts = str.split(/\s+/);
+    const y = parts[1].endsWith("%") ? parts[1] : `${parts[1]}%`;
+    return `${parts[0]} ${y}`;
+  }
+
+  return str;
+}
+
 const copy = {
   en: {
     label: "Get in touch",
@@ -113,6 +140,24 @@ export default function FloatingContactWidget({ lang }: { lang: "en" | "ar" }) {
     okReset: getLocalizedValue(data?.sendAnother, lang, tx.okReset),
   }), [data, lang, tx]);
 
+  const mobileImagePosition = useMemo(() => {
+    return resolveImagePosition(
+      data?.formImagePositionMobile || data?.formImagePosition,
+      data?.formImage?.hotspot
+        ? `${Math.round(data.formImage.hotspot.x * 100)}% ${Math.round(data.formImage.hotspot.y * 100)}%`
+        : "center 3%"
+    );
+  }, [data]);
+
+  const desktopImagePosition = useMemo(() => {
+    return resolveImagePosition(
+      data?.formImagePosition,
+      data?.formImage?.hotspot
+        ? `${Math.round(data.formImage.hotspot.x * 100)}% ${Math.round(data.formImage.hotspot.y * 100)}%`
+        : "center top"
+    );
+  }, [data]);
+
   const reset = () => {
     setName("");
     setEmail("");
@@ -171,27 +216,68 @@ export default function FloatingContactWidget({ lang }: { lang: "en" | "ar" }) {
               exit={{ opacity: 0, y: 18, scale: 0.97 }}
               transition={{ duration: 0.34, ease: [0.25, 1, 0.5, 1] }}
               sx={{
-                width: "min(900px, 100%)",
-                maxHeight: { xs: "calc(100vh - 32px)", sm: "calc(100vh - 56px)" },
-                bgcolor: "#f4efe8",
+                width: "min(920px, 100%)",
+                maxHeight: { xs: "calc(100vh - 24px)", sm: "calc(100vh - 48px)" },
+                bgcolor: "#f7f2ec",
                 border: "none",
-                boxShadow: "0 34px 110px rgba(0,0,0,0.42)",
+                boxShadow: "0 34px 110px rgba(0,0,0,0.5)",
                 overflow: "hidden",
                 position: "relative",
-                borderRadius: { xs: 0, sm: "2px" },
+                borderRadius: 0,
               }}
             >
-              <IconButton aria-label="Close contact form" onClick={() => setOpen(false)} sx={{ position: "absolute", top: { xs: 10, sm: 18 }, right: isAr ? "auto" : { xs: 10, sm: 18 }, left: isAr ? { xs: 10, sm: 18 } : "auto", zIndex: 2, width: 38, height: 38, bgcolor: "rgba(244,239,232,0.88)", color: TK.charcoal, border: "1px solid rgba(17,17,17,0.08)", backdropFilter: "blur(8px)", "&:hover": { bgcolor: "#fff" } }}>
-                <CloseIcon fontSize="small" />
+              <IconButton 
+                aria-label="Close contact form" 
+                onClick={() => setOpen(false)} 
+                sx={{ 
+                  position: "absolute", 
+                  top: { xs: 12, sm: 18 }, 
+                  right: isAr ? "auto" : { xs: 12, sm: 18 }, 
+                  left: isAr ? { xs: 12, sm: 18 } : "auto", 
+                  zIndex: 10, 
+                  width: { xs: 34, sm: 38 }, 
+                  height: { xs: 34, sm: 38 }, 
+                  bgcolor: { xs: "rgba(0,0,0,0.52)", sm: "rgba(244,239,232,0.88)" }, 
+                  color: { xs: "#ffffff", sm: TK.charcoal }, 
+                  border: { xs: "1px solid rgba(255,255,255,0.25)", sm: "1px solid rgba(17,17,17,0.08)" }, 
+                  backdropFilter: "blur(10px)", 
+                  borderRadius: "50%",
+                  boxShadow: "0 4px 14px rgba(0,0,0,0.25)",
+                  transition: "all 0.2s ease",
+                  "&:hover": { 
+                    bgcolor: { xs: "rgba(0,0,0,0.8)", sm: "#fff" },
+                    transform: "scale(1.08)"
+                  } 
+                }}
+              >
+                <CloseIcon sx={{ fontSize: { xs: 18, sm: 20 } }} />
               </IconButton>
 
-              <Grid container sx={{ maxHeight: { xs: "calc(100vh - 32px)", sm: "calc(100vh - 56px)" } }}>
+              <Grid container sx={{ maxHeight: { xs: "calc(100vh - 24px)", sm: "calc(100vh - 48px)" } }}>
                 <Grid size={{ xs: 12, md: 5 }}>
-                  <Box sx={{ position: "relative", height: { xs: 150, sm: 196, md: "100%" }, minHeight: { md: 590 }, overflow: "hidden", bgcolor: "#050505" }}>
-                    <Box component="img" src={data?.formImage?.asset?.url || "/brand-pages/contact_bg.png"} alt="" sx={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: { xs: "center 18%", md: "center top" }, display: "block", opacity: 0.9, filter: "saturate(0.82) contrast(1.08)" }} />
-                    <Box sx={{ position: "absolute", inset: 0, background: "linear-gradient(90deg, rgba(0,0,0,0.18), rgba(0,0,0,0) 44%, rgba(244,239,232,0.18) 100%)" }} />
-                    <Box sx={{ position: "absolute", inset: { xs: 10, sm: 14 }, border: "1px solid rgba(255,255,255,0.28)", pointerEvents: "none" }} />
-                    <Box sx={{ position: "absolute", left: 28, right: 28, bottom: 28, color: "#fff", display: { xs: "none", sm: "block" } }}>
+                  <Box sx={{ position: "relative", height: { xs: 180, sm: 215, md: "100%" }, minHeight: { md: 590 }, overflow: "hidden", bgcolor: "#080808" }}>
+                    <Box 
+                      component="img" 
+                      src={data?.formImage?.asset?.url || "/brand-pages/contact_bg.png"} 
+                      alt="" 
+                      sx={{ 
+                        width: "100%", 
+                        height: "100%", 
+                        objectFit: "cover", 
+                        objectPosition: { xs: mobileImagePosition, sm: mobileImagePosition, md: desktopImagePosition }, 
+                        display: "block", 
+                        opacity: 1, 
+                        filter: "contrast(1.02)" 
+                      }} 
+                    />
+                    {/* Top gradient for close button contrast on mobile */}
+                    <Box sx={{ position: "absolute", top: 0, left: 0, right: 0, height: 70, background: "linear-gradient(to bottom, rgba(0,0,0,0.55) 0%, transparent 100%)", display: { xs: "block", md: "none" }, pointerEvents: "none" }} />
+                    {/* Desktop horizontal dark gradient for text readability (no white layer) */}
+                    <Box sx={{ position: "absolute", inset: 0, display: { xs: "none", md: "block" }, background: "linear-gradient(90deg, rgba(0,0,0,0.22) 0%, rgba(0,0,0,0) 50%)", pointerEvents: "none" }} />
+                    {/* Desktop inset fine border - hidden on mobile to avoid cutting model face */}
+                    <Box sx={{ position: "absolute", inset: { sm: 14 }, border: "1px solid rgba(255,255,255,0.28)", display: { xs: "none", md: "block" }, pointerEvents: "none" }} />
+                    {/* Desktop text overlay */}
+                    <Box sx={{ position: "absolute", left: 28, right: 28, bottom: 28, color: "#fff", display: { xs: "none", md: "block" } }}>
                       <Typography sx={{ fontFamily: isAr ? TK.cursiveAr : TK.cursive, fontSize: { sm: "1.45rem", md: "1.7rem" }, color: "#fff", mb: 0.5 }}>
                         {t.cursive}
                       </Typography>
@@ -202,26 +288,26 @@ export default function FloatingContactWidget({ lang }: { lang: "en" | "ar" }) {
                   </Box>
                 </Grid>
                 <Grid size={{ xs: 12, md: 7 }}>
-                  <Box sx={{ maxHeight: { xs: "calc(100vh - 182px)", sm: "calc(100vh - 252px)", md: "calc(100vh - 56px)" }, overflowY: "auto", p: { xs: 3, sm: 4.5, md: 6 }, bgcolor: "#f7f2ec", backgroundImage: "linear-gradient(135deg, rgba(255,255,255,0.72), rgba(255,255,255,0.16))" }}>
+                  <Box sx={{ maxHeight: { xs: "calc(100vh - 204px)", sm: "calc(100vh - 263px)", md: "calc(100vh - 56px)" }, overflowY: "auto", WebkitOverflowScrolling: "touch", p: { xs: 2.5, sm: 4, md: 6 }, bgcolor: "#f7f2ec", backgroundImage: "linear-gradient(135deg, rgba(255,255,255,0.72), rgba(255,255,255,0.16))" }}>
                     {!submitted ? (
                       <form onSubmit={handleSubmit}>
-                        <Box sx={{ mb: { xs: 3, md: 4.25 }, pr: isAr ? 0 : { xs: 4, sm: 5 }, pl: isAr ? { xs: 4, sm: 5 } : 0 }}>
-                          <Box sx={{ width: 54, height: 1, bgcolor: TK.copper, mb: 2.2 }} />
-                          <Typography sx={{ display: { xs: "block", md: "none" }, fontFamily: isAr ? TK.cursiveAr : TK.cursive, fontSize: "1.35rem", color: TK.copper, mb: 0.5 }}>
+                        <Box sx={{ mb: { xs: 2.2, md: 4.25 }, pr: isAr ? 0 : { xs: 2, sm: 5 }, pl: isAr ? { xs: 2, sm: 5 } : 0 }}>
+                          <Box sx={{ width: 44, height: 2, bgcolor: TK.copper, mb: 1.6 }} />
+                          <Typography sx={{ display: { xs: "block", md: "none" }, fontFamily: isAr ? TK.cursiveAr : TK.cursive, fontSize: { xs: "1.2rem", sm: "1.35rem" }, color: TK.copper, mb: 0.3 }}>
                             {t.cursive}
                           </Typography>
-                          <Typography sx={{ display: { xs: "block", md: "none" }, fontFamily: TK.heading, fontSize: { xs: "1.7rem", sm: "2rem" }, fontWeight: 400, lineHeight: 1.08, mb: 1 }}>
+                          <Typography sx={{ display: { xs: "block", md: "none" }, fontFamily: TK.heading, fontSize: { xs: "1.55rem", sm: "1.9rem" }, fontWeight: 400, lineHeight: 1.12, mb: 0.8, color: TK.charcoal }}>
                             {t.title}
                           </Typography>
                           <Typography sx={{ display: { xs: "none", md: "block" }, fontFamily: TK.heading, fontSize: "2rem", fontWeight: 400, lineHeight: 1.08, mb: 1 }}>
                             {t.label}
                           </Typography>
-                          <Typography sx={{ fontSize: { xs: 13.5, sm: 14.5 }, color: "rgba(0,0,0,0.58)", lineHeight: 1.75, fontFamily: TK.body, maxWidth: 460 }}>
+                          <Typography sx={{ fontSize: { xs: 12.5, sm: 14 }, color: "rgba(0,0,0,0.58)", lineHeight: 1.65, fontFamily: TK.body, maxWidth: 460 }}>
                             {t.sub}
                           </Typography>
                         </Box>
 
-                        <Stack spacing={{ xs: 2.2, sm: 2.7 }}>
+                        <Stack spacing={{ xs: 1.8, sm: 2.5 }}>
                           <input
                             aria-hidden="true"
                             autoComplete="off"
@@ -232,7 +318,7 @@ export default function FloatingContactWidget({ lang }: { lang: "en" | "ar" }) {
                             readOnly
                             style={{ display: "none" }}
                           />
-                          <Grid container spacing={{ xs: 2.2, sm: 3 }}>
+                          <Grid container spacing={{ xs: 1.8, sm: 2.5 }}>
                             <Grid size={{ xs: 12, sm: 6 }}>
                               <FormField label={t.name} required value={name} onChange={setName} isAr={isAr} />
                             </Grid>
@@ -243,7 +329,31 @@ export default function FloatingContactWidget({ lang }: { lang: "en" | "ar" }) {
                           <FormField label={t.phone} value={phone} onChange={setPhone} placeholder="+963 ..." isAr={isAr} />
                           <FormField label={t.msg} required multiline value={message} onChange={setMessage} isAr={isAr} />
                           {error && <Typography role="alert" sx={{ fontSize: 13, color: "#9D1C0C", fontFamily: TK.body }}>{error}</Typography>}
-                          <Button type="submit" disabled={submitting} endIcon={!submitting && (isAr ? <ArrowBackIcon sx={{ fontSize: "15px !important" }} /> : <ArrowForwardIcon sx={{ fontSize: "15px !important" }} />)} sx={{ alignSelf: "flex-start", bgcolor: TK.charcoal, color: "#fff", px: { xs: 3.5, sm: 5 }, py: 1.45, minHeight: 46, fontSize: 12, fontWeight: 800, fontFamily: TK.body, letterSpacing: isAr ? 0 : "0.1em", textTransform: "uppercase", boxShadow: "0 14px 30px rgba(17,17,17,0.2)", "& .MuiButton-endIcon": { ml: isAr ? 0 : 1, mr: isAr ? 1 : 0 }, "&:hover": { bgcolor: TK.copperDeep, transform: "translateY(-1px)", boxShadow: "0 16px 34px rgba(157,67,12,0.22)" }, "&.Mui-disabled": { bgcolor: "rgba(0,0,0,0.28)", color: "#fff" } }}>
+                          <Button 
+                            type="submit" 
+                            disabled={submitting} 
+                            endIcon={!submitting && (isAr ? <ArrowBackIcon sx={{ fontSize: "15px !important" }} /> : <ArrowForwardIcon sx={{ fontSize: "15px !important" }} />)} 
+                            sx={{ 
+                              alignSelf: { xs: "stretch", sm: "flex-start" }, 
+                              width: { xs: "100%", sm: "auto" },
+                              justifyContent: "center",
+                              bgcolor: TK.charcoal, 
+                              color: "#fff", 
+                              px: { xs: 3.5, sm: 5 }, 
+                              py: 1.45, 
+                              minHeight: 46, 
+                              fontSize: 12, 
+                              fontWeight: 800, 
+                              fontFamily: TK.body, 
+                              letterSpacing: isAr ? 0 : "0.1em", 
+                              textTransform: "uppercase", 
+                              borderRadius: 0,
+                              boxShadow: "0 14px 30px rgba(17,17,17,0.2)", 
+                              "& .MuiButton-endIcon": { ml: isAr ? 0 : 1, mr: isAr ? 1 : 0 }, 
+                              "&:hover": { bgcolor: TK.copperDeep, transform: "translateY(-1px)", boxShadow: "0 16px 34px rgba(157,67,12,0.22)" }, 
+                              "&.Mui-disabled": { bgcolor: "rgba(0,0,0,0.28)", color: "#fff" } 
+                            }}
+                          >
                             {submitting ? tx.sending : t.send}
                           </Button>
                         </Stack>
@@ -284,10 +394,22 @@ export default function FloatingContactWidget({ lang }: { lang: "en" | "ar" }) {
         )}
       </AnimatePresence>
 
-      <MotionBox animate={{ y: [0, -8, 0] }} transition={{ duration: 1.9, repeat: Infinity, repeatDelay: 1.2, ease: "easeInOut" }} sx={{ position: "fixed", right: isAr ? "auto" : { xs: 16, sm: 24 }, left: isAr ? { xs: 16, sm: 24 } : "auto", bottom: { xs: 22, sm: 28 }, zIndex: 1301 }}>
+      <MotionBox 
+        animate={open ? { scale: 0, opacity: 0 } : { scale: 1, opacity: 1, y: [0, -8, 0] }} 
+        transition={open ? { duration: 0.18 } : { duration: 1.9, repeat: Infinity, repeatDelay: 1.2, ease: "easeInOut" }} 
+        sx={{ 
+          position: "fixed", 
+          right: isAr ? "auto" : { xs: 16, sm: 24 }, 
+          left: isAr ? { xs: 16, sm: 24 } : "auto", 
+          bottom: { xs: 22, sm: 28 }, 
+          zIndex: 1301,
+          display: open ? "none" : "block",
+          pointerEvents: open ? "none" : "auto"
+        }}
+      >
         <Tooltip title={t.label} placement="left" arrow>
-          <IconButton aria-label={t.label} onClick={() => setOpen((value) => !value)} sx={{ width: 58, height: 58, bgcolor: TK.charcoal, color: "#fff", border: "1px solid rgba(255,255,255,0.2)", boxShadow: "0 14px 34px rgba(17,17,17,0.28)", "&:hover": { bgcolor: TK.copperDeep, boxShadow: "0 16px 38px rgba(157,67,12,0.32)" } }}>
-            {open ? <CloseIcon /> : <MdOutlineSupportAgent size={28} />}
+          <IconButton aria-label={t.label} onClick={() => setOpen(true)} sx={{ width: 58, height: 58, bgcolor: TK.charcoal, color: "#fff", border: "1px solid rgba(255,255,255,0.2)", boxShadow: "0 14px 34px rgba(17,17,17,0.28)", "&:hover": { bgcolor: TK.copperDeep, boxShadow: "0 16px 38px rgba(157,67,12,0.32)" } }}>
+            <MdOutlineSupportAgent size={28} />
           </IconButton>
         </Tooltip>
       </MotionBox>
@@ -328,8 +450,8 @@ function FormField({ label, required, multiline, value, onChange, type, placehol
           color: TK.charcoal,
           fontFamily: TK.body,
           ...(multiline
-            ? { border: `1px solid ${focused ? TK.copper : "rgba(17,17,17,0.12)"}`, p: 1.5, bgcolor: "rgba(255,255,255,0.52)", minHeight: 112 }
-            : { borderBottom: `1px solid ${focused ? TK.copper : "rgba(17,17,17,0.18)"}`, pb: 0.95, bgcolor: "rgba(255,255,255,0.18)" }),
+            ? { border: `1px solid ${focused ? TK.copper : "rgba(17,17,17,0.12)"}`, p: 1.5, bgcolor: "rgba(255,255,255,0.52)", minHeight: 112, borderRadius: 0 }
+            : { borderBottom: `1px solid ${focused ? TK.copper : "rgba(17,17,17,0.18)"}`, pb: 0.95, bgcolor: "rgba(255,255,255,0.18)", borderRadius: 0 }),
           transition: "border-color 0.22s ease, background-color 0.22s ease",
           "&:hover": {
             bgcolor: multiline ? "rgba(255,255,255,0.68)" : "rgba(255,255,255,0.3)",

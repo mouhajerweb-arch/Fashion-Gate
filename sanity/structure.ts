@@ -180,12 +180,12 @@ export const structure: StructureResolver = (S) =>
                     .title("Dining Page")
                 ),
               S.listItem()
-                .title("Vilamore Restaurant")
+                .title("SERA Restaurant")
                 .child(
                   S.document()
                     .schemaType("restaurantPage")
-                    .documentId("vilamore")
-                    .title("Vilamore Restaurant")
+                    .documentId("sera")
+                    .title("SERA Restaurant")
                 ),
               S.listItem()
                 .title("The Espresso Lab")
@@ -231,7 +231,16 @@ export const structure: StructureResolver = (S) =>
 
       S.divider(),
 
-      // Site Settings
+      // Site Settings & Layouts
+      S.listItem()
+        .title("Header Settings")
+        .icon(Settings)
+        .child(
+          S.document()
+            .schemaType("header")
+            .documentId("header-settings")
+            .title("Header Settings")
+        ),
       S.listItem()
         .title("Site Settings")
         .icon(Settings)
@@ -272,6 +281,7 @@ export const structure: StructureResolver = (S) =>
             "product",
             "collection",
             "brand",
+            "header",
             "siteSettings",
             "footerSettings",
             "section",

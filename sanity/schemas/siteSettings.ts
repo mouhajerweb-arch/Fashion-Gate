@@ -20,6 +20,13 @@ export const siteSettings = defineType({
     }),
     defineField({ name: "socialLabel", title: "Social Label", type: "string" }),
     defineField({ name: "socialUrl", title: "Social URL", type: "url" }),
+    defineField({
+      name: "showLanguageSwitcher",
+      title: "Show Language Switcher",
+      type: "boolean",
+      initialValue: true,
+      description: "Toggle whether to display the language switcher (flag & toggle) across header and site."
+    }),
     defineField({ name: "seo", title: "Global SEO Fallback Settings", type: "seo" }),
     defineField({
       name: "cookieConsent",

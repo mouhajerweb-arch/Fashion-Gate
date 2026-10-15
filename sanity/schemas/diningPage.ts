@@ -77,7 +77,7 @@ const diningPlaceFields = [
     name: "buttonPath",
     title: "Button Custom Redirection Path",
     type: "string",
-    description: "e.g. '/dining/vilamore' or '/dining/the-espresso-lab'",
+    description: "e.g. '/dining/sera' or '/dining/the-espresso-lab'",
     hidden: ({ parent }) => parent?.redirectionType === "reference"
   }),
 
@@ -132,7 +132,7 @@ export const diningPage = defineType({
     }),
     defineField({
       name: "restaurantPlace",
-      title: "Restaurant Section (e.g. Vilamore)",
+      title: "Restaurant Section (e.g. SERA)",
       type: "object",
       fields: diningPlaceFields,
     }),
@@ -159,8 +159,8 @@ export const diningPage = defineType({
       ar: "المطاعم",
     },
     description: {
-      en: "At Fashion Gate Mall Syria, exceptional food and drink is something we take incredibly seriously. That is why we are proud to offer a destination featuring VILAMORE RESTAURANT & CAFE and The Espresso Lab. We have carefully curated these establishments to provide an elevated culinary experience, ensuring that every visit offers both quality and variety. Whether you are looking for a refined meal or a perfect brew, our selection is designed to satisfy the most discerning tastes in a comfortable and sophisticated setting.",
-      ar: "في فاشن غيت مول سوريا، نأخذ المأكولات والمشروبات الاستثنائية على محمل الجد. لهذا السبب نحن فخورون بتقديم وجهة تضم مطعم ومقهى فيلامور وذا اسبريسو لاب. لقد قمنا برعاية هذه المنشآت بعناية لتقديم تجربة طهي راقية، مما يضمن أن كل زيارة توفر الجودة والتنوع. سواء كنت تبحث عن وجبة راقية أو قهوة مثالية، فإن مجموعتنا مصممة لإرضاء الأذواق الأكثر تطلباً في أجواء مريحة وراقية.",
+      en: "At Fashion Gate Mall Syria, exceptional food and drink is something we take incredibly seriously. That is why we are proud to offer a destination featuring SERA RESTAURANT & CAFE and The Espresso Lab. We have carefully curated these establishments to provide an elevated culinary experience, ensuring that every visit offers both quality and variety. Whether you are looking for a refined meal or a perfect brew, our selection is designed to satisfy the most discerning tastes in a comfortable and sophisticated setting.",
+      ar: "في فاشن غيت مول سوريا، نأخذ المأكولات والمشروبات الاستثنائية على محمل الجد. لهذا السبب نحن فخورون بتقديم وجهة تضم مطعم ومقهى سيرا وذا اسبريسو لاب. لقد قمنا برعاية هذه المنشآت بعناية لتقديم تجربة طهي راقية، مما يضمن أن كل زيارة توفر الجودة والتنوع. سواء كنت تبحث عن وجبة راقية أو قهوة مثالية، فإن مجموعتنا مصممة لإرضاء الأذواق الأكثر تطلباً في أجواء مريحة وراقية.",
     },
   },
   preview: {

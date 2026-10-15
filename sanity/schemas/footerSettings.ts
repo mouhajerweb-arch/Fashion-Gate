@@ -5,6 +5,26 @@ export const footerSettings = defineType({
   title: "Footer Settings",
   type: "document",
   fields: [
+    defineField({
+      name: "logoImage",
+      title: "Footer Logo / Monogram Image",
+      type: "image",
+      description: "Upload the monogram/logo icon for the footer brand lockup. Falls back to default logo if empty."
+    }),
+    defineField({
+      name: "brandTitle",
+      title: "Brand Title (Bilingual)",
+      type: "localizedString",
+      initialValue: { en: "Fashion Gate", ar: "فاشن غيت" },
+      description: "Primary brand name displayed in the footer (e.g. 'Fashion Gate' / 'فاشن غيت')."
+    }),
+    defineField({
+      name: "brandSubtitle",
+      title: "Brand Subtitle (Bilingual)",
+      type: "localizedString",
+      initialValue: { en: "Boulevard Damascus", ar: "بوليفارد دمشق" },
+      description: "Subtitle or venue location displayed beneath the brand name (e.g. 'Boulevard Damascus' / 'بوليفارد دمشق')."
+    }),
     defineField({ name: "description", title: "Brand Description", type: "localizedText" }),
     defineField({ name: "exploreTitle", title: "Explore Column Title", type: "localizedString", initialValue: { en: "Explore", ar: "استكشف" } }),
     defineField({

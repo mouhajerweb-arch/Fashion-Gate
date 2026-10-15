@@ -10,7 +10,7 @@ import { getHomepageData } from "@/lib/sanity";
 import { fallbackSettings } from "@/lib/fallbackData";
 import { ThemeProvider, createTheme, Box } from "@mui/material";
 
-export default function LayoutWrapper({ children, initialSettings }: { children: React.ReactNode; initialSettings?: any }) {
+export default function LayoutWrapper({ children, initialSettings, initialHeaderSettings }: { children: React.ReactNode; initialSettings?: any; initialHeaderSettings?: any }) {
   const pathname = usePathname();
   const [settings, setSettings] = useState<any>(() => {
     return initialSettings ? { ...fallbackSettings, ...initialSettings } : fallbackSettings;
@@ -39,7 +39,7 @@ export default function LayoutWrapper({ children, initialSettings }: { children:
    }), [settings.accentColor, settings.primaryColor]);
 
   const isAuthOrStudio = pathname?.includes("/login") || pathname?.includes("/studio");
-  const isVilamore = pathname?.includes("/dining/vilamore");
+  const isSera = pathname?.includes("/dining/sera");
   const isEspressoLab = pathname?.includes("/dining/the-espresso-lab");
 
   if (isAuthOrStudio) {
@@ -48,7 +48,7 @@ export default function LayoutWrapper({ children, initialSettings }: { children:
 
   const lang = (pathname?.endsWith("/ar") || pathname?.includes("/ar/") ? "ar" : "en") as "en" | "ar";
 
-  if (isVilamore || isEspressoLab) {
+  if (isSera || isEspressoLab) {
     return (
       <ThemeProvider theme={theme}>
         <div dir={lang === "ar" ? "rtl" : "ltr"} style={{ width: "100%" }}>
@@ -66,7 +66,7 @@ export default function LayoutWrapper({ children, initialSettings }: { children:
   return (
     <ThemeProvider theme={theme}>
       <div dir={lang === "ar" ? "rtl" : "ltr"} style={{ width: "100%" }}>
-        <SiteHeader settings={settings} />
+        <SiteHeader settings={settings} initialHeaderSettings={initialHeaderSettings} />
         <Box 
           component="main" 
           sx={{ 
